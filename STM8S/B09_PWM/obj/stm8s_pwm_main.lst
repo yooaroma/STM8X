@@ -1,0 +1,151 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_pwm_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _TIM2_OC3PreloadConfig
+                                     13 	.globl _TIM2_OC2PreloadConfig
+                                     14 	.globl _TIM2_OC1PreloadConfig
+                                     15 	.globl _TIM2_ARRPreloadConfig
+                                     16 	.globl _TIM2_Cmd
+                                     17 	.globl _TIM2_OC3Init
+                                     18 	.globl _TIM2_OC2Init
+                                     19 	.globl _TIM2_OC1Init
+                                     20 	.globl _TIM2_TimeBaseInit
+                                     21 	.globl _TIM2_DeInit
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area DATA
+                                     26 ;--------------------------------------------------------
+                                     27 ; ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area INITIALIZED
+                                     30 ;--------------------------------------------------------
+                                     31 ; Stack segment in internal ram
+                                     32 ;--------------------------------------------------------
+                                     33 	.area SSEG
+      000000                         34 __start__stack:
+      000000                         35 	.ds	1
+                                     36 
+                                     37 ;--------------------------------------------------------
+                                     38 ; absolute external ram data
+                                     39 ;--------------------------------------------------------
+                                     40 	.area DABS (ABS)
+                                     41 
+                                     42 ; default segment ordering for linker
+                                     43 	.area HOME
+                                     44 	.area GSINIT
+                                     45 	.area GSFINAL
+                                     46 	.area CONST
+                                     47 	.area INITIALIZER
+                                     48 	.area CODE
+                                     49 
+                                     50 ;--------------------------------------------------------
+                                     51 ; interrupt vector
+                                     52 ;--------------------------------------------------------
+                                     53 	.area HOME
+      000000                         54 __interrupt_vect:
+      000000 82v00u00u00             55 	int s_GSINIT ; reset
+                                     56 ;--------------------------------------------------------
+                                     57 ; global & static initialisations
+                                     58 ;--------------------------------------------------------
+                                     59 	.area HOME
+                                     60 	.area GSINIT
+                                     61 	.area GSFINAL
+                                     62 	.area GSINIT
+      000000 CDr00r00         [ 4]   63 	call	___sdcc_external_startup
+      000003                         64 __sdcc_init_data:
+                                     65 ; stm8_genXINIT() start
+      000003 AEr00r00         [ 2]   66 	ldw x, #l_DATA
+      000006 27 07            [ 1]   67 	jreq	00002$
+      000008                         68 00001$:
+      000008 72 4FuFFuFF      [ 1]   69 	clr (s_DATA - 1, x)
+      00000C 5A               [ 2]   70 	decw x
+      00000D 26 F9            [ 1]   71 	jrne	00001$
+      00000F                         72 00002$:
+      00000F AEr00r00         [ 2]   73 	ldw	x, #l_INITIALIZER
+      000012 27 09            [ 1]   74 	jreq	00004$
+      000014                         75 00003$:
+      000014 D6uFFuFF         [ 1]   76 	ld	a, (s_INITIALIZER - 1, x)
+      000017 D7uFFuFF         [ 1]   77 	ld	(s_INITIALIZED - 1, x), a
+      00001A 5A               [ 2]   78 	decw	x
+      00001B 26 F7            [ 1]   79 	jrne	00003$
+      00001D                         80 00004$:
+                                     81 ; stm8_genXINIT() end
+                                     82 	.area GSFINAL
+      000000 CCr00r04         [ 2]   83 	jp	__sdcc_program_startup
+                                     84 ;--------------------------------------------------------
+                                     85 ; Home
+                                     86 ;--------------------------------------------------------
+                                     87 	.area HOME
+                                     88 	.area HOME
+      000004                         89 __sdcc_program_startup:
+      000004 CCr00r00         [ 2]   90 	jp	_main
+                                     91 ;	return from main will return to caller
+                                     92 ;--------------------------------------------------------
+                                     93 ; code
+                                     94 ;--------------------------------------------------------
+                                     95 	.area CODE
+                                     96 ;	stm8s_pwm_main.c: 50: void main(void)
+                                     97 ;	-----------------------------------------
+                                     98 ;	 function main
+                                     99 ;	-----------------------------------------
+      000000                        100 _main:
+                                    101 ;	stm8s_pwm_main.c: 54: TIM2_DeInit();
+      000000 CDr00r00         [ 4]  102 	call	_TIM2_DeInit
+                                    103 ;	stm8s_pwm_main.c: 57: TIM2_TimeBaseInit(TIM2_PRESCALER_1, 999);
+      000003 AE 03 E7         [ 2]  104 	ldw	x, #0x03e7
+      000006 4F               [ 1]  105 	clr	a
+      000007 CDr00r00         [ 4]  106 	call	_TIM2_TimeBaseInit
+                                    107 ;	stm8s_pwm_main.c: 61: TIM2_OC1Init(TIM2_OCMODE_PWM2, TIM2_OUTPUTSTATE_ENABLE,CCR1_Val, TIM2_OCPOLARITY_LOW ); 
+      00000A 4B 22            [ 1]  108 	push	#0x22
+      00000C 4B F4            [ 1]  109 	push	#0xf4
+      00000E 4B 01            [ 1]  110 	push	#0x01
+      000010 4B 11            [ 1]  111 	push	#0x11
+      000012 A6 70            [ 1]  112 	ld	a, #0x70
+      000014 CDr00r00         [ 4]  113 	call	_TIM2_OC1Init
+                                    114 ;	stm8s_pwm_main.c: 62: TIM2_OC1PreloadConfig(ENABLE);
+      000017 A6 01            [ 1]  115 	ld	a, #0x01
+      000019 CDr00r00         [ 4]  116 	call	_TIM2_OC1PreloadConfig
+                                    117 ;	stm8s_pwm_main.c: 65: TIM2_OC2Init(TIM2_OCMODE_PWM2, TIM2_OUTPUTSTATE_ENABLE,CCR2_Val, TIM2_OCPOLARITY_LOW );
+      00001C 4B 22            [ 1]  118 	push	#0x22
+      00001E 4B FA            [ 1]  119 	push	#0xfa
+      000020 4B 00            [ 1]  120 	push	#0x00
+      000022 4B 11            [ 1]  121 	push	#0x11
+      000024 A6 70            [ 1]  122 	ld	a, #0x70
+      000026 CDr00r00         [ 4]  123 	call	_TIM2_OC2Init
+                                    124 ;	stm8s_pwm_main.c: 66: TIM2_OC2PreloadConfig(ENABLE);
+      000029 A6 01            [ 1]  125 	ld	a, #0x01
+      00002B CDr00r00         [ 4]  126 	call	_TIM2_OC2PreloadConfig
+                                    127 ;	stm8s_pwm_main.c: 69: TIM2_OC3Init(TIM2_OCMODE_PWM2, TIM2_OUTPUTSTATE_ENABLE,CCR3_Val, TIM2_OCPOLARITY_LOW );
+      00002E 4B 22            [ 1]  128 	push	#0x22
+      000030 4B EE            [ 1]  129 	push	#0xee
+      000032 4B 02            [ 1]  130 	push	#0x02
+      000034 4B 11            [ 1]  131 	push	#0x11
+      000036 A6 70            [ 1]  132 	ld	a, #0x70
+      000038 CDr00r00         [ 4]  133 	call	_TIM2_OC3Init
+                                    134 ;	stm8s_pwm_main.c: 70: TIM2_OC3PreloadConfig(ENABLE);
+      00003B A6 01            [ 1]  135 	ld	a, #0x01
+      00003D CDr00r00         [ 4]  136 	call	_TIM2_OC3PreloadConfig
+                                    137 ;	stm8s_pwm_main.c: 73: TIM2_ARRPreloadConfig(ENABLE);
+      000040 A6 01            [ 1]  138 	ld	a, #0x01
+      000042 CDr00r00         [ 4]  139 	call	_TIM2_ARRPreloadConfig
+                                    140 ;	stm8s_pwm_main.c: 76: TIM2_Cmd(ENABLE);
+      000045 A6 01            [ 1]  141 	ld	a, #0x01
+      000047 CDr00r00         [ 4]  142 	call	_TIM2_Cmd
+                                    143 ;	stm8s_pwm_main.c: 79: while (1); 
+      00004A                        144 00102$:
+      00004A 20 FE            [ 2]  145 	jra	00102$
+                                    146 ;	stm8s_pwm_main.c: 80: }
+      00004C 81               [ 4]  147 	ret
+                                    148 	.area CODE
+                                    149 	.area CONST
+                                    150 	.area INITIALIZER
+                                    151 	.area CABS (ABS)

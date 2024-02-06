@@ -1,0 +1,2078 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_tim1_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _cmd_test_init_before_irq_enable
+                                     12 	.globl _cmd_test
+                                     13 	.globl _cmd_tim1
+                                     14 	.globl _DecToLong
+                                     15 	.globl _HexToInt
+                                     16 	.globl _mib_printf
+                                     17 	.globl _MibWriteDebugString
+                                     18 	.globl ___memcpy
+                                     19 	.globl _strcmp
+                                     20 	.globl _TIM1_SetCompare4
+                                     21 	.globl _TIM1_SetCompare3
+                                     22 	.globl _TIM1_SetCompare2
+                                     23 	.globl _TIM1_SetCompare1
+                                     24 	.globl _TIM1_SelectOCxM
+                                     25 	.globl _TIM1_CCxNCmd
+                                     26 	.globl _TIM1_CCxCmd
+                                     27 	.globl _TIM1_OC4PolarityConfig
+                                     28 	.globl _TIM1_OC3NPolarityConfig
+                                     29 	.globl _TIM1_OC3PolarityConfig
+                                     30 	.globl _TIM1_OC2NPolarityConfig
+                                     31 	.globl _TIM1_OC2PolarityConfig
+                                     32 	.globl _TIM1_OC1NPolarityConfig
+                                     33 	.globl _TIM1_OC1PolarityConfig
+                                     34 	.globl _TIM1_OC4PreloadConfig
+                                     35 	.globl _TIM1_OC3PreloadConfig
+                                     36 	.globl _TIM1_OC2PreloadConfig
+                                     37 	.globl _TIM1_OC1PreloadConfig
+                                     38 	.globl _TIM1_ARRPreloadConfig
+                                     39 	.globl _TIM1_SelectOnePulseMode
+                                     40 	.globl _TIM1_CtrlPWMOutputs
+                                     41 	.globl _TIM1_Cmd
+                                     42 	.globl _TIM1_TimeBaseInit
+                                     43 	.globl _TIM1_DeInit
+                                     44 	.globl _FLASH_ProgramOptionByte
+                                     45 	.globl _FLASH_ReadOptionByte
+                                     46 	.globl _FLASH_ReadByte
+                                     47 	.globl _FLASH_Unlock
+                                     48 	.globl _irqTim1UpdOvf_CALLBACK
+                                     49 	.globl _irqTim1Cap_CALLBACK
+                                     50 	.globl _mmTim1Onepulse
+                                     51 	.globl _mmTim1PWM
+                                     52 	.globl _mmTim1CalPscrCntr
+                                     53 	.globl _mmTim1GpioInit
+                                     54 	.globl _mmRemapCH1N_CH2N_CH3N_ETR
+                                     55 ;--------------------------------------------------------
+                                     56 ; ram data
+                                     57 ;--------------------------------------------------------
+                                     58 	.area DATA
+                                     59 ;--------------------------------------------------------
+                                     60 ; ram data
+                                     61 ;--------------------------------------------------------
+                                     62 	.area INITIALIZED
+      000000                         63 _gpbHelp_TIM1_TypeDef:
+      000000                         64 	.ds 2
+      000002                         65 _cmdTbl_only:
+      000002                         66 	.ds 12
+                                     67 ;--------------------------------------------------------
+                                     68 ; absolute external ram data
+                                     69 ;--------------------------------------------------------
+                                     70 	.area DABS (ABS)
+                                     71 
+                                     72 ; default segment ordering for linker
+                                     73 	.area HOME
+                                     74 	.area GSINIT
+                                     75 	.area GSFINAL
+                                     76 	.area CONST
+                                     77 	.area INITIALIZER
+                                     78 	.area CODE
+                                     79 
+                                     80 ;--------------------------------------------------------
+                                     81 ; global & static initialisations
+                                     82 ;--------------------------------------------------------
+                                     83 	.area HOME
+                                     84 	.area GSINIT
+                                     85 	.area GSFINAL
+                                     86 	.area GSINIT
+                                     87 ;--------------------------------------------------------
+                                     88 ; Home
+                                     89 ;--------------------------------------------------------
+                                     90 	.area HOME
+                                     91 	.area HOME
+                                     92 ;--------------------------------------------------------
+                                     93 ; code
+                                     94 ;--------------------------------------------------------
+                                     95 	.area CODE
+                                     96 ;	stm8s_tim1_main.c: 115: void cmd_tim1(void)
+                                     97 ;	-----------------------------------------
+                                     98 ;	 function cmd_tim1
+                                     99 ;	-----------------------------------------
+      000000                        100 _cmd_tim1:
+      000000 52 0A            [ 2]  101 	sub	sp, #10
+                                    102 ;	stm8s_tim1_main.c: 121: for (cptr = cmdTbl;; cptr++)
+      000002 AEr00r00         [ 2]  103 	ldw	x, #(_cmdTbl+0)
+      000005 1F 01            [ 2]  104 	ldw	(0x01, sp), x
+      000007 5F               [ 1]  105 	clrw	x
+      000008 1F 07            [ 2]  106 	ldw	(0x07, sp), x
+      00000A 1F 05            [ 2]  107 	ldw	(0x05, sp), x
+      00000C 16 01            [ 2]  108 	ldw	y, (0x01, sp)
+      00000E 17 09            [ 2]  109 	ldw	(0x09, sp), y
+      000010                        110 00106$:
+                                    111 ;	stm8s_tim1_main.c: 123: if (cptr->cmd == 0)
+      000010 1E 09            [ 2]  112 	ldw	x, (0x09, sp)
+      000012 FE               [ 2]  113 	ldw	x, (x)
+      000013 1F 03            [ 2]  114 	ldw	(0x03, sp), x
+      000015 26 19            [ 1]  115 	jrne	00102$
+                                    116 ;	stm8s_tim1_main.c: 125: ccprintf(1, ("INFO:+cmd_tim1...\r\n"));
+      000017 4Br00            [ 1]  117 	push	#<(__str_0+0)
+      000019 4Bs00            [ 1]  118 	push	#((__str_0+0) >> 8)
+      00001B CDr00r00         [ 4]  119 	call	_mib_printf
+      00001E 5B 02            [ 2]  120 	addw	sp, #2
+                                    121 ;	stm8s_tim1_main.c: 126: memcpy((void *)&(cptr->cmd), (void *)&(cmdTbl_only[0].cmd), sizeof(CMD_MY));
+      000020 AEr00r02         [ 2]  122 	ldw	x, #_cmdTbl_only+0
+      000023 16 01            [ 2]  123 	ldw	y, (0x01, sp)
+      000025 4B 06            [ 1]  124 	push	#0x06
+      000027 4B 00            [ 1]  125 	push	#0x00
+      000029 89               [ 2]  126 	pushw	x
+      00002A 93               [ 1]  127 	ldw	x, y
+      00002B CDr00r00         [ 4]  128 	call	___memcpy
+                                    129 ;	stm8s_tim1_main.c: 127: break;
+      00002E 20 2F            [ 2]  130 	jra	00105$
+      000030                        131 00102$:
+                                    132 ;	stm8s_tim1_main.c: 129: index++;
+      000030 1E 07            [ 2]  133 	ldw	x, (0x07, sp)
+      000032 5C               [ 1]  134 	incw	x
+      000033 1F 07            [ 2]  135 	ldw	(0x07, sp), x
+      000035 26 05            [ 1]  136 	jrne	00126$
+      000037 1E 05            [ 2]  137 	ldw	x, (0x05, sp)
+      000039 5C               [ 1]  138 	incw	x
+      00003A 1F 05            [ 2]  139 	ldw	(0x05, sp), x
+      00003C                        140 00126$:
+                                    141 ;	stm8s_tim1_main.c: 130: if (index > MAX_COMMANDS)
+      00003C AE 00 06         [ 2]  142 	ldw	x, #0x0006
+      00003F 13 07            [ 2]  143 	cpw	x, (0x07, sp)
+      000041 4F               [ 1]  144 	clr	a
+      000042 12 06            [ 1]  145 	sbc	a, (0x06, sp)
+      000044 4F               [ 1]  146 	clr	a
+      000045 12 05            [ 1]  147 	sbc	a, (0x05, sp)
+      000047 24 0B            [ 1]  148 	jrnc	00107$
+                                    149 ;	stm8s_tim1_main.c: 132: ccprintf(1, ("INFO:-cmd_tim1...\r\n"));
+      000049 4Br14            [ 1]  150 	push	#<(__str_1+0)
+      00004B 4Bs00            [ 1]  151 	push	#((__str_1+0) >> 8)
+      00004D CDr00r00         [ 4]  152 	call	_mib_printf
+      000050 5B 02            [ 2]  153 	addw	sp, #2
+                                    154 ;	stm8s_tim1_main.c: 133: return;
+      000052 20 0B            [ 2]  155 	jra	00108$
+      000054                        156 00107$:
+                                    157 ;	stm8s_tim1_main.c: 121: for (cptr = cmdTbl;; cptr++)
+      000054 1E 09            [ 2]  158 	ldw	x, (0x09, sp)
+      000056 1C 00 06         [ 2]  159 	addw	x, #0x0006
+      000059 1F 09            [ 2]  160 	ldw	(0x09, sp), x
+      00005B 1F 01            [ 2]  161 	ldw	(0x01, sp), x
+      00005D 20 B1            [ 2]  162 	jra	00106$
+      00005F                        163 00105$:
+                                    164 ;	stm8s_tim1_main.c: 136: return;
+      00005F                        165 00108$:
+                                    166 ;	stm8s_tim1_main.c: 137: }
+      00005F 5B 0A            [ 2]  167 	addw	sp, #10
+      000061 81               [ 4]  168 	ret
+                                    169 ;	stm8s_tim1_main.c: 142: void cmd_test(void)
+                                    170 ;	-----------------------------------------
+                                    171 ;	 function cmd_test
+                                    172 ;	-----------------------------------------
+      000062                        173 _cmd_test:
+                                    174 ;	stm8s_tim1_main.c: 144: cmd_tim1();
+                                    175 ;	stm8s_tim1_main.c: 145: }
+      000062 CCr00r00         [ 2]  176 	jp	_cmd_tim1
+                                    177 ;	stm8s_tim1_main.c: 151: void cmd_test_init_before_irq_enable(void)
+                                    178 ;	-----------------------------------------
+                                    179 ;	 function cmd_test_init_before_irq_enable
+                                    180 ;	-----------------------------------------
+      000065                        181 _cmd_test_init_before_irq_enable:
+                                    182 ;	stm8s_tim1_main.c: 154: }
+      000065 81               [ 4]  183 	ret
+                                    184 ;	stm8s_tim1_main.c: 165: static int DoTIM1(CMD_MY *cptr, int argc, char **argv)
+                                    185 ;	-----------------------------------------
+                                    186 ;	 function DoTIM1
+                                    187 ;	-----------------------------------------
+      000066                        188 _DoTIM1:
+      000066 52 1A            [ 2]  189 	sub	sp, #26
+      000068 51               [ 1]  190 	exgw	x, y
+                                    191 ;	stm8s_tim1_main.c: 167: uint32_t vdwAddr = 0;
+      000069 5F               [ 1]  192 	clrw	x
+      00006A 1F 07            [ 2]  193 	ldw	(0x07, sp), x
+      00006C 1F 05            [ 2]  194 	ldw	(0x05, sp), x
+                                    195 ;	stm8s_tim1_main.c: 168: uint8_t vbData = 0;
+      00006E 0F 09            [ 1]  196 	clr	(0x09, sp)
+                                    197 ;	stm8s_tim1_main.c: 171: MibWriteDebugString(cptr->usage);
+      000070 93               [ 1]  198 	ldw	x, y
+      000071 1C 00 04         [ 2]  199 	addw	x, #0x0004
+      000074 1F 0F            [ 2]  200 	ldw	(0x0f, sp), x
+                                    201 ;	stm8s_tim1_main.c: 169: if (argc < 2)
+      000076 1E 1D            [ 2]  202 	ldw	x, (0x1d, sp)
+      000078 A3 00 02         [ 2]  203 	cpw	x, #0x0002
+      00007B 2E 0A            [ 1]  204 	jrsge	00102$
+                                    205 ;	stm8s_tim1_main.c: 171: MibWriteDebugString(cptr->usage);
+      00007D 1E 0F            [ 2]  206 	ldw	x, (0x0f, sp)
+      00007F FE               [ 2]  207 	ldw	x, (x)
+      000080 CDr00r00         [ 4]  208 	call	_MibWriteDebugString
+                                    209 ;	stm8s_tim1_main.c: 172: return FALSE;
+      000083 5F               [ 1]  210 	clrw	x
+      000084 CCr04r8C         [ 2]  211 	jp	00194$
+      000087                        212 00102$:
+                                    213 ;	stm8s_tim1_main.c: 177: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      000087 1E 1F            [ 2]  214 	ldw	x, (0x1f, sp)
+      000089 5C               [ 1]  215 	incw	x
+      00008A 5C               [ 1]  216 	incw	x
+      00008B 1F 11            [ 2]  217 	ldw	(0x11, sp), x
+      00008D FE               [ 2]  218 	ldw	x, (x)
+      00008E 4Br28            [ 1]  219 	push	#<(___str_2+0)
+      000090 4Bs00            [ 1]  220 	push	#((___str_2+0) >> 8)
+      000092 CDr00r00         [ 4]  221 	call	_strcmp
+      000095 51               [ 1]  222 	exgw	x, y
+                                    223 ;	stm8s_tim1_main.c: 179: if (argc < 4)
+      000096 1E 1D            [ 2]  224 	ldw	x, (0x1d, sp)
+      000098 A3 00 04         [ 2]  225 	cpw	x, #0x0004
+      00009B 2F 04            [ 1]  226 	jrslt	00377$
+      00009D 0F 13            [ 1]  227 	clr	(0x13, sp)
+      00009F 20 04            [ 2]  228 	jra	00378$
+      0000A1                        229 00377$:
+      0000A1 A6 01            [ 1]  230 	ld	a, #0x01
+      0000A3 6B 13            [ 1]  231 	ld	(0x13, sp), a
+      0000A5                        232 00378$:
+                                    233 ;	stm8s_tim1_main.c: 184: if (!HexToInt(argv[2], &vdwAddr, 32))
+      0000A5 1E 1F            [ 2]  234 	ldw	x, (0x1f, sp)
+      0000A7 1C 00 04         [ 2]  235 	addw	x, #0x0004
+      0000AA 1F 14            [ 2]  236 	ldw	(0x14, sp), x
+                                    237 ;	stm8s_tim1_main.c: 189: if (!HexToInt(argv[3], &vbData, 8))
+      0000AC 1E 1F            [ 2]  238 	ldw	x, (0x1f, sp)
+      0000AE 1C 00 06         [ 2]  239 	addw	x, #0x0006
+      0000B1 1F 16            [ 2]  240 	ldw	(0x16, sp), x
+                                    241 ;	stm8s_tim1_main.c: 177: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      0000B3 90 5D            [ 2]  242 	tnzw	y
+      0000B5 26 6C            [ 1]  243 	jrne	00192$
+                                    244 ;	stm8s_tim1_main.c: 179: if (argc < 4)
+      0000B7 0D 13            [ 1]  245 	tnz	(0x13, sp)
+      0000B9 27 0A            [ 1]  246 	jreq	00104$
+                                    247 ;	stm8s_tim1_main.c: 181: MibWriteDebugString(cptr->usage);
+      0000BB 1E 0F            [ 2]  248 	ldw	x, (0x0f, sp)
+      0000BD FE               [ 2]  249 	ldw	x, (x)
+      0000BE CDr00r00         [ 4]  250 	call	_MibWriteDebugString
+                                    251 ;	stm8s_tim1_main.c: 182: return FALSE;
+      0000C1 5F               [ 1]  252 	clrw	x
+      0000C2 CCr04r8C         [ 2]  253 	jp	00194$
+      0000C5                        254 00104$:
+                                    255 ;	stm8s_tim1_main.c: 184: if (!HexToInt(argv[2], &vdwAddr, 32))
+      0000C5 96               [ 1]  256 	ldw	x, sp
+      0000C6 1C 00 05         [ 2]  257 	addw	x, #5
+      0000C9 51               [ 1]  258 	exgw	x, y
+      0000CA 1E 14            [ 2]  259 	ldw	x, (0x14, sp)
+      0000CC FE               [ 2]  260 	ldw	x, (x)
+      0000CD 4B 20            [ 1]  261 	push	#0x20
+      0000CF 4B 00            [ 1]  262 	push	#0x00
+      0000D1 90 89            [ 2]  263 	pushw	y
+      0000D3 CDr00r00         [ 4]  264 	call	_HexToInt
+      0000D6 5D               [ 2]  265 	tnzw	x
+      0000D7 26 0D            [ 1]  266 	jrne	00106$
+                                    267 ;	stm8s_tim1_main.c: 186: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000D9 4Br2E            [ 1]  268 	push	#<(__str_3+0)
+      0000DB 4Bs00            [ 1]  269 	push	#((__str_3+0) >> 8)
+      0000DD CDr00r00         [ 4]  270 	call	_mib_printf
+      0000E0 5B 02            [ 2]  271 	addw	sp, #2
+                                    272 ;	stm8s_tim1_main.c: 187: return FALSE;
+      0000E2 5F               [ 1]  273 	clrw	x
+      0000E3 CCr04r8C         [ 2]  274 	jp	00194$
+      0000E6                        275 00106$:
+                                    276 ;	stm8s_tim1_main.c: 189: if (!HexToInt(argv[3], &vbData, 8))
+      0000E6 96               [ 1]  277 	ldw	x, sp
+      0000E7 1C 00 09         [ 2]  278 	addw	x, #9
+      0000EA 51               [ 1]  279 	exgw	x, y
+      0000EB 1E 16            [ 2]  280 	ldw	x, (0x16, sp)
+      0000ED FE               [ 2]  281 	ldw	x, (x)
+      0000EE 4B 08            [ 1]  282 	push	#0x08
+      0000F0 4B 00            [ 1]  283 	push	#0x00
+      0000F2 90 89            [ 2]  284 	pushw	y
+      0000F4 CDr00r00         [ 4]  285 	call	_HexToInt
+      0000F7 5D               [ 2]  286 	tnzw	x
+      0000F8 26 0D            [ 1]  287 	jrne	00108$
+                                    288 ;	stm8s_tim1_main.c: 191: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000FA 4Br2E            [ 1]  289 	push	#<(__str_3+0)
+      0000FC 4Bs00            [ 1]  290 	push	#((__str_3+0) >> 8)
+      0000FE CDr00r00         [ 4]  291 	call	_mib_printf
+      000101 5B 02            [ 2]  292 	addw	sp, #2
+                                    293 ;	stm8s_tim1_main.c: 192: return FALSE;
+      000103 5F               [ 1]  294 	clrw	x
+      000104 CCr04r8C         [ 2]  295 	jp	00194$
+      000107                        296 00108$:
+                                    297 ;	stm8s_tim1_main.c: 194: wr_ADDR8(vdwAddr, vbData);
+      000107 1E 07            [ 2]  298 	ldw	x, (0x07, sp)
+      000109 7B 09            [ 1]  299 	ld	a, (0x09, sp)
+      00010B F7               [ 1]  300 	ld	(x), a
+                                    301 ;	stm8s_tim1_main.c: 195: ccprintf(_DEBUG_CMD_A_, ("wr_ADDR8 : 0x%08lx[0x%02x]\r\n", vdwAddr, vbData));
+      00010C 5F               [ 1]  302 	clrw	x
+      00010D 7B 09            [ 1]  303 	ld	a, (0x09, sp)
+      00010F 97               [ 1]  304 	ld	xl, a
+      000110 89               [ 2]  305 	pushw	x
+      000111 1E 09            [ 2]  306 	ldw	x, (0x09, sp)
+      000113 89               [ 2]  307 	pushw	x
+      000114 1E 09            [ 2]  308 	ldw	x, (0x09, sp)
+      000116 89               [ 2]  309 	pushw	x
+      000117 4Br4B            [ 1]  310 	push	#<(__str_4+0)
+      000119 4Bs00            [ 1]  311 	push	#((__str_4+0) >> 8)
+      00011B CDr00r00         [ 4]  312 	call	_mib_printf
+      00011E 5B 08            [ 2]  313 	addw	sp, #8
+      000120 CCr04r8A         [ 2]  314 	jp	00193$
+      000123                        315 00192$:
+                                    316 ;	stm8s_tim1_main.c: 200: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      000123 1E 11            [ 2]  317 	ldw	x, (0x11, sp)
+      000125 FE               [ 2]  318 	ldw	x, (x)
+      000126 4Br68            [ 1]  319 	push	#<(___str_5+0)
+      000128 4Bs00            [ 1]  320 	push	#((___str_5+0) >> 8)
+      00012A CDr00r00         [ 4]  321 	call	_strcmp
+      00012D 51               [ 1]  322 	exgw	x, y
+                                    323 ;	stm8s_tim1_main.c: 202: if (argc < 3)
+      00012E 1E 1D            [ 2]  324 	ldw	x, (0x1d, sp)
+      000130 A3 00 03         [ 2]  325 	cpw	x, #0x0003
+      000133 2F 04            [ 1]  326 	jrslt	00383$
+      000135 0F 18            [ 1]  327 	clr	(0x18, sp)
+      000137 20 04            [ 2]  328 	jra	00384$
+      000139                        329 00383$:
+      000139 A6 01            [ 1]  330 	ld	a, #0x01
+      00013B 6B 18            [ 1]  331 	ld	(0x18, sp), a
+      00013D                        332 00384$:
+                                    333 ;	stm8s_tim1_main.c: 200: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      00013D 90 5D            [ 2]  334 	tnzw	y
+      00013F 26 49            [ 1]  335 	jrne	00189$
+                                    336 ;	stm8s_tim1_main.c: 202: if (argc < 3)
+      000141 0D 18            [ 1]  337 	tnz	(0x18, sp)
+      000143 27 0A            [ 1]  338 	jreq	00110$
+                                    339 ;	stm8s_tim1_main.c: 204: MibWriteDebugString(cptr->usage);
+      000145 1E 0F            [ 2]  340 	ldw	x, (0x0f, sp)
+      000147 FE               [ 2]  341 	ldw	x, (x)
+      000148 CDr00r00         [ 4]  342 	call	_MibWriteDebugString
+                                    343 ;	stm8s_tim1_main.c: 205: return FALSE;
+      00014B 5F               [ 1]  344 	clrw	x
+      00014C CCr04r8C         [ 2]  345 	jp	00194$
+      00014F                        346 00110$:
+                                    347 ;	stm8s_tim1_main.c: 207: if (!HexToInt(argv[2], &vdwAddr, 32))
+      00014F 96               [ 1]  348 	ldw	x, sp
+      000150 1C 00 05         [ 2]  349 	addw	x, #5
+      000153 51               [ 1]  350 	exgw	x, y
+      000154 1E 14            [ 2]  351 	ldw	x, (0x14, sp)
+      000156 FE               [ 2]  352 	ldw	x, (x)
+      000157 4B 20            [ 1]  353 	push	#0x20
+      000159 4B 00            [ 1]  354 	push	#0x00
+      00015B 90 89            [ 2]  355 	pushw	y
+      00015D CDr00r00         [ 4]  356 	call	_HexToInt
+      000160 5D               [ 2]  357 	tnzw	x
+      000161 26 0D            [ 1]  358 	jrne	00112$
+                                    359 ;	stm8s_tim1_main.c: 209: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      000163 4Br2E            [ 1]  360 	push	#<(__str_3+0)
+      000165 4Bs00            [ 1]  361 	push	#((__str_3+0) >> 8)
+      000167 CDr00r00         [ 4]  362 	call	_mib_printf
+      00016A 5B 02            [ 2]  363 	addw	sp, #2
+                                    364 ;	stm8s_tim1_main.c: 210: return FALSE;
+      00016C 5F               [ 1]  365 	clrw	x
+      00016D CCr04r8C         [ 2]  366 	jp	00194$
+      000170                        367 00112$:
+                                    368 ;	stm8s_tim1_main.c: 213: vbData = rd_ADDR8(vdwAddr);
+      000170 1E 07            [ 2]  369 	ldw	x, (0x07, sp)
+      000172 F6               [ 1]  370 	ld	a, (x)
+      000173 6B 09            [ 1]  371 	ld	(0x09, sp), a
+                                    372 ;	stm8s_tim1_main.c: 215: ccprintf(_DEBUG_CMD_A_, ("rd_ADDR8 : 0x%08lx[0x%02x]\r\n", vdwAddr, vbData));
+      000175 5F               [ 1]  373 	clrw	x
+      000176 97               [ 1]  374 	ld	xl, a
+      000177 89               [ 2]  375 	pushw	x
+      000178 1E 09            [ 2]  376 	ldw	x, (0x09, sp)
+      00017A 89               [ 2]  377 	pushw	x
+      00017B 1E 09            [ 2]  378 	ldw	x, (0x09, sp)
+      00017D 89               [ 2]  379 	pushw	x
+      00017E 4Br6D            [ 1]  380 	push	#<(__str_6+0)
+      000180 4Bs00            [ 1]  381 	push	#((__str_6+0) >> 8)
+      000182 CDr00r00         [ 4]  382 	call	_mib_printf
+      000185 5B 08            [ 2]  383 	addw	sp, #8
+      000187 CCr04r8A         [ 2]  384 	jp	00193$
+      00018A                        385 00189$:
+                                    386 ;	stm8s_tim1_main.c: 220: else if (!strcmp(argv[1], "onepulse"))
+      00018A 1E 11            [ 2]  387 	ldw	x, (0x11, sp)
+      00018C FE               [ 2]  388 	ldw	x, (x)
+      00018D 4Br8A            [ 1]  389 	push	#<(___str_7+0)
+      00018F 4Bs00            [ 1]  390 	push	#((___str_7+0) >> 8)
+      000191 CDr00r00         [ 4]  391 	call	_strcmp
+                                    392 ;	stm8s_tim1_main.c: 243: if (!DecToLong(argv[4], &vdwDataWidth, 32))
+      000194 16 1F            [ 2]  393 	ldw	y, (0x1f, sp)
+      000196 72 A9 00 08      [ 2]  394 	addw	y, #0x0008
+      00019A 17 19            [ 2]  395 	ldw	(0x19, sp), y
+                                    396 ;	stm8s_tim1_main.c: 220: else if (!strcmp(argv[1], "onepulse"))
+      00019C 5D               [ 2]  397 	tnzw	x
+      00019D 27 03            [ 1]  398 	jreq	00388$
+      00019F CCr02r2D         [ 2]  399 	jp	00186$
+      0001A2                        400 00388$:
+                                    401 ;	stm8s_tim1_main.c: 223: uint32_t vdwDataDelay = 0;
+      0001A2 5F               [ 1]  402 	clrw	x
+      0001A3 1F 03            [ 2]  403 	ldw	(0x03, sp), x
+      0001A5 1F 01            [ 2]  404 	ldw	(0x01, sp), x
+                                    405 ;	stm8s_tim1_main.c: 224: uint32_t vdwDataWidth = 0;
+      0001A7 5F               [ 1]  406 	clrw	x
+      0001A8 1F 0D            [ 2]  407 	ldw	(0x0d, sp), x
+      0001AA 1F 0B            [ 2]  408 	ldw	(0x0b, sp), x
+                                    409 ;	stm8s_tim1_main.c: 225: if (argc < 5)
+      0001AC 1E 1D            [ 2]  410 	ldw	x, (0x1d, sp)
+      0001AE A3 00 05         [ 2]  411 	cpw	x, #0x0005
+      0001B1 2E 0A            [ 1]  412 	jrsge	00114$
+                                    413 ;	stm8s_tim1_main.c: 227: MibWriteDebugString(cptr->usage);
+      0001B3 1E 0F            [ 2]  414 	ldw	x, (0x0f, sp)
+      0001B5 FE               [ 2]  415 	ldw	x, (x)
+      0001B6 CDr00r00         [ 4]  416 	call	_MibWriteDebugString
+                                    417 ;	stm8s_tim1_main.c: 228: return FALSE;
+      0001B9 5F               [ 1]  418 	clrw	x
+      0001BA CCr04r8C         [ 2]  419 	jp	00194$
+      0001BD                        420 00114$:
+                                    421 ;	stm8s_tim1_main.c: 230: if (!strcmp(argv[2], "low"))
+      0001BD 1E 14            [ 2]  422 	ldw	x, (0x14, sp)
+      0001BF FE               [ 2]  423 	ldw	x, (x)
+      0001C0 4Br93            [ 1]  424 	push	#<(___str_8+0)
+      0001C2 4Bs00            [ 1]  425 	push	#((___str_8+0) >> 8)
+      0001C4 CDr00r00         [ 4]  426 	call	_strcmp
+      0001C7 1F 14            [ 2]  427 	ldw	(0x14, sp), x
+      0001C9 26 04            [ 1]  428 	jrne	00116$
+                                    429 ;	stm8s_tim1_main.c: 232: vbPulseState = 0;
+      0001CB 0F 18            [ 1]  430 	clr	(0x18, sp)
+      0001CD 20 04            [ 2]  431 	jra	00117$
+      0001CF                        432 00116$:
+                                    433 ;	stm8s_tim1_main.c: 236: vbPulseState = 1;
+      0001CF A6 01            [ 1]  434 	ld	a, #0x01
+      0001D1 6B 18            [ 1]  435 	ld	(0x18, sp), a
+      0001D3                        436 00117$:
+                                    437 ;	stm8s_tim1_main.c: 238: if (!DecToLong(argv[3], &vdwDataDelay, 32))
+      0001D3 96               [ 1]  438 	ldw	x, sp
+      0001D4 5C               [ 1]  439 	incw	x
+      0001D5 51               [ 1]  440 	exgw	x, y
+      0001D6 1E 16            [ 2]  441 	ldw	x, (0x16, sp)
+      0001D8 FE               [ 2]  442 	ldw	x, (x)
+      0001D9 4B 20            [ 1]  443 	push	#0x20
+      0001DB 4B 00            [ 1]  444 	push	#0x00
+      0001DD 90 89            [ 2]  445 	pushw	y
+      0001DF CDr00r00         [ 4]  446 	call	_DecToLong
+      0001E2 5D               [ 2]  447 	tnzw	x
+      0001E3 26 0D            [ 1]  448 	jrne	00119$
+                                    449 ;	stm8s_tim1_main.c: 240: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0001E5 4Br2E            [ 1]  450 	push	#<(__str_3+0)
+      0001E7 4Bs00            [ 1]  451 	push	#((__str_3+0) >> 8)
+      0001E9 CDr00r00         [ 4]  452 	call	_mib_printf
+      0001EC 5B 02            [ 2]  453 	addw	sp, #2
+                                    454 ;	stm8s_tim1_main.c: 241: return FALSE;
+      0001EE 5F               [ 1]  455 	clrw	x
+      0001EF CCr04r8C         [ 2]  456 	jp	00194$
+      0001F2                        457 00119$:
+                                    458 ;	stm8s_tim1_main.c: 243: if (!DecToLong(argv[4], &vdwDataWidth, 32))
+      0001F2 96               [ 1]  459 	ldw	x, sp
+      0001F3 1C 00 0B         [ 2]  460 	addw	x, #11
+      0001F6 51               [ 1]  461 	exgw	x, y
+      0001F7 1E 19            [ 2]  462 	ldw	x, (0x19, sp)
+      0001F9 FE               [ 2]  463 	ldw	x, (x)
+      0001FA 4B 20            [ 1]  464 	push	#0x20
+      0001FC 4B 00            [ 1]  465 	push	#0x00
+      0001FE 90 89            [ 2]  466 	pushw	y
+      000200 CDr00r00         [ 4]  467 	call	_DecToLong
+      000203 5D               [ 2]  468 	tnzw	x
+      000204 26 0D            [ 1]  469 	jrne	00121$
+                                    470 ;	stm8s_tim1_main.c: 245: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      000206 4Br2E            [ 1]  471 	push	#<(__str_3+0)
+      000208 4Bs00            [ 1]  472 	push	#((__str_3+0) >> 8)
+      00020A CDr00r00         [ 4]  473 	call	_mib_printf
+      00020D 5B 02            [ 2]  474 	addw	sp, #2
+                                    475 ;	stm8s_tim1_main.c: 246: return FALSE;
+      00020F 5F               [ 1]  476 	clrw	x
+      000210 CCr04r8C         [ 2]  477 	jp	00194$
+      000213                        478 00121$:
+                                    479 ;	stm8s_tim1_main.c: 248: mmTim1GpioInit();
+      000213 CDr06rBF         [ 4]  480 	call	_mmTim1GpioInit
+                                    481 ;	stm8s_tim1_main.c: 249: mmRemapCH1N_CH2N_CH3N_ETR();
+      000216 CDr06rDE         [ 4]  482 	call	_mmRemapCH1N_CH2N_CH3N_ETR
+                                    483 ;	stm8s_tim1_main.c: 250: mmTim1Onepulse(vbPulseState, vdwDataDelay, vdwDataWidth);
+      000219 1E 0D            [ 2]  484 	ldw	x, (0x0d, sp)
+      00021B 89               [ 2]  485 	pushw	x
+      00021C 1E 0D            [ 2]  486 	ldw	x, (0x0d, sp)
+      00021E 89               [ 2]  487 	pushw	x
+      00021F 1E 07            [ 2]  488 	ldw	x, (0x07, sp)
+      000221 89               [ 2]  489 	pushw	x
+      000222 1E 07            [ 2]  490 	ldw	x, (0x07, sp)
+      000224 89               [ 2]  491 	pushw	x
+      000225 7B 20            [ 1]  492 	ld	a, (0x20, sp)
+      000227 CDr04r94         [ 4]  493 	call	_mmTim1Onepulse
+      00022A CCr04r8A         [ 2]  494 	jp	00193$
+      00022D                        495 00186$:
+                                    496 ;	stm8s_tim1_main.c: 255: else if (!strcmp(argv[1], "pwm"))
+      00022D 1E 11            [ 2]  497 	ldw	x, (0x11, sp)
+      00022F FE               [ 2]  498 	ldw	x, (x)
+      000230 4Br97            [ 1]  499 	push	#<(___str_9+0)
+      000232 4Bs00            [ 1]  500 	push	#((___str_9+0) >> 8)
+      000234 CDr00r00         [ 4]  501 	call	_strcmp
+      000237 5D               [ 2]  502 	tnzw	x
+      000238 27 03            [ 1]  503 	jreq	00393$
+      00023A CCr03r64         [ 2]  504 	jp	00183$
+      00023D                        505 00393$:
+                                    506 ;	stm8s_tim1_main.c: 257: uint32_t vdwDataPeriod = 0;
+      00023D 5F               [ 1]  507 	clrw	x
+      00023E 1F 0C            [ 2]  508 	ldw	(0x0c, sp), x
+      000240 1F 0A            [ 2]  509 	ldw	(0x0a, sp), x
+                                    510 ;	stm8s_tim1_main.c: 258: uint8_t vbDataRatio = 0;
+      000242 0F 0E            [ 1]  511 	clr	(0x0e, sp)
+                                    512 ;	stm8s_tim1_main.c: 263: if (argc < 3)
+      000244 0D 18            [ 1]  513 	tnz	(0x18, sp)
+      000246 27 0A            [ 1]  514 	jreq	00123$
+                                    515 ;	stm8s_tim1_main.c: 265: MibWriteDebugString(cptr->usage);
+      000248 1E 0F            [ 2]  516 	ldw	x, (0x0f, sp)
+      00024A FE               [ 2]  517 	ldw	x, (x)
+      00024B CDr00r00         [ 4]  518 	call	_MibWriteDebugString
+                                    519 ;	stm8s_tim1_main.c: 266: return FALSE;
+      00024E 5F               [ 1]  520 	clrw	x
+      00024F CCr04r8C         [ 2]  521 	jp	00194$
+      000252                        522 00123$:
+                                    523 ;	stm8s_tim1_main.c: 268: if(argc < 4)
+      000252 0D 13            [ 1]  524 	tnz	(0x13, sp)
+      000254 27 0C            [ 1]  525 	jreq	00152$
+                                    526 ;	stm8s_tim1_main.c: 270: vbChannelNumber = 1; // ch1
+                                    527 ;	stm8s_tim1_main.c: 271: vbPinUseFlag = 1; // Plus
+      000256 A6 01            [ 1]  528 	ld	a, #0x01
+      000258 6B 19            [ 1]  529 	ld	(0x19, sp), a
+      00025A 6B 1A            [ 1]  530 	ld	(0x1a, sp), a
+                                    531 ;	stm8s_tim1_main.c: 272: vbLevelState = TIM1_OCPOLARITY_LOW;
+      00025C A6 22            [ 1]  532 	ld	a, #0x22
+      00025E 6B 18            [ 1]  533 	ld	(0x18, sp), a
+      000260 20 6D            [ 2]  534 	jra	00153$
+      000262                        535 00152$:
+                                    536 ;	stm8s_tim1_main.c: 276: if (argv[4][0]=='1')
+      000262 1E 19            [ 2]  537 	ldw	x, (0x19, sp)
+      000264 FE               [ 2]  538 	ldw	x, (x)
+      000265 1F 12            [ 2]  539 	ldw	(0x12, sp), x
+      000267 F6               [ 1]  540 	ld	a, (x)
+      000268 A1 31            [ 1]  541 	cp	a, #0x31
+      00026A 26 04            [ 1]  542 	jrne	00134$
+                                    543 ;	stm8s_tim1_main.c: 278: vbChannelNumber = TIM1_CHANNEL_1;
+      00026C 0F 19            [ 1]  544 	clr	(0x19, sp)
+      00026E 20 1F            [ 2]  545 	jra	00135$
+      000270                        546 00134$:
+                                    547 ;	stm8s_tim1_main.c: 280: else if (argv[4][0]=='2')
+      000270 A1 32            [ 1]  548 	cp	a, #0x32
+      000272 26 06            [ 1]  549 	jrne	00131$
+                                    550 ;	stm8s_tim1_main.c: 282: vbChannelNumber = TIM1_CHANNEL_2;
+      000274 A6 01            [ 1]  551 	ld	a, #0x01
+      000276 6B 19            [ 1]  552 	ld	(0x19, sp), a
+      000278 20 15            [ 2]  553 	jra	00135$
+      00027A                        554 00131$:
+                                    555 ;	stm8s_tim1_main.c: 284: else if (argv[4][0]=='3')
+      00027A A1 33            [ 1]  556 	cp	a, #0x33
+      00027C 26 06            [ 1]  557 	jrne	00128$
+                                    558 ;	stm8s_tim1_main.c: 286: vbChannelNumber = TIM1_CHANNEL_3;
+      00027E A6 02            [ 1]  559 	ld	a, #0x02
+      000280 6B 19            [ 1]  560 	ld	(0x19, sp), a
+      000282 20 0B            [ 2]  561 	jra	00135$
+      000284                        562 00128$:
+                                    563 ;	stm8s_tim1_main.c: 288: else if (argv[4][0]=='4')
+      000284 A1 34            [ 1]  564 	cp	a, #0x34
+      000286 26 05            [ 1]  565 	jrne	00125$
+                                    566 ;	stm8s_tim1_main.c: 290: vbChannelNumber = TIM1_CHANNEL_4;
+      000288 A6 03            [ 1]  567 	ld	a, #0x03
+      00028A 6B 19            [ 1]  568 	ld	(0x19, sp), a
+                                    569 ;	stm8s_tim1_main.c: 294: vbChannelNumber = TIM1_CHANNEL_1;
+      00028C C5                     570 	.byte 0xc5
+      00028D                        571 00125$:
+      00028D 0F 19            [ 1]  572 	clr	(0x19, sp)
+      00028F                        573 00135$:
+                                    574 ;	stm8s_tim1_main.c: 297: if (argv[4][1]=='p')
+      00028F 1E 12            [ 2]  575 	ldw	x, (0x12, sp)
+      000291 E6 01            [ 1]  576 	ld	a, (0x1, x)
+      000293 A1 70            [ 1]  577 	cp	a, #0x70
+      000295 26 06            [ 1]  578 	jrne	00143$
+                                    579 ;	stm8s_tim1_main.c: 299: vbPinUseFlag = 1;
+      000297 A6 01            [ 1]  580 	ld	a, #0x01
+      000299 6B 1A            [ 1]  581 	ld	(0x1a, sp), a
+      00029B 20 18            [ 2]  582 	jra	00144$
+      00029D                        583 00143$:
+                                    584 ;	stm8s_tim1_main.c: 301: else if (argv[4][1]=='n')
+      00029D A1 6E            [ 1]  585 	cp	a, #0x6e
+      00029F 26 06            [ 1]  586 	jrne	00140$
+                                    587 ;	stm8s_tim1_main.c: 303: vbPinUseFlag = 2;
+      0002A1 A6 02            [ 1]  588 	ld	a, #0x02
+      0002A3 6B 1A            [ 1]  589 	ld	(0x1a, sp), a
+      0002A5 20 0E            [ 2]  590 	jra	00144$
+      0002A7                        591 00140$:
+                                    592 ;	stm8s_tim1_main.c: 305: else if (argv[4][1]=='b')
+      0002A7 A1 62            [ 1]  593 	cp	a, #0x62
+      0002A9 26 06            [ 1]  594 	jrne	00137$
+                                    595 ;	stm8s_tim1_main.c: 307: vbPinUseFlag = 3;
+      0002AB A6 03            [ 1]  596 	ld	a, #0x03
+      0002AD 6B 1A            [ 1]  597 	ld	(0x1a, sp), a
+      0002AF 20 04            [ 2]  598 	jra	00144$
+      0002B1                        599 00137$:
+                                    600 ;	stm8s_tim1_main.c: 311: vbPinUseFlag = 1;
+      0002B1 A6 01            [ 1]  601 	ld	a, #0x01
+      0002B3 6B 1A            [ 1]  602 	ld	(0x1a, sp), a
+      0002B5                        603 00144$:
+                                    604 ;	stm8s_tim1_main.c: 314: if (argv[4][2]=='h')
+      0002B5 1E 12            [ 2]  605 	ldw	x, (0x12, sp)
+      0002B7 E6 02            [ 1]  606 	ld	a, (0x2, x)
+      0002B9 A1 68            [ 1]  607 	cp	a, #0x68
+      0002BB 26 04            [ 1]  608 	jrne	00149$
+                                    609 ;	stm8s_tim1_main.c: 316: vbLevelState = TIM1_OCPOLARITY_HIGH;
+      0002BD 0F 18            [ 1]  610 	clr	(0x18, sp)
+      0002BF 20 0E            [ 2]  611 	jra	00153$
+      0002C1                        612 00149$:
+                                    613 ;	stm8s_tim1_main.c: 318: else if (argv[4][2]=='l')
+      0002C1 A1 6C            [ 1]  614 	cp	a, #0x6c
+      0002C3 26 06            [ 1]  615 	jrne	00146$
+                                    616 ;	stm8s_tim1_main.c: 320: vbLevelState = TIM1_OCPOLARITY_LOW;
+      0002C5 A6 22            [ 1]  617 	ld	a, #0x22
+      0002C7 6B 18            [ 1]  618 	ld	(0x18, sp), a
+      0002C9 20 04            [ 2]  619 	jra	00153$
+      0002CB                        620 00146$:
+                                    621 ;	stm8s_tim1_main.c: 324: vbLevelState = TIM1_OCPOLARITY_LOW;
+      0002CB A6 22            [ 1]  622 	ld	a, #0x22
+      0002CD 6B 18            [ 1]  623 	ld	(0x18, sp), a
+      0002CF                        624 00153$:
+                                    625 ;	stm8s_tim1_main.c: 327: if (!DecToLong(argv[2], &vdwDataPeriod, 32))
+      0002CF 96               [ 1]  626 	ldw	x, sp
+      0002D0 1C 00 0A         [ 2]  627 	addw	x, #10
+      0002D3 16 14            [ 2]  628 	ldw	y, (0x14, sp)
+      0002D5 90 FE            [ 2]  629 	ldw	y, (y)
+      0002D7 4B 20            [ 1]  630 	push	#0x20
+      0002D9 4B 00            [ 1]  631 	push	#0x00
+      0002DB 89               [ 2]  632 	pushw	x
+      0002DC 93               [ 1]  633 	ldw	x, y
+      0002DD CDr00r00         [ 4]  634 	call	_DecToLong
+      0002E0 5D               [ 2]  635 	tnzw	x
+      0002E1 26 0D            [ 1]  636 	jrne	00155$
+                                    637 ;	stm8s_tim1_main.c: 329: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0002E3 4Br2E            [ 1]  638 	push	#<(__str_3+0)
+      0002E5 4Bs00            [ 1]  639 	push	#((__str_3+0) >> 8)
+      0002E7 CDr00r00         [ 4]  640 	call	_mib_printf
+      0002EA 5B 02            [ 2]  641 	addw	sp, #2
+                                    642 ;	stm8s_tim1_main.c: 330: return FALSE;
+      0002EC 5F               [ 1]  643 	clrw	x
+      0002ED CCr04r8C         [ 2]  644 	jp	00194$
+      0002F0                        645 00155$:
+                                    646 ;	stm8s_tim1_main.c: 332: if (!DecToLong(argv[3], &vbDataRatio, 8))
+      0002F0 96               [ 1]  647 	ldw	x, sp
+      0002F1 1C 00 0E         [ 2]  648 	addw	x, #14
+      0002F4 16 16            [ 2]  649 	ldw	y, (0x16, sp)
+      0002F6 90 FE            [ 2]  650 	ldw	y, (y)
+      0002F8 4B 08            [ 1]  651 	push	#0x08
+      0002FA 4B 00            [ 1]  652 	push	#0x00
+      0002FC 89               [ 2]  653 	pushw	x
+      0002FD 93               [ 1]  654 	ldw	x, y
+      0002FE CDr00r00         [ 4]  655 	call	_DecToLong
+      000301 5D               [ 2]  656 	tnzw	x
+      000302 26 0D            [ 1]  657 	jrne	00157$
+                                    658 ;	stm8s_tim1_main.c: 334: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      000304 4Br2E            [ 1]  659 	push	#<(__str_3+0)
+      000306 4Bs00            [ 1]  660 	push	#((__str_3+0) >> 8)
+      000308 CDr00r00         [ 4]  661 	call	_mib_printf
+      00030B 5B 02            [ 2]  662 	addw	sp, #2
+                                    663 ;	stm8s_tim1_main.c: 335: return FALSE;
+      00030D 5F               [ 1]  664 	clrw	x
+      00030E CCr04r8C         [ 2]  665 	jp	00194$
+      000311                        666 00157$:
+                                    667 ;	stm8s_tim1_main.c: 337: ccprintf(_DEBUG_CMD_A_, ("mmTim1 : vdwDataPeriod (0x%08lx) vbDataRatio (%d)\r\n", vdwDataPeriod, vbDataRatio));
+      000311 5F               [ 1]  668 	clrw	x
+      000312 7B 0E            [ 1]  669 	ld	a, (0x0e, sp)
+      000314 97               [ 1]  670 	ld	xl, a
+      000315 89               [ 2]  671 	pushw	x
+      000316 1E 0E            [ 2]  672 	ldw	x, (0x0e, sp)
+      000318 89               [ 2]  673 	pushw	x
+      000319 1E 0E            [ 2]  674 	ldw	x, (0x0e, sp)
+      00031B 89               [ 2]  675 	pushw	x
+      00031C 4Br9B            [ 1]  676 	push	#<(__str_10+0)
+      00031E 4Bs00            [ 1]  677 	push	#((__str_10+0) >> 8)
+      000320 CDr00r00         [ 4]  678 	call	_mib_printf
+      000323 5B 08            [ 2]  679 	addw	sp, #8
+                                    680 ;	stm8s_tim1_main.c: 338: ccprintf(_DEBUG_CMD_A_, ("mmTim1 : vbChannelNumber (%d) vbPinUseFlag (%d) vbLevelState (%d)\r\n", vbChannelNumber, vbPinUseFlag, vbLevelState));
+      000325 5F               [ 1]  681 	clrw	x
+      000326 7B 18            [ 1]  682 	ld	a, (0x18, sp)
+      000328 97               [ 1]  683 	ld	xl, a
+      000329 7B 1A            [ 1]  684 	ld	a, (0x1a, sp)
+      00032B 6B 15            [ 1]  685 	ld	(0x15, sp), a
+      00032D 0F 14            [ 1]  686 	clr	(0x14, sp)
+      00032F 7B 19            [ 1]  687 	ld	a, (0x19, sp)
+      000331 0F 16            [ 1]  688 	clr	(0x16, sp)
+      000333 89               [ 2]  689 	pushw	x
+      000334 1E 16            [ 2]  690 	ldw	x, (0x16, sp)
+      000336 89               [ 2]  691 	pushw	x
+      000337 88               [ 1]  692 	push	a
+      000338 7B 1B            [ 1]  693 	ld	a, (0x1b, sp)
+      00033A 88               [ 1]  694 	push	a
+      00033B 4BrCF            [ 1]  695 	push	#<(__str_11+0)
+      00033D 4Bs00            [ 1]  696 	push	#((__str_11+0) >> 8)
+      00033F CDr00r00         [ 4]  697 	call	_mib_printf
+      000342 5B 08            [ 2]  698 	addw	sp, #8
+                                    699 ;	stm8s_tim1_main.c: 339: mmTim1GpioInit();
+      000344 CDr06rBF         [ 4]  700 	call	_mmTim1GpioInit
+                                    701 ;	stm8s_tim1_main.c: 340: mmRemapCH1N_CH2N_CH3N_ETR();
+      000347 CDr06rDE         [ 4]  702 	call	_mmRemapCH1N_CH2N_CH3N_ETR
+                                    703 ;	stm8s_tim1_main.c: 341: mmTim1PWM(vdwDataPeriod, vbDataRatio, vbChannelNumber, vbPinUseFlag,vbLevelState,0);
+      00034A 4B 00            [ 1]  704 	push	#0x00
+      00034C 7B 19            [ 1]  705 	ld	a, (0x19, sp)
+      00034E 88               [ 1]  706 	push	a
+      00034F 7B 1C            [ 1]  707 	ld	a, (0x1c, sp)
+      000351 88               [ 1]  708 	push	a
+      000352 7B 1C            [ 1]  709 	ld	a, (0x1c, sp)
+      000354 88               [ 1]  710 	push	a
+      000355 7B 12            [ 1]  711 	ld	a, (0x12, sp)
+      000357 88               [ 1]  712 	push	a
+      000358 1E 11            [ 2]  713 	ldw	x, (0x11, sp)
+      00035A 89               [ 2]  714 	pushw	x
+      00035B 1E 11            [ 2]  715 	ldw	x, (0x11, sp)
+      00035D 89               [ 2]  716 	pushw	x
+      00035E CDr05r1B         [ 4]  717 	call	_mmTim1PWM
+      000361 CCr04r8A         [ 2]  718 	jp	00193$
+      000364                        719 00183$:
+                                    720 ;	stm8s_tim1_main.c: 346: else if (!strcmp(argv[1], "remap")) // _CMD_MY_READ_
+      000364 1E 11            [ 2]  721 	ldw	x, (0x11, sp)
+      000366 FE               [ 2]  722 	ldw	x, (x)
+      000367 4Br13            [ 1]  723 	push	#<(___str_12+0)
+      000369 4Bs01            [ 1]  724 	push	#((___str_12+0) >> 8)
+      00036B CDr00r00         [ 4]  725 	call	_strcmp
+      00036E 5D               [ 2]  726 	tnzw	x
+      00036F 27 03            [ 1]  727 	jreq	00425$
+      000371 CCr04r00         [ 2]  728 	jp	00180$
+      000374                        729 00425$:
+                                    730 ;	stm8s_tim1_main.c: 355: if (!strcmp(argv[2], "set"))
+      000374 1E 14            [ 2]  731 	ldw	x, (0x14, sp)
+      000376 FE               [ 2]  732 	ldw	x, (x)
+      000377 4Br19            [ 1]  733 	push	#<(___str_13+0)
+      000379 4Bs01            [ 1]  734 	push	#((___str_13+0) >> 8)
+      00037B CDr00r00         [ 4]  735 	call	_strcmp
+      00037E 1F 19            [ 2]  736 	ldw	(0x19, sp), x
+      000380 26 25            [ 1]  737 	jrne	00166$
+                                    738 ;	stm8s_tim1_main.c: 358: if(FLASH_ReadByte(OPT2_REG)!=AFR5_BIT) 
+      000382 4B 03            [ 1]  739 	push	#0x03
+      000384 4B 48            [ 1]  740 	push	#0x48
+      000386 5F               [ 1]  741 	clrw	x
+      000387 89               [ 2]  742 	pushw	x
+      000388 CDr00r00         [ 4]  743 	call	_FLASH_ReadByte
+      00038B A1 20            [ 1]  744 	cp	a, #0x20
+      00038D 27 0D            [ 1]  745 	jreq	00159$
+                                    746 ;	stm8s_tim1_main.c: 360: FLASH_Unlock(FLASH_MEMTYPE_DATA); 
+      00038F A6 F7            [ 1]  747 	ld	a, #0xf7
+      000391 CDr00r00         [ 4]  748 	call	_FLASH_Unlock
+                                    749 ;	stm8s_tim1_main.c: 362: FLASH_ProgramOptionByte(OPT2_REG,AFR5_BIT); 
+      000394 A6 20            [ 1]  750 	ld	a, #0x20
+      000396 AE 48 03         [ 2]  751 	ldw	x, #0x4803
+      000399 CDr00r00         [ 4]  752 	call	_FLASH_ProgramOptionByte
+      00039C                        753 00159$:
+                                    754 ;	stm8s_tim1_main.c: 364: vbData=FLASH_ReadOptionByte(OPT2_REG); 
+      00039C AE 48 03         [ 2]  755 	ldw	x, #0x4803
+      00039F CDr00r00         [ 4]  756 	call	_FLASH_ReadOptionByte
+      0003A2 9F               [ 1]  757 	ld	a, xl
+      0003A3 6B 09            [ 1]  758 	ld	(0x09, sp), a
+      0003A5 20 39            [ 2]  759 	jra	00167$
+      0003A7                        760 00166$:
+                                    761 ;	stm8s_tim1_main.c: 366: else if (!strcmp(argv[2], "reset"))
+      0003A7 1E 14            [ 2]  762 	ldw	x, (0x14, sp)
+      0003A9 FE               [ 2]  763 	ldw	x, (x)
+      0003AA 4Br1D            [ 1]  764 	push	#<(___str_14+0)
+      0003AC 4Bs01            [ 1]  765 	push	#((___str_14+0) >> 8)
+      0003AE CDr00r00         [ 4]  766 	call	_strcmp
+      0003B1 5D               [ 2]  767 	tnzw	x
+      0003B2 26 23            [ 1]  768 	jrne	00163$
+                                    769 ;	stm8s_tim1_main.c: 369: if(FLASH_ReadByte(OPT2_REG)!=0x00) 
+      0003B4 4B 03            [ 1]  770 	push	#0x03
+      0003B6 4B 48            [ 1]  771 	push	#0x48
+      0003B8 5F               [ 1]  772 	clrw	x
+      0003B9 89               [ 2]  773 	pushw	x
+      0003BA CDr00r00         [ 4]  774 	call	_FLASH_ReadByte
+      0003BD 4D               [ 1]  775 	tnz	a
+      0003BE 27 0C            [ 1]  776 	jreq	00161$
+                                    777 ;	stm8s_tim1_main.c: 371: FLASH_Unlock(FLASH_MEMTYPE_DATA); 
+      0003C0 A6 F7            [ 1]  778 	ld	a, #0xf7
+      0003C2 CDr00r00         [ 4]  779 	call	_FLASH_Unlock
+                                    780 ;	stm8s_tim1_main.c: 373: FLASH_ProgramOptionByte(OPT2_REG,0x00); 
+      0003C5 4F               [ 1]  781 	clr	a
+      0003C6 AE 48 03         [ 2]  782 	ldw	x, #0x4803
+      0003C9 CDr00r00         [ 4]  783 	call	_FLASH_ProgramOptionByte
+      0003CC                        784 00161$:
+                                    785 ;	stm8s_tim1_main.c: 375: vbData=FLASH_ReadOptionByte(OPT2_REG); 
+      0003CC AE 48 03         [ 2]  786 	ldw	x, #0x4803
+      0003CF CDr00r00         [ 4]  787 	call	_FLASH_ReadOptionByte
+      0003D2 9F               [ 1]  788 	ld	a, xl
+      0003D3 6B 09            [ 1]  789 	ld	(0x09, sp), a
+      0003D5 20 09            [ 2]  790 	jra	00167$
+      0003D7                        791 00163$:
+                                    792 ;	stm8s_tim1_main.c: 379: ccprintf(_DEBUG_CMD_A_, ("tim1 init....error !!!\r\n"));		
+      0003D7 4Br23            [ 1]  793 	push	#<(__str_15+0)
+      0003D9 4Bs01            [ 1]  794 	push	#((__str_15+0) >> 8)
+      0003DB CDr00r00         [ 4]  795 	call	_mib_printf
+      0003DE 5B 02            [ 2]  796 	addw	sp, #2
+      0003E0                        797 00167$:
+                                    798 ;	stm8s_tim1_main.c: 382: ccprintf(_DEBUG_CMD_A_, ("tim1 init....(0x%02X)\r\n",vbData));		
+      0003E0 5F               [ 1]  799 	clrw	x
+      0003E1 7B 09            [ 1]  800 	ld	a, (0x09, sp)
+      0003E3 97               [ 1]  801 	ld	xl, a
+      0003E4 89               [ 2]  802 	pushw	x
+      0003E5 4Br3C            [ 1]  803 	push	#<(__str_16+0)
+      0003E7 4Bs01            [ 1]  804 	push	#((__str_16+0) >> 8)
+      0003E9 CDr00r00         [ 4]  805 	call	_mib_printf
+      0003EC 5B 04            [ 2]  806 	addw	sp, #4
+                                    807 ;	stm8s_tim1_main.c: 383: ccprintf(_DEBUG_CMD_A_, ("tim1 AFR5....(0x%x)\r\n",rd_ADDR8(OPT2_REG)));		
+      0003EE C6 48 03         [ 1]  808 	ld	a, 0x4803
+      0003F1 5F               [ 1]  809 	clrw	x
+      0003F2 97               [ 1]  810 	ld	xl, a
+      0003F3 89               [ 2]  811 	pushw	x
+      0003F4 4Br54            [ 1]  812 	push	#<(__str_17+0)
+      0003F6 4Bs01            [ 1]  813 	push	#((__str_17+0) >> 8)
+      0003F8 CDr00r00         [ 4]  814 	call	_mib_printf
+      0003FB 5B 04            [ 2]  815 	addw	sp, #4
+      0003FD CCr04r8A         [ 2]  816 	jp	00193$
+      000400                        817 00180$:
+                                    818 ;	stm8s_tim1_main.c: 388: else if (!strcmp(argv[1], "init")) // _CMD_MY_READ_
+      000400 1E 11            [ 2]  819 	ldw	x, (0x11, sp)
+      000402 FE               [ 2]  820 	ldw	x, (x)
+      000403 4Br6A            [ 1]  821 	push	#<(___str_18+0)
+      000405 4Bs01            [ 1]  822 	push	#((___str_18+0) >> 8)
+      000407 CDr00r00         [ 4]  823 	call	_strcmp
+      00040A 5D               [ 2]  824 	tnzw	x
+      00040B 26 05            [ 1]  825 	jrne	00177$
+                                    826 ;	stm8s_tim1_main.c: 390: mmTim1GpioInit();
+      00040D CDr06rBF         [ 4]  827 	call	_mmTim1GpioInit
+      000410 20 78            [ 2]  828 	jra	00193$
+      000412                        829 00177$:
+                                    830 ;	stm8s_tim1_main.c: 395: else if (!strcmp(argv[1], "reset")) // _CMD_MY_READ_
+      000412 1E 11            [ 2]  831 	ldw	x, (0x11, sp)
+      000414 FE               [ 2]  832 	ldw	x, (x)
+      000415 4Br1D            [ 1]  833 	push	#<(___str_14+0)
+      000417 4Bs01            [ 1]  834 	push	#((___str_14+0) >> 8)
+      000419 CDr00r00         [ 4]  835 	call	_strcmp
+      00041C 5D               [ 2]  836 	tnzw	x
+      00041D 26 41            [ 1]  837 	jrne	00174$
+                                    838 ;	stm8s_tim1_main.c: 397: TIM1_DeInit();
+      00041F CDr00r00         [ 4]  839 	call	_TIM1_DeInit
+                                    840 ;	stm8s_tim1_main.c: 400: if(FLASH_ReadByte(OPT2_REG)!=0x00) 
+      000422 4B 03            [ 1]  841 	push	#0x03
+      000424 4B 48            [ 1]  842 	push	#0x48
+      000426 5F               [ 1]  843 	clrw	x
+      000427 89               [ 2]  844 	pushw	x
+      000428 CDr00r00         [ 4]  845 	call	_FLASH_ReadByte
+      00042B 4D               [ 1]  846 	tnz	a
+      00042C 27 0C            [ 1]  847 	jreq	00169$
+                                    848 ;	stm8s_tim1_main.c: 402: FLASH_Unlock(FLASH_MEMTYPE_DATA); 
+      00042E A6 F7            [ 1]  849 	ld	a, #0xf7
+      000430 CDr00r00         [ 4]  850 	call	_FLASH_Unlock
+                                    851 ;	stm8s_tim1_main.c: 404: FLASH_ProgramOptionByte(OPT2_REG,0x00); 
+      000433 4F               [ 1]  852 	clr	a
+      000434 AE 48 03         [ 2]  853 	ldw	x, #0x4803
+      000437 CDr00r00         [ 4]  854 	call	_FLASH_ProgramOptionByte
+      00043A                        855 00169$:
+                                    856 ;	stm8s_tim1_main.c: 406: vbData=FLASH_ReadOptionByte(OPT2_REG); 
+      00043A AE 48 03         [ 2]  857 	ldw	x, #0x4803
+      00043D CDr00r00         [ 4]  858 	call	_FLASH_ReadOptionByte
+      000440 9F               [ 1]  859 	ld	a, xl
+      000441 6B 09            [ 1]  860 	ld	(0x09, sp), a
+                                    861 ;	stm8s_tim1_main.c: 407: ccprintf(_DEBUG_CMD_A_, ("tim1 reset....(0x%02X)\r\n",vbData));		
+      000443 5F               [ 1]  862 	clrw	x
+      000444 97               [ 1]  863 	ld	xl, a
+      000445 89               [ 2]  864 	pushw	x
+      000446 4Br6F            [ 1]  865 	push	#<(__str_19+0)
+      000448 4Bs01            [ 1]  866 	push	#((__str_19+0) >> 8)
+      00044A CDr00r00         [ 4]  867 	call	_mib_printf
+      00044D 5B 04            [ 2]  868 	addw	sp, #4
+                                    869 ;	stm8s_tim1_main.c: 408: ccprintf(_DEBUG_CMD_A_, ("tim1 AFR5....(0x%x)\r\n",rd_ADDR8(OPT2_REG)));		
+      00044F C6 48 03         [ 1]  870 	ld	a, 0x4803
+      000452 5F               [ 1]  871 	clrw	x
+      000453 97               [ 1]  872 	ld	xl, a
+      000454 89               [ 2]  873 	pushw	x
+      000455 4Br54            [ 1]  874 	push	#<(__str_17+0)
+      000457 4Bs01            [ 1]  875 	push	#((__str_17+0) >> 8)
+      000459 CDr00r00         [ 4]  876 	call	_mib_printf
+      00045C 5B 04            [ 2]  877 	addw	sp, #4
+      00045E 20 2A            [ 2]  878 	jra	00193$
+      000460                        879 00174$:
+                                    880 ;	stm8s_tim1_main.c: 414: else if (!strcmp(argv[1], "help")) // _CMD_MY_READ_
+      000460 1E 11            [ 2]  881 	ldw	x, (0x11, sp)
+      000462 FE               [ 2]  882 	ldw	x, (x)
+      000463 4Br88            [ 1]  883 	push	#<(___str_20+0)
+      000465 4Bs01            [ 1]  884 	push	#((___str_20+0) >> 8)
+      000467 CDr00r00         [ 4]  885 	call	_strcmp
+      00046A 5D               [ 2]  886 	tnzw	x
+      00046B 26 15            [ 1]  887 	jrne	00171$
+                                    888 ;	stm8s_tim1_main.c: 417: ccprintf(_DEBUG_CMD_A_, ("TIM1_BaseAddress : 0x%04x\r\n", TIM1_BaseAddress));
+      00046D 4B 50            [ 1]  889 	push	#0x50
+      00046F 4B 52            [ 1]  890 	push	#0x52
+      000471 4Br8D            [ 1]  891 	push	#<(__str_21+0)
+      000473 4Bs01            [ 1]  892 	push	#((__str_21+0) >> 8)
+      000475 CDr00r00         [ 4]  893 	call	_mib_printf
+      000478 5B 04            [ 2]  894 	addw	sp, #4
+                                    895 ;	stm8s_tim1_main.c: 418: MibWriteDebugString((uint8_t *)gpbHelp_TIM1_TypeDef);
+      00047A CEu00u00         [ 2]  896 	ldw	x, _gpbHelp_TIM1_TypeDef+0
+      00047D CDr00r00         [ 4]  897 	call	_MibWriteDebugString
+      000480 20 08            [ 2]  898 	jra	00193$
+      000482                        899 00171$:
+                                    900 ;	stm8s_tim1_main.c: 422: MibWriteDebugString(cptr->usage);
+      000482 1E 0F            [ 2]  901 	ldw	x, (0x0f, sp)
+      000484 FE               [ 2]  902 	ldw	x, (x)
+      000485 CDr00r00         [ 4]  903 	call	_MibWriteDebugString
+                                    904 ;	stm8s_tim1_main.c: 423: return FALSE;
+      000488 5F               [ 1]  905 	clrw	x
+                                    906 ;	stm8s_tim1_main.c: 425: return TRUE;
+      000489 C5                     907 	.byte 0xc5
+      00048A                        908 00193$:
+      00048A 5F               [ 1]  909 	clrw	x
+      00048B 5C               [ 1]  910 	incw	x
+      00048C                        911 00194$:
+                                    912 ;	stm8s_tim1_main.c: 426: }
+      00048C 16 1B            [ 2]  913 	ldw	y, (27, sp)
+      00048E 5B 20            [ 2]  914 	addw	sp, #32
+      000490 90 FC            [ 2]  915 	jp	(y)
+                                    916 ;	stm8s_tim1_main.c: 437: void irqTim1UpdOvf_CALLBACK(void)
+                                    917 ;	-----------------------------------------
+                                    918 ;	 function irqTim1UpdOvf_CALLBACK
+                                    919 ;	-----------------------------------------
+      000492                        920 _irqTim1UpdOvf_CALLBACK:
+                                    921 ;	stm8s_tim1_main.c: 439: }
+      000492 81               [ 4]  922 	ret
+                                    923 ;	stm8s_tim1_main.c: 445: void irqTim1Cap_CALLBACK(void)
+                                    924 ;	-----------------------------------------
+                                    925 ;	 function irqTim1Cap_CALLBACK
+                                    926 ;	-----------------------------------------
+      000493                        927 _irqTim1Cap_CALLBACK:
+                                    928 ;	stm8s_tim1_main.c: 447: }
+      000493 81               [ 4]  929 	ret
+                                    930 ;	stm8s_tim1_main.c: 458: int mmTim1Onepulse(uint8_t vbPulseState, uint32_t vdwDataDelay, uint32_t vdwDataWidth)
+                                    931 ;	-----------------------------------------
+                                    932 ;	 function mmTim1Onepulse
+                                    933 ;	-----------------------------------------
+      000494                        934 _mmTim1Onepulse:
+      000494 52 0C            [ 2]  935 	sub	sp, #12
+      000496 6B 05            [ 1]  936 	ld	(0x05, sp), a
+                                    937 ;	stm8s_tim1_main.c: 464: UCOM_LED1_GPIO->ODR &= (uint8_t)(~(UCOM_LED1_PIN)); /* Output mode  Low level */
+      000498 72 11 50 0F      [ 1]  938 	bres	0x500f, #0
+                                    939 ;	stm8s_tim1_main.c: 468: vdwPeriod = vdwDataDelay + vdwDataWidth;
+      00049C 16 11            [ 2]  940 	ldw	y, (0x11, sp)
+      00049E 72 F9 15         [ 2]  941 	addw	y, (0x15, sp)
+      0004A1 1E 0F            [ 2]  942 	ldw	x, (0x0f, sp)
+      0004A3 24 01            [ 1]  943 	jrnc	00111$
+      0004A5 5C               [ 1]  944 	incw	x
+      0004A6                        945 00111$:
+      0004A6 72 FB 13         [ 2]  946 	addw	x, (0x13, sp)
+      0004A9 17 08            [ 2]  947 	ldw	(0x08, sp), y
+      0004AB 1F 06            [ 2]  948 	ldw	(0x06, sp), x
+                                    949 ;	stm8s_tim1_main.c: 469: vbDataRatio = (vdwDataWidth * 100) / vdwPeriod;
+      0004AD 1E 15            [ 2]  950 	ldw	x, (0x15, sp)
+      0004AF 89               [ 2]  951 	pushw	x
+      0004B0 1E 15            [ 2]  952 	ldw	x, (0x15, sp)
+      0004B2 89               [ 2]  953 	pushw	x
+      0004B3 4B 64            [ 1]  954 	push	#0x64
+      0004B5 5F               [ 1]  955 	clrw	x
+      0004B6 89               [ 2]  956 	pushw	x
+      0004B7 4B 00            [ 1]  957 	push	#0x00
+      0004B9 CDr00r00         [ 4]  958 	call	__mullong
+      0004BC 5B 08            [ 2]  959 	addw	sp, #8
+      0004BE 1F 03            [ 2]  960 	ldw	(0x03, sp), x
+      0004C0 1E 08            [ 2]  961 	ldw	x, (0x08, sp)
+      0004C2 89               [ 2]  962 	pushw	x
+      0004C3 1E 08            [ 2]  963 	ldw	x, (0x08, sp)
+      0004C5 89               [ 2]  964 	pushw	x
+      0004C6 1E 07            [ 2]  965 	ldw	x, (0x07, sp)
+      0004C8 89               [ 2]  966 	pushw	x
+      0004C9 90 89            [ 2]  967 	pushw	y
+      0004CB CDr00r00         [ 4]  968 	call	__divulong
+      0004CE 5B 08            [ 2]  969 	addw	sp, #8
+      0004D0 9F               [ 1]  970 	ld	a, xl
+      0004D1 6B 0A            [ 1]  971 	ld	(0x0a, sp), a
+                                    972 ;	stm8s_tim1_main.c: 475: if(vbPulseState)
+      0004D3 0D 05            [ 1]  973 	tnz	(0x05, sp)
+      0004D5 27 04            [ 1]  974 	jreq	00102$
+                                    975 ;	stm8s_tim1_main.c: 477: vbLevelState = TIM1_OCPOLARITY_HIGH;
+      0004D7 0F 0B            [ 1]  976 	clr	(0x0b, sp)
+      0004D9 20 04            [ 2]  977 	jra	00103$
+      0004DB                        978 00102$:
+                                    979 ;	stm8s_tim1_main.c: 481: vbLevelState = TIM1_OCPOLARITY_LOW;
+      0004DB A6 22            [ 1]  980 	ld	a, #0x22
+      0004DD 6B 0B            [ 1]  981 	ld	(0x0b, sp), a
+      0004DF                        982 00103$:
+                                    983 ;	stm8s_tim1_main.c: 483: vbPulseState = (vbPulseState<<1) | 0x1;
+      0004DF 7B 05            [ 1]  984 	ld	a, (0x05, sp)
+      0004E1 48               [ 1]  985 	sll	a
+      0004E2 AA 01            [ 1]  986 	or	a, #0x01
+      0004E4 6B 0C            [ 1]  987 	ld	(0x0c, sp), a
+                                    988 ;	stm8s_tim1_main.c: 484: ccprintf(_DEBUG_CMD_A_, ("mmTim1Onepulse : vdwPeriod (0x%08lx) vbDataRatio (%d)\r\n", vdwPeriod, vbDataRatio));
+      0004E6 5F               [ 1]  989 	clrw	x
+      0004E7 7B 0A            [ 1]  990 	ld	a, (0x0a, sp)
+      0004E9 97               [ 1]  991 	ld	xl, a
+      0004EA 89               [ 2]  992 	pushw	x
+      0004EB 1E 0A            [ 2]  993 	ldw	x, (0x0a, sp)
+      0004ED 89               [ 2]  994 	pushw	x
+      0004EE 1E 0A            [ 2]  995 	ldw	x, (0x0a, sp)
+      0004F0 89               [ 2]  996 	pushw	x
+      0004F1 4BrA9            [ 1]  997 	push	#<(__str_22+0)
+      0004F3 4Bs01            [ 1]  998 	push	#((__str_22+0) >> 8)
+      0004F5 CDr00r00         [ 4]  999 	call	_mib_printf
+      0004F8 5B 08            [ 2] 1000 	addw	sp, #8
+                                   1001 ;	stm8s_tim1_main.c: 488: UCOM_LED1_GPIO->ODR |= (uint8_t)((UCOM_LED1_PIN)); /* Output mode  high level */
+      0004FA 72 10 50 0F      [ 1] 1002 	bset	0x500f, #0
+                                   1003 ;	stm8s_tim1_main.c: 490: mmTim1PWM(vdwPeriod, vbDataRatio, vbChannelNumber, vbPinUseFlag,vbLevelState,vbPulseState);
+      0004FE 7B 0C            [ 1] 1004 	ld	a, (0x0c, sp)
+      000500 88               [ 1] 1005 	push	a
+      000501 7B 0C            [ 1] 1006 	ld	a, (0x0c, sp)
+      000503 88               [ 1] 1007 	push	a
+      000504 4B 03            [ 1] 1008 	push	#0x03
+      000506 4B 00            [ 1] 1009 	push	#0x00
+      000508 7B 0E            [ 1] 1010 	ld	a, (0x0e, sp)
+      00050A 88               [ 1] 1011 	push	a
+      00050B 1E 0D            [ 2] 1012 	ldw	x, (0x0d, sp)
+      00050D 89               [ 2] 1013 	pushw	x
+      00050E 1E 0D            [ 2] 1014 	ldw	x, (0x0d, sp)
+      000510 89               [ 2] 1015 	pushw	x
+      000511 CDr05r1B         [ 4] 1016 	call	_mmTim1PWM
+                                   1017 ;	stm8s_tim1_main.c: 492: return 0;
+      000514 5F               [ 1] 1018 	clrw	x
+                                   1019 ;	stm8s_tim1_main.c: 493: }
+      000515 16 0D            [ 2] 1020 	ldw	y, (13, sp)
+      000517 5B 16            [ 2] 1021 	addw	sp, #22
+      000519 90 FC            [ 2] 1022 	jp	(y)
+                                   1023 ;	stm8s_tim1_main.c: 497: int mmTim1PWM(uint32_t vdwDataPeriod, uint8_t vbDataRatio, uint8_t vbChannelNumber, uint8_t vbPinUseFlag, uint8_t vbLevelState, uint8_t vbPulseState)
+                                   1024 ;	-----------------------------------------
+                                   1025 ;	 function mmTim1PWM
+                                   1026 ;	-----------------------------------------
+      00051B                       1027 _mmTim1PWM:
+      00051B 52 0C            [ 2] 1028 	sub	sp, #12
+                                   1029 ;	stm8s_tim1_main.c: 499: uint16_t vwPSCR = 0;
+      00051D 5F               [ 1] 1030 	clrw	x
+      00051E 1F 01            [ 2] 1031 	ldw	(0x01, sp), x
+                                   1032 ;	stm8s_tim1_main.c: 500: uint16_t vwCNTR = 0;
+      000520 5F               [ 1] 1033 	clrw	x
+      000521 1F 03            [ 2] 1034 	ldw	(0x03, sp), x
+                                   1035 ;	stm8s_tim1_main.c: 504: mmTim1CalPscrCntr(vdwDataPeriod, (uint16_t *)&vwPSCR, (uint16_t *)&vwCNTR);
+      000523 96               [ 1] 1036 	ldw	x, sp
+      000524 1C 00 03         [ 2] 1037 	addw	x, #3
+      000527 89               [ 2] 1038 	pushw	x
+      000528 96               [ 1] 1039 	ldw	x, sp
+      000529 1C 00 03         [ 2] 1040 	addw	x, #3
+      00052C 89               [ 2] 1041 	pushw	x
+      00052D 1E 15            [ 2] 1042 	ldw	x, (0x15, sp)
+      00052F 89               [ 2] 1043 	pushw	x
+      000530 1E 15            [ 2] 1044 	ldw	x, (0x15, sp)
+      000532 89               [ 2] 1045 	pushw	x
+      000533 CDr06r41         [ 4] 1046 	call	_mmTim1CalPscrCntr
+                                   1047 ;	stm8s_tim1_main.c: 505: vdwRatioTemp = vwCNTR;
+      000536 16 03            [ 2] 1048 	ldw	y, (0x03, sp)
+      000538 5F               [ 1] 1049 	clrw	x
+      000539 1F 05            [ 2] 1050 	ldw	(0x05, sp), x
+                                   1051 ;	stm8s_tim1_main.c: 506: vdwRatioTemp = vdwRatioTemp * vbDataRatio;
+      00053B 7B 13            [ 1] 1052 	ld	a, (0x13, sp)
+      00053D 5F               [ 1] 1053 	clrw	x
+      00053E 1F 09            [ 2] 1054 	ldw	(0x09, sp), x
+      000540 88               [ 1] 1055 	push	a
+      000541 9E               [ 1] 1056 	ld	a, xh
+      000542 88               [ 1] 1057 	push	a
+      000543 1E 0B            [ 2] 1058 	ldw	x, (0x0b, sp)
+      000545 89               [ 2] 1059 	pushw	x
+      000546 90 89            [ 2] 1060 	pushw	y
+      000548 1E 0B            [ 2] 1061 	ldw	x, (0x0b, sp)
+      00054A 89               [ 2] 1062 	pushw	x
+      00054B CDr00r00         [ 4] 1063 	call	__mullong
+      00054E 5B 08            [ 2] 1064 	addw	sp, #8
+                                   1065 ;	stm8s_tim1_main.c: 507: vdwRatioTemp = vdwRatioTemp / 100;
+      000550 4B 64            [ 1] 1066 	push	#0x64
+      000552 4B 00            [ 1] 1067 	push	#0x00
+      000554 4B 00            [ 1] 1068 	push	#0x00
+      000556 4B 00            [ 1] 1069 	push	#0x00
+      000558 89               [ 2] 1070 	pushw	x
+      000559 90 89            [ 2] 1071 	pushw	y
+      00055B CDr00r00         [ 4] 1072 	call	__divulong
+      00055E 5B 08            [ 2] 1073 	addw	sp, #8
+                                   1074 ;	stm8s_tim1_main.c: 508: vwRatioReg = (uint16_t)vdwRatioTemp;
+      000560 1F 0B            [ 2] 1075 	ldw	(0x0b, sp), x
+                                   1076 ;	stm8s_tim1_main.c: 509: ccprintf(_DEBUG_CMD_A_, ("mmTim1PWM : vdwDataPeriod (0x%08lx) vbDataRatio (%d)\r\n", vdwDataPeriod, vbDataRatio));
+      000562 5F               [ 1] 1077 	clrw	x
+      000563 7B 13            [ 1] 1078 	ld	a, (0x13, sp)
+      000565 97               [ 1] 1079 	ld	xl, a
+      000566 89               [ 2] 1080 	pushw	x
+      000567 1E 13            [ 2] 1081 	ldw	x, (0x13, sp)
+      000569 89               [ 2] 1082 	pushw	x
+      00056A 1E 13            [ 2] 1083 	ldw	x, (0x13, sp)
+      00056C 89               [ 2] 1084 	pushw	x
+      00056D 4BrE1            [ 1] 1085 	push	#<(__str_23+0)
+      00056F 4Bs01            [ 1] 1086 	push	#((__str_23+0) >> 8)
+      000571 CDr00r00         [ 4] 1087 	call	_mib_printf
+      000574 5B 08            [ 2] 1088 	addw	sp, #8
+                                   1089 ;	stm8s_tim1_main.c: 510: ccprintf(_DEBUG_CMD_A_, ("mmTim1PWM : vwPSCR (0x%04x) vwCNTR (0x%04x) vwRatioReg (0x%04x)\r\n", vwPSCR, vwCNTR,vwRatioReg));
+      000576 1E 0B            [ 2] 1090 	ldw	x, (0x0b, sp)
+      000578 89               [ 2] 1091 	pushw	x
+      000579 1E 05            [ 2] 1092 	ldw	x, (0x05, sp)
+      00057B 89               [ 2] 1093 	pushw	x
+      00057C 1E 05            [ 2] 1094 	ldw	x, (0x05, sp)
+      00057E 89               [ 2] 1095 	pushw	x
+      00057F 4Br18            [ 1] 1096 	push	#<(__str_24+0)
+      000581 4Bs02            [ 1] 1097 	push	#((__str_24+0) >> 8)
+      000583 CDr00r00         [ 4] 1098 	call	_mib_printf
+      000586 5B 08            [ 2] 1099 	addw	sp, #8
+                                   1100 ;	stm8s_tim1_main.c: 535: TIM1_DeInit();
+      000588 CDr00r00         [ 4] 1101 	call	_TIM1_DeInit
+                                   1102 ;	stm8s_tim1_main.c: 536: TIM1_TimeBaseInit(vwPSCR, TIM1_COUNTERMODE_UP, vwCNTR, 0);
+      00058B 4B 00            [ 1] 1103 	push	#0x00
+      00058D 1E 04            [ 2] 1104 	ldw	x, (0x04, sp)
+      00058F 89               [ 2] 1105 	pushw	x
+      000590 4F               [ 1] 1106 	clr	a
+      000591 1E 04            [ 2] 1107 	ldw	x, (0x04, sp)
+      000593 CDr00r00         [ 4] 1108 	call	_TIM1_TimeBaseInit
+                                   1109 ;	stm8s_tim1_main.c: 549: TIM1_SelectOCxM(vbChannelNumber, TIM1_OCMODE_PWM2);
+      000596 4B 70            [ 1] 1110 	push	#0x70
+      000598 7B 15            [ 1] 1111 	ld	a, (0x15, sp)
+      00059A CDr00r00         [ 4] 1112 	call	_TIM1_SelectOCxM
+                                   1113 ;	stm8s_tim1_main.c: 559: if(vbChannelNumber==TIM1_CHANNEL_1) // ch1
+      00059D 0D 14            [ 1] 1114 	tnz	(0x14, sp)
+      00059F 26 16            [ 1] 1115 	jrne	00122$
+                                   1116 ;	stm8s_tim1_main.c: 561: TIM1_SetCompare1(vwRatioReg);
+      0005A1 1E 0B            [ 2] 1117 	ldw	x, (0x0b, sp)
+      0005A3 CDr00r00         [ 4] 1118 	call	_TIM1_SetCompare1
+                                   1119 ;	stm8s_tim1_main.c: 568: TIM1_OC1PolarityConfig(vbLevelState);
+      0005A6 7B 16            [ 1] 1120 	ld	a, (0x16, sp)
+      0005A8 CDr00r00         [ 4] 1121 	call	_TIM1_OC1PolarityConfig
+                                   1122 ;	stm8s_tim1_main.c: 573: TIM1_OC1NPolarityConfig(vbLevelState);
+      0005AB 7B 16            [ 1] 1123 	ld	a, (0x16, sp)
+      0005AD CDr00r00         [ 4] 1124 	call	_TIM1_OC1NPolarityConfig
+                                   1125 ;	stm8s_tim1_main.c: 578: TIM1_OC1PreloadConfig(ENABLE);
+      0005B0 A6 01            [ 1] 1126 	ld	a, #0x01
+      0005B2 CDr00r00         [ 4] 1127 	call	_TIM1_OC1PreloadConfig
+                                   1128 ;	stm8s_tim1_main.c: 579: if(0)
+      0005B5 20 4C            [ 2] 1129 	jra	00123$
+                                   1130 ;	stm8s_tim1_main.c: 581: TIM1->CCMR1 |= TIM1_CCMR_OCxPE; // : Preload register on TIM1_CCR1 enabled
+      0005B7                       1131 00122$:
+                                   1132 ;	stm8s_tim1_main.c: 584: else if(vbChannelNumber==TIM1_CHANNEL_2) // ch2
+      0005B7 7B 14            [ 1] 1133 	ld	a, (0x14, sp)
+      0005B9 4A               [ 1] 1134 	dec	a
+      0005BA 26 16            [ 1] 1135 	jrne	00119$
+                                   1136 ;	stm8s_tim1_main.c: 586: TIM1_SetCompare2(vwRatioReg);
+      0005BC 1E 0B            [ 2] 1137 	ldw	x, (0x0b, sp)
+      0005BE CDr00r00         [ 4] 1138 	call	_TIM1_SetCompare2
+                                   1139 ;	stm8s_tim1_main.c: 587: TIM1_OC2PolarityConfig(vbLevelState);
+      0005C1 7B 16            [ 1] 1140 	ld	a, (0x16, sp)
+      0005C3 CDr00r00         [ 4] 1141 	call	_TIM1_OC2PolarityConfig
+                                   1142 ;	stm8s_tim1_main.c: 588: TIM1_OC2NPolarityConfig(vbLevelState);
+      0005C6 7B 16            [ 1] 1143 	ld	a, (0x16, sp)
+      0005C8 CDr00r00         [ 4] 1144 	call	_TIM1_OC2NPolarityConfig
+                                   1145 ;	stm8s_tim1_main.c: 589: TIM1_OC2PreloadConfig(ENABLE);
+      0005CB A6 01            [ 1] 1146 	ld	a, #0x01
+      0005CD CDr00r00         [ 4] 1147 	call	_TIM1_OC2PreloadConfig
+      0005D0 20 31            [ 2] 1148 	jra	00123$
+      0005D2                       1149 00119$:
+                                   1150 ;	stm8s_tim1_main.c: 591: else if(vbChannelNumber==TIM1_CHANNEL_3) // ch3
+      0005D2 7B 14            [ 1] 1151 	ld	a, (0x14, sp)
+      0005D4 A1 02            [ 1] 1152 	cp	a, #0x02
+      0005D6 26 16            [ 1] 1153 	jrne	00116$
+                                   1154 ;	stm8s_tim1_main.c: 593: TIM1_SetCompare3(vwRatioReg);
+      0005D8 1E 0B            [ 2] 1155 	ldw	x, (0x0b, sp)
+      0005DA CDr00r00         [ 4] 1156 	call	_TIM1_SetCompare3
+                                   1157 ;	stm8s_tim1_main.c: 594: TIM1_OC3PolarityConfig(vbLevelState);
+      0005DD 7B 16            [ 1] 1158 	ld	a, (0x16, sp)
+      0005DF CDr00r00         [ 4] 1159 	call	_TIM1_OC3PolarityConfig
+                                   1160 ;	stm8s_tim1_main.c: 595: TIM1_OC3NPolarityConfig(vbLevelState);
+      0005E2 7B 16            [ 1] 1161 	ld	a, (0x16, sp)
+      0005E4 CDr00r00         [ 4] 1162 	call	_TIM1_OC3NPolarityConfig
+                                   1163 ;	stm8s_tim1_main.c: 596: TIM1_OC3PreloadConfig(ENABLE);
+      0005E7 A6 01            [ 1] 1164 	ld	a, #0x01
+      0005E9 CDr00r00         [ 4] 1165 	call	_TIM1_OC3PreloadConfig
+      0005EC 20 15            [ 2] 1166 	jra	00123$
+      0005EE                       1167 00116$:
+                                   1168 ;	stm8s_tim1_main.c: 598: else if(vbChannelNumber==TIM1_CHANNEL_4) // ch4
+      0005EE 7B 14            [ 1] 1169 	ld	a, (0x14, sp)
+      0005F0 A1 03            [ 1] 1170 	cp	a, #0x03
+      0005F2 26 0F            [ 1] 1171 	jrne	00123$
+                                   1172 ;	stm8s_tim1_main.c: 600: TIM1_SetCompare4(vwRatioReg);
+      0005F4 1E 0B            [ 2] 1173 	ldw	x, (0x0b, sp)
+      0005F6 CDr00r00         [ 4] 1174 	call	_TIM1_SetCompare4
+                                   1175 ;	stm8s_tim1_main.c: 601: TIM1_OC4PolarityConfig(vbLevelState);
+      0005F9 7B 16            [ 1] 1176 	ld	a, (0x16, sp)
+      0005FB CDr00r00         [ 4] 1177 	call	_TIM1_OC4PolarityConfig
+                                   1178 ;	stm8s_tim1_main.c: 603: TIM1_OC4PreloadConfig(ENABLE);
+      0005FE A6 01            [ 1] 1179 	ld	a, #0x01
+      000600 CDr00r00         [ 4] 1180 	call	_TIM1_OC4PreloadConfig
+      000603                       1181 00123$:
+                                   1182 ;	stm8s_tim1_main.c: 605: if(vbPinUseFlag&0x1)
+      000603 7B 15            [ 1] 1183 	ld	a, (0x15, sp)
+      000605 A5 01            [ 1] 1184 	bcp	a, #0x01
+      000607 27 09            [ 1] 1185 	jreq	00127$
+                                   1186 ;	stm8s_tim1_main.c: 607: TIM1_CCxCmd(vbChannelNumber, ENABLE);
+      000609 88               [ 1] 1187 	push	a
+      00060A 4B 01            [ 1] 1188 	push	#0x01
+      00060C 7B 16            [ 1] 1189 	ld	a, (0x16, sp)
+      00060E CDr00r00         [ 4] 1190 	call	_TIM1_CCxCmd
+      000611 84               [ 1] 1191 	pop	a
+                                   1192 ;	stm8s_tim1_main.c: 610: TIM1->CCER1 |= TIM1_CCER1_CC1E; // On - OC1 signal is output on the corresponding output pin depending on the MOE, OSSI, OSSR, OIS1, OIS1N and CC1NE bits
+      000612                       1193 00127$:
+                                   1194 ;	stm8s_tim1_main.c: 613: if(vbPinUseFlag&0x2)
+      000612 A5 02            [ 1] 1195 	bcp	a, #0x02
+      000614 27 07            [ 1] 1196 	jreq	00131$
+                                   1197 ;	stm8s_tim1_main.c: 615: TIM1_CCxNCmd(vbChannelNumber, ENABLE);
+      000616 4B 01            [ 1] 1198 	push	#0x01
+      000618 7B 15            [ 1] 1199 	ld	a, (0x15, sp)
+      00061A CDr00r00         [ 4] 1200 	call	_TIM1_CCxNCmd
+                                   1201 ;	stm8s_tim1_main.c: 618: TIM1->CCER1 |= TIM1_CCER1_CC1NE;
+      00061D                       1202 00131$:
+                                   1203 ;	stm8s_tim1_main.c: 621: TIM1_ARRPreloadConfig(ENABLE);
+      00061D A6 01            [ 1] 1204 	ld	a, #0x01
+      00061F CDr00r00         [ 4] 1205 	call	_TIM1_ARRPreloadConfig
+                                   1206 ;	stm8s_tim1_main.c: 626: if(vbPulseState)
+      000622 0D 17            [ 1] 1207 	tnz	(0x17, sp)
+      000624 27 09            [ 1] 1208 	jreq	00135$
+                                   1209 ;	stm8s_tim1_main.c: 628: TIM1_SelectOnePulseMode(TIM1_OPMODE_SINGLE);
+      000626 A6 01            [ 1] 1210 	ld	a, #0x01
+      000628 CDr00r00         [ 4] 1211 	call	_TIM1_SelectOnePulseMode
+                                   1212 ;	stm8s_tim1_main.c: 630: TIM1->EGR = 0xFF;
+      00062B 35 FF 52 57      [ 1] 1213 	mov	0x5257+0, #0xff
+      00062F                       1214 00135$:
+                                   1215 ;	stm8s_tim1_main.c: 633: TIM1_CtrlPWMOutputs(ENABLE);
+      00062F A6 01            [ 1] 1216 	ld	a, #0x01
+      000631 CDr00r00         [ 4] 1217 	call	_TIM1_CtrlPWMOutputs
+                                   1218 ;	stm8s_tim1_main.c: 639: TIM1_Cmd(ENABLE);
+      000634 A6 01            [ 1] 1219 	ld	a, #0x01
+      000636 CDr00r00         [ 4] 1220 	call	_TIM1_Cmd
+                                   1221 ;	stm8s_tim1_main.c: 647: return 1;
+      000639 5F               [ 1] 1222 	clrw	x
+      00063A 5C               [ 1] 1223 	incw	x
+                                   1224 ;	stm8s_tim1_main.c: 648: }
+      00063B 16 0D            [ 2] 1225 	ldw	y, (13, sp)
+      00063D 5B 17            [ 2] 1226 	addw	sp, #23
+      00063F 90 FC            [ 2] 1227 	jp	(y)
+                                   1228 ;	stm8s_tim1_main.c: 667: int mmTim1CalPscrCntr(uint32_t vdwDelayUsec, uint16_t *pvwPSCR, uint16_t *pvwCNTR)
+                                   1229 ;	-----------------------------------------
+                                   1230 ;	 function mmTim1CalPscrCntr
+                                   1231 ;	-----------------------------------------
+      000641                       1232 _mmTim1CalPscrCntr:
+      000641 52 04            [ 2] 1233 	sub	sp, #4
+                                   1234 ;	stm8s_tim1_main.c: 669: uint32_t vdwMask = vdwDelayUsec;
+      000643 16 09            [ 2] 1235 	ldw	y, (0x09, sp)
+      000645 1E 07            [ 2] 1236 	ldw	x, (0x07, sp)
+                                   1237 ;	stm8s_tim1_main.c: 674: for (vbIndex = 0; vbIndex < 32; vbIndex++)
+      000647 4F               [ 1] 1238 	clr	a
+      000648                       1239 00109$:
+                                   1240 ;	stm8s_tim1_main.c: 676: if (vdwMask & 0x80000000)
+      000648 5D               [ 2] 1241 	tnzw	x
+      000649 2B 08            [ 1] 1242 	jrmi	00103$
+                                   1243 ;	stm8s_tim1_main.c: 680: vdwMask <<= 1;
+      00064B 90 58            [ 2] 1244 	sllw	y
+      00064D 59               [ 2] 1245 	rlcw	x
+                                   1246 ;	stm8s_tim1_main.c: 674: for (vbIndex = 0; vbIndex < 32; vbIndex++)
+      00064E 4C               [ 1] 1247 	inc	a
+      00064F A1 20            [ 1] 1248 	cp	a, #0x20
+      000651 25 F5            [ 1] 1249 	jrc	00109$
+      000653                       1250 00103$:
+                                   1251 ;	stm8s_tim1_main.c: 682: vbMaxBitDelay = 31 - vbIndex;
+      000653 6B 04            [ 1] 1252 	ld	(0x04, sp), a
+      000655 A6 1F            [ 1] 1253 	ld	a, #0x1f
+      000657 10 04            [ 1] 1254 	sub	a, (0x04, sp)
+                                   1255 ;	stm8s_tim1_main.c: 683: ccprintf(_DEBUG_CMD_A_, ("mmTim1CalPscrCntr : vbMaxBitDelay : %d\r\n", vbMaxBitDelay));
+      000659 5F               [ 1] 1256 	clrw	x
+      00065A 97               [ 1] 1257 	ld	xl, a
+      00065B 88               [ 1] 1258 	push	a
+      00065C 89               [ 2] 1259 	pushw	x
+      00065D 4Br5A            [ 1] 1260 	push	#<(__str_25+0)
+      00065F 4Bs02            [ 1] 1261 	push	#((__str_25+0) >> 8)
+      000661 CDr00r00         [ 4] 1262 	call	_mib_printf
+      000664 5B 04            [ 2] 1263 	addw	sp, #4
+      000666 84               [ 1] 1264 	pop	a
+                                   1265 ;	stm8s_tim1_main.c: 684: if (vbMaxBitDelay <= 15)
+      000667 A1 0F            [ 1] 1266 	cp	a, #0x0f
+      000669 22 04            [ 1] 1267 	jrugt	00107$
+                                   1268 ;	stm8s_tim1_main.c: 686: vbMaxBitDelay = 15;
+      00066B A6 0F            [ 1] 1269 	ld	a, #0x0f
+      00066D 20 06            [ 2] 1270 	jra	00108$
+      00066F                       1271 00107$:
+                                   1272 ;	stm8s_tim1_main.c: 688: else if(vbMaxBitDelay >= (31-5)) // 2 ^ 5 = 32 > (_MM_CK_PSC_/1000000) =  16
+      00066F A1 1A            [ 1] 1273 	cp	a, #0x1a
+      000671 25 02            [ 1] 1274 	jrc	00108$
+                                   1275 ;	stm8s_tim1_main.c: 690: vbMaxBitDelay = 31-5;
+      000673 A6 1A            [ 1] 1276 	ld	a, #0x1a
+      000675                       1277 00108$:
+                                   1278 ;	stm8s_tim1_main.c: 692: vbPscrBitData = vbMaxBitDelay - 15;
+      000675 A0 0F            [ 1] 1279 	sub	a, #0x0f
+                                   1280 ;	stm8s_tim1_main.c: 693: *pvwPSCR = (1 << vbPscrBitData) * (_MM_CK_PSC_/1000000) - 1;
+      000677 16 0B            [ 2] 1281 	ldw	y, (0x0b, sp)
+      000679 88               [ 1] 1282 	push	a
+      00067A 5F               [ 1] 1283 	clrw	x
+      00067B 5C               [ 1] 1284 	incw	x
+      00067C 4D               [ 1] 1285 	tnz	a
+      00067D 27 04            [ 1] 1286 	jreq	00139$
+      00067F                       1287 00138$:
+      00067F 58               [ 2] 1288 	sllw	x
+      000680 4A               [ 1] 1289 	dec	a
+      000681 26 FC            [ 1] 1290 	jrne	00138$
+      000683                       1291 00139$:
+      000683 84               [ 1] 1292 	pop	a
+      000684 58               [ 2] 1293 	sllw	x
+      000685 58               [ 2] 1294 	sllw	x
+      000686 58               [ 2] 1295 	sllw	x
+      000687 58               [ 2] 1296 	sllw	x
+      000688 5A               [ 2] 1297 	decw	x
+      000689 1F 01            [ 2] 1298 	ldw	(0x01, sp), x
+      00068B 93               [ 1] 1299 	ldw	x, y
+      00068C 16 01            [ 2] 1300 	ldw	y, (0x01, sp)
+      00068E FF               [ 2] 1301 	ldw	(x), y
+                                   1302 ;	stm8s_tim1_main.c: 694: *pvwCNTR = vdwDelayUsec >> vbPscrBitData;
+      00068F 16 0D            [ 2] 1303 	ldw	y, (0x0d, sp)
+      000691 17 03            [ 2] 1304 	ldw	(0x03, sp), y
+      000693 16 09            [ 2] 1305 	ldw	y, (0x09, sp)
+      000695 1E 07            [ 2] 1306 	ldw	x, (0x07, sp)
+      000697 4D               [ 1] 1307 	tnz	a
+      000698 27 06            [ 1] 1308 	jreq	00141$
+      00069A                       1309 00140$:
+      00069A 54               [ 2] 1310 	srlw	x
+      00069B 90 56            [ 2] 1311 	rrcw	y
+      00069D 4A               [ 1] 1312 	dec	a
+      00069E 26 FA            [ 1] 1313 	jrne	00140$
+      0006A0                       1314 00141$:
+      0006A0 1E 03            [ 2] 1315 	ldw	x, (0x03, sp)
+      0006A2 FF               [ 2] 1316 	ldw	(x), y
+                                   1317 ;	stm8s_tim1_main.c: 695: ccprintf(_DEBUG_CMD_A_, ("mmTim1CalPscrCntr : vwPSCR (0x%04x) vwCNTR (0x%04x) vdwDelayUsec [0x%08lx]\r\n", *pvwPSCR, *pvwCNTR, vdwDelayUsec));
+      0006A3 1E 09            [ 2] 1318 	ldw	x, (0x09, sp)
+      0006A5 89               [ 2] 1319 	pushw	x
+      0006A6 1E 09            [ 2] 1320 	ldw	x, (0x09, sp)
+      0006A8 89               [ 2] 1321 	pushw	x
+      0006A9 90 89            [ 2] 1322 	pushw	y
+      0006AB 1E 07            [ 2] 1323 	ldw	x, (0x07, sp)
+      0006AD 89               [ 2] 1324 	pushw	x
+      0006AE 4Br83            [ 1] 1325 	push	#<(__str_26+0)
+      0006B0 4Bs02            [ 1] 1326 	push	#((__str_26+0) >> 8)
+      0006B2 CDr00r00         [ 4] 1327 	call	_mib_printf
+      0006B5 5B 0A            [ 2] 1328 	addw	sp, #10
+                                   1329 ;	stm8s_tim1_main.c: 697: return 1;
+      0006B7 5F               [ 1] 1330 	clrw	x
+      0006B8 5C               [ 1] 1331 	incw	x
+                                   1332 ;	stm8s_tim1_main.c: 698: }
+      0006B9 16 05            [ 2] 1333 	ldw	y, (5, sp)
+      0006BB 5B 0E            [ 2] 1334 	addw	sp, #14
+      0006BD 90 FC            [ 2] 1335 	jp	(y)
+                                   1336 ;	stm8s_tim1_main.c: 702: int mmTim1GpioInit(void)
+                                   1337 ;	-----------------------------------------
+                                   1338 ;	 function mmTim1GpioInit
+                                   1339 ;	-----------------------------------------
+      0006BF                       1340 _mmTim1GpioInit:
+                                   1341 ;	stm8s_tim1_main.c: 710: UCOM_LED1_GPIO->ODR &= (uint8_t)(~(UCOM_LED1_PIN)); /* Output mode  Low level */
+      0006BF 72 11 50 0F      [ 1] 1342 	bres	0x500f, #0
+                                   1343 ;	stm8s_tim1_main.c: 711: UCOM_LED1_GPIO->DDR |= (uint8_t)UCOM_LED1_PIN;      /* Set Output mode */
+      0006C3 72 10 50 11      [ 1] 1344 	bset	0x5011, #0
+                                   1345 ;	stm8s_tim1_main.c: 712: UCOM_LED1_GPIO->CR1 |= (uint8_t)UCOM_LED1_PIN;      /* Push-Pull */
+      0006C7 72 10 50 12      [ 1] 1346 	bset	0x5012, #0
+                                   1347 ;	stm8s_tim1_main.c: 714: UCOM_LED1_GPIO->CR2 |= (uint8_t)UCOM_LED1_PIN; /* 10MHz */
+      0006CB 72 10 50 13      [ 1] 1348 	bset	0x5013, #0
+                                   1349 ;	stm8s_tim1_main.c: 720: UCOM_KEY1_GPIO->DDR &= (uint8_t)(~(UCOM_KEY1_PIN)); /* Set Input mode */
+      0006CF 72 17 50 02      [ 1] 1350 	bres	0x5002, #3
+                                   1351 ;	stm8s_tim1_main.c: 722: UCOM_KEY1_GPIO->CR1 &= (uint8_t)(~(UCOM_KEY1_PIN)); /* Float */
+      0006D3 72 17 50 03      [ 1] 1352 	bres	0x5003, #3
+                                   1353 ;	stm8s_tim1_main.c: 724: UCOM_KEY1_GPIO->CR2 &= (uint8_t)(~(UCOM_KEY1_PIN)); /* External interrupt disable */
+      0006D7 72 17 50 04      [ 1] 1354 	bres	0x5004, #3
+                                   1355 ;	stm8s_tim1_main.c: 727: return 1;
+      0006DB 5F               [ 1] 1356 	clrw	x
+      0006DC 5C               [ 1] 1357 	incw	x
+                                   1358 ;	stm8s_tim1_main.c: 728: }
+      0006DD 81               [ 4] 1359 	ret
+                                   1360 ;	stm8s_tim1_main.c: 732: void mmRemapCH1N_CH2N_CH3N_ETR(void)
+                                   1361 ;	-----------------------------------------
+                                   1362 ;	 function mmRemapCH1N_CH2N_CH3N_ETR
+                                   1363 ;	-----------------------------------------
+      0006DE                       1364 _mmRemapCH1N_CH2N_CH3N_ETR:
+                                   1365 ;	stm8s_tim1_main.c: 739: if(FLASH_ReadByte(OPT2_REG)!=AFR5_BIT) 
+      0006DE 4B 03            [ 1] 1366 	push	#0x03
+      0006E0 4B 48            [ 1] 1367 	push	#0x48
+      0006E2 5F               [ 1] 1368 	clrw	x
+      0006E3 89               [ 2] 1369 	pushw	x
+      0006E4 CDr00r00         [ 4] 1370 	call	_FLASH_ReadByte
+      0006E7 A1 20            [ 1] 1371 	cp	a, #0x20
+      0006E9 26 01            [ 1] 1372 	jrne	00111$
+      0006EB 81               [ 4] 1373 	ret
+      0006EC                       1374 00111$:
+                                   1375 ;	stm8s_tim1_main.c: 741: FLASH_Unlock(FLASH_MEMTYPE_DATA); 
+      0006EC A6 F7            [ 1] 1376 	ld	a, #0xf7
+      0006EE CDr00r00         [ 4] 1377 	call	_FLASH_Unlock
+                                   1378 ;	stm8s_tim1_main.c: 743: FLASH_ProgramOptionByte(OPT2_REG,AFR5_BIT); 
+      0006F1 A6 20            [ 1] 1379 	ld	a, #0x20
+      0006F3 AE 48 03         [ 2] 1380 	ldw	x, #0x4803
+                                   1381 ;	stm8s_tim1_main.c: 747: }
+      0006F6 CCr00r00         [ 2] 1382 	jp	_FLASH_ProgramOptionByte
+                                   1383 	.area CODE
+                                   1384 	.area CONST
+                                   1385 	.area CONST
+      000000                       1386 __str_0:
+      000000 49 4E 46 4F 3A 2B 63  1387 	.ascii "INFO:+cmd_tim1..."
+             6D 64 5F 74 69 6D 31
+             2E 2E 2E
+      000011 0D                    1388 	.db 0x0d
+      000012 0A                    1389 	.db 0x0a
+      000013 00                    1390 	.db 0x00
+                                   1391 	.area CODE
+                                   1392 	.area CONST
+      000014                       1393 __str_1:
+      000014 49 4E 46 4F 3A 2D 63  1394 	.ascii "INFO:-cmd_tim1..."
+             6D 64 5F 74 69 6D 31
+             2E 2E 2E
+      000025 0D                    1395 	.db 0x0d
+      000026 0A                    1396 	.db 0x0a
+      000027 00                    1397 	.db 0x00
+                                   1398 	.area CODE
+                                   1399 	.area CONST
+      000028                       1400 ___str_2:
+      000028 77 72 69 74 65        1401 	.ascii "write"
+      00002D 00                    1402 	.db 0x00
+                                   1403 	.area CODE
+                                   1404 	.area CONST
+      00002E                       1405 __str_3:
+      00002E 49 6C 6C 75 67 61 6C  1406 	.ascii "Illugal character is used."
+             20 63 68 61 72 61 63
+             74 65 72 20 69 73 20
+             75 73 65 64 2E
+      000048 0D                    1407 	.db 0x0d
+      000049 0A                    1408 	.db 0x0a
+      00004A 00                    1409 	.db 0x00
+                                   1410 	.area CODE
+                                   1411 	.area CONST
+      00004B                       1412 __str_4:
+      00004B 77 72 5F 41 44 44 52  1413 	.ascii "wr_ADDR8 : 0x%08lx[0x%02x]"
+             38 20 3A 20 30 78 25
+             30 38 6C 78 5B 30 78
+             25 30 32 78 5D
+      000065 0D                    1414 	.db 0x0d
+      000066 0A                    1415 	.db 0x0a
+      000067 00                    1416 	.db 0x00
+                                   1417 	.area CODE
+                                   1418 	.area CONST
+      000068                       1419 ___str_5:
+      000068 72 65 61 64           1420 	.ascii "read"
+      00006C 00                    1421 	.db 0x00
+                                   1422 	.area CODE
+                                   1423 	.area CONST
+      00006D                       1424 __str_6:
+      00006D 72 64 5F 41 44 44 52  1425 	.ascii "rd_ADDR8 : 0x%08lx[0x%02x]"
+             38 20 3A 20 30 78 25
+             30 38 6C 78 5B 30 78
+             25 30 32 78 5D
+      000087 0D                    1426 	.db 0x0d
+      000088 0A                    1427 	.db 0x0a
+      000089 00                    1428 	.db 0x00
+                                   1429 	.area CODE
+                                   1430 	.area CONST
+      00008A                       1431 ___str_7:
+      00008A 6F 6E 65 70 75 6C 73  1432 	.ascii "onepulse"
+             65
+      000092 00                    1433 	.db 0x00
+                                   1434 	.area CODE
+                                   1435 	.area CONST
+      000093                       1436 ___str_8:
+      000093 6C 6F 77              1437 	.ascii "low"
+      000096 00                    1438 	.db 0x00
+                                   1439 	.area CODE
+                                   1440 	.area CONST
+      000097                       1441 ___str_9:
+      000097 70 77 6D              1442 	.ascii "pwm"
+      00009A 00                    1443 	.db 0x00
+                                   1444 	.area CODE
+                                   1445 	.area CONST
+      00009B                       1446 __str_10:
+      00009B 6D 6D 54 69 6D 31 20  1447 	.ascii "mmTim1 : vdwDataPeriod (0x%08lx) vbDataRatio (%d)"
+             3A 20 76 64 77 44 61
+             74 61 50 65 72 69 6F
+             64 20 28 30 78 25 30
+             38 6C 78 29 20 76 62
+             44 61 74 61 52 61 74
+             69 6F 20 28 25 64 29
+      0000CC 0D                    1448 	.db 0x0d
+      0000CD 0A                    1449 	.db 0x0a
+      0000CE 00                    1450 	.db 0x00
+                                   1451 	.area CODE
+                                   1452 	.area CONST
+      0000CF                       1453 __str_11:
+      0000CF 6D 6D 54 69 6D 31 20  1454 	.ascii "mmTim1 : vbChannelNumber (%d) vbPinUseFlag (%d) vbLevelState"
+             3A 20 76 62 43 68 61
+             6E 6E 65 6C 4E 75 6D
+             62 65 72 20 28 25 64
+             29 20 76 62 50 69 6E
+             55 73 65 46 6C 61 67
+             20 28 25 64 29 20 76
+             62 4C 65 76 65 6C 53
+             74 61 74 65
+      00010B 20 28 25 64 29        1455 	.ascii " (%d)"
+      000110 0D                    1456 	.db 0x0d
+      000111 0A                    1457 	.db 0x0a
+      000112 00                    1458 	.db 0x00
+                                   1459 	.area CODE
+                                   1460 	.area CONST
+      000113                       1461 ___str_12:
+      000113 72 65 6D 61 70        1462 	.ascii "remap"
+      000118 00                    1463 	.db 0x00
+                                   1464 	.area CODE
+                                   1465 	.area CONST
+      000119                       1466 ___str_13:
+      000119 73 65 74              1467 	.ascii "set"
+      00011C 00                    1468 	.db 0x00
+                                   1469 	.area CODE
+                                   1470 	.area CONST
+      00011D                       1471 ___str_14:
+      00011D 72 65 73 65 74        1472 	.ascii "reset"
+      000122 00                    1473 	.db 0x00
+                                   1474 	.area CODE
+                                   1475 	.area CONST
+      000123                       1476 __str_15:
+      000123 74 69 6D 31 20 69 6E  1477 	.ascii "tim1 init....error !!!"
+             69 74 2E 2E 2E 2E 65
+             72 72 6F 72 20 21 21
+             21
+      000139 0D                    1478 	.db 0x0d
+      00013A 0A                    1479 	.db 0x0a
+      00013B 00                    1480 	.db 0x00
+                                   1481 	.area CODE
+                                   1482 	.area CONST
+      00013C                       1483 __str_16:
+      00013C 74 69 6D 31 20 69 6E  1484 	.ascii "tim1 init....(0x%02X)"
+             69 74 2E 2E 2E 2E 28
+             30 78 25 30 32 58 29
+      000151 0D                    1485 	.db 0x0d
+      000152 0A                    1486 	.db 0x0a
+      000153 00                    1487 	.db 0x00
+                                   1488 	.area CODE
+                                   1489 	.area CONST
+      000154                       1490 __str_17:
+      000154 74 69 6D 31 20 41 46  1491 	.ascii "tim1 AFR5....(0x%x)"
+             52 35 2E 2E 2E 2E 28
+             30 78 25 78 29
+      000167 0D                    1492 	.db 0x0d
+      000168 0A                    1493 	.db 0x0a
+      000169 00                    1494 	.db 0x00
+                                   1495 	.area CODE
+                                   1496 	.area CONST
+      00016A                       1497 ___str_18:
+      00016A 69 6E 69 74           1498 	.ascii "init"
+      00016E 00                    1499 	.db 0x00
+                                   1500 	.area CODE
+                                   1501 	.area CONST
+      00016F                       1502 __str_19:
+      00016F 74 69 6D 31 20 72 65  1503 	.ascii "tim1 reset....(0x%02X)"
+             73 65 74 2E 2E 2E 2E
+             28 30 78 25 30 32 58
+             29
+      000185 0D                    1504 	.db 0x0d
+      000186 0A                    1505 	.db 0x0a
+      000187 00                    1506 	.db 0x00
+                                   1507 	.area CODE
+                                   1508 	.area CONST
+      000188                       1509 ___str_20:
+      000188 68 65 6C 70           1510 	.ascii "help"
+      00018C 00                    1511 	.db 0x00
+                                   1512 	.area CODE
+                                   1513 	.area CONST
+      00018D                       1514 __str_21:
+      00018D 54 49 4D 31 5F 42 61  1515 	.ascii "TIM1_BaseAddress : 0x%04x"
+             73 65 41 64 64 72 65
+             73 73 20 3A 20 30 78
+             25 30 34 78
+      0001A6 0D                    1516 	.db 0x0d
+      0001A7 0A                    1517 	.db 0x0a
+      0001A8 00                    1518 	.db 0x00
+                                   1519 	.area CODE
+                                   1520 	.area CONST
+      0001A9                       1521 __str_22:
+      0001A9 6D 6D 54 69 6D 31 4F  1522 	.ascii "mmTim1Onepulse : vdwPeriod (0x%08lx) vbDataRatio (%d)"
+             6E 65 70 75 6C 73 65
+             20 3A 20 76 64 77 50
+             65 72 69 6F 64 20 28
+             30 78 25 30 38 6C 78
+             29 20 76 62 44 61 74
+             61 52 61 74 69 6F 20
+             28 25 64 29
+      0001DE 0D                    1523 	.db 0x0d
+      0001DF 0A                    1524 	.db 0x0a
+      0001E0 00                    1525 	.db 0x00
+                                   1526 	.area CODE
+                                   1527 	.area CONST
+      0001E1                       1528 __str_23:
+      0001E1 6D 6D 54 69 6D 31 50  1529 	.ascii "mmTim1PWM : vdwDataPeriod (0x%08lx) vbDataRatio (%d)"
+             57 4D 20 3A 20 76 64
+             77 44 61 74 61 50 65
+             72 69 6F 64 20 28 30
+             78 25 30 38 6C 78 29
+             20 76 62 44 61 74 61
+             52 61 74 69 6F 20 28
+             25 64 29
+      000215 0D                    1530 	.db 0x0d
+      000216 0A                    1531 	.db 0x0a
+      000217 00                    1532 	.db 0x00
+                                   1533 	.area CODE
+                                   1534 	.area CONST
+      000218                       1535 __str_24:
+      000218 6D 6D 54 69 6D 31 50  1536 	.ascii "mmTim1PWM : vwPSCR (0x%04x) vwCNTR (0x%04x) vwRatioReg (0x%0"
+             57 4D 20 3A 20 76 77
+             50 53 43 52 20 28 30
+             78 25 30 34 78 29 20
+             76 77 43 4E 54 52 20
+             28 30 78 25 30 34 78
+             29 20 76 77 52 61 74
+             69 6F 52 65 67 20 28
+             30 78 25 30
+      000254 34 78 29              1537 	.ascii "4x)"
+      000257 0D                    1538 	.db 0x0d
+      000258 0A                    1539 	.db 0x0a
+      000259 00                    1540 	.db 0x00
+                                   1541 	.area CODE
+                                   1542 	.area CONST
+      00025A                       1543 __str_25:
+      00025A 6D 6D 54 69 6D 31 43  1544 	.ascii "mmTim1CalPscrCntr : vbMaxBitDelay : %d"
+             61 6C 50 73 63 72 43
+             6E 74 72 20 3A 20 76
+             62 4D 61 78 42 69 74
+             44 65 6C 61 79 20 3A
+             20 25 64
+      000280 0D                    1545 	.db 0x0d
+      000281 0A                    1546 	.db 0x0a
+      000282 00                    1547 	.db 0x00
+                                   1548 	.area CODE
+                                   1549 	.area CONST
+      000283                       1550 __str_26:
+      000283 6D 6D 54 69 6D 31 43  1551 	.ascii "mmTim1CalPscrCntr : vwPSCR (0x%04x) vwCNTR (0x%04x) vdwDelay"
+             61 6C 50 73 63 72 43
+             6E 74 72 20 3A 20 76
+             77 50 53 43 52 20 28
+             30 78 25 30 34 78 29
+             20 76 77 43 4E 54 52
+             20 28 30 78 25 30 34
+             78 29 20 76 64 77 44
+             65 6C 61 79
+      0002BF 55 73 65 63 20 5B 30  1552 	.ascii "Usec [0x%08lx]"
+             78 25 30 38 6C 78 5D
+      0002CD 0D                    1553 	.db 0x0d
+      0002CE 0A                    1554 	.db 0x0a
+      0002CF 00                    1555 	.db 0x00
+                                   1556 	.area CODE
+                                   1557 	.area CONST
+      0002D0                       1558 ___str_27:
+      0002D0 74 79 70 65 64 65 66  1559 	.ascii "typedef struct TIM1_struct"
+             20 73 74 72 75 63 74
+             20 54 49 4D 31 5F 73
+             74 72 75 63 74
+      0002EA 0D                    1560 	.db 0x0d
+      0002EB 0A                    1561 	.db 0x0a
+      0002EC 7B                    1562 	.ascii "{"
+      0002ED 0D                    1563 	.db 0x0d
+      0002EE 0A                    1564 	.db 0x0a
+      0002EF 30 78 30 30 3A 5F 5F  1565 	.ascii "0x00:__IO uint8_t CR1;   /*!< control register 1 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 52 31
+             3B 20 20 20 2F 2A 21
+             3C 20 63 6F 6E 74 72
+             6F 6C 20 72 65 67 69
+             73 74 65 72 20 31 20
+             2A 2F
+      000322 0D                    1566 	.db 0x0d
+      000323 0A                    1567 	.db 0x0a
+      000324 30 78 30 31 3A 5F 5F  1568 	.ascii "0x01:__IO uint8_t CR2;   /*!< control register 2 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 52 32
+             3B 20 20 20 2F 2A 21
+             3C 20 63 6F 6E 74 72
+             6F 6C 20 72 65 67 69
+             73 74 65 72 20 32 20
+             2A 2F
+      000357 0D                    1569 	.db 0x0d
+      000358 0A                    1570 	.db 0x0a
+      000359 30 78 30 32 3A 5F 5F  1571 	.ascii "0x02:__IO uint8_t SMCR;  /*!< Synchro mode control register "
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 53 4D 43
+             52 3B 20 20 2F 2A 21
+             3C 20 53 79 6E 63 68
+             72 6F 20 6D 6F 64 65
+             20 63 6F 6E 74 72 6F
+             6C 20 72 65 67 69 73
+             74 65 72 20
+      000395 2A 2F                 1572 	.ascii "*/"
+      000397 0D                    1573 	.db 0x0d
+      000398 0A                    1574 	.db 0x0a
+      000399 30 78 30 33 3A 5F 5F  1575 	.ascii "0x03:__IO uint8_t ETR;   /*!< external trigger register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 45 54 52
+             3B 20 20 20 2F 2A 21
+             3C 20 65 78 74 65 72
+             6E 61 6C 20 74 72 69
+             67 67 65 72 20 72 65
+             67 69 73 74 65 72 20
+             2A 2F
+      0003D3 0D                    1576 	.db 0x0d
+      0003D4 0A                    1577 	.db 0x0a
+      0003D5 30 78 30 34 3A 5F 5F  1578 	.ascii "0x04:__IO uint8_t IER;   /*!< interrupt enable register*/"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 49 45 52
+             3B 20 20 20 2F 2A 21
+             3C 20 69 6E 74 65 72
+             72 75 70 74 20 65 6E
+             61 62 6C 65 20 72 65
+             67 69 73 74 65 72 2A
+             2F
+      00040E 0D                    1579 	.db 0x0d
+      00040F 0A                    1580 	.db 0x0a
+      000410 30 78 30 35 3A 5F 5F  1581 	.ascii "0x05:__IO uint8_t SR1;   /*!< status register 1 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 53 52 31
+             3B 20 20 20 2F 2A 21
+             3C 20 73 74 61 74 75
+             73 20 72 65 67 69 73
+             74 65 72 20 31 20 2A
+             2F
+      000442 0D                    1582 	.db 0x0d
+      000443 0A                    1583 	.db 0x0a
+      000444 30 78 30 36 3A 5F 5F  1584 	.ascii "0x06:__IO uint8_t SR2;   /*!< status register 2 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 53 52 32
+             3B 20 20 20 2F 2A 21
+             3C 20 73 74 61 74 75
+             73 20 72 65 67 69 73
+             74 65 72 20 32 20 2A
+             2F
+      000476 0D                    1585 	.db 0x0d
+      000477 0A                    1586 	.db 0x0a
+      000478 30 78 30 37 3A 5F 5F  1587 	.ascii "0x07:__IO uint8_t EGR;   /*!< event generation register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 45 47 52
+             3B 20 20 20 2F 2A 21
+             3C 20 65 76 65 6E 74
+             20 67 65 6E 65 72 61
+             74 69 6F 6E 20 72 65
+             67 69 73 74 65 72 20
+             2A 2F
+      0004B2 0D                    1588 	.db 0x0d
+      0004B3 0A                    1589 	.db 0x0a
+      0004B4 30 78 30 38 3A 5F 5F  1590 	.ascii "0x08:__IO uint8_t CCMR1; /*!< CC mode register 1 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 4D
+             52 31 3B 20 2F 2A 21
+             3C 20 43 43 20 6D 6F
+             64 65 20 72 65 67 69
+             73 74 65 72 20 31 20
+             2A 2F
+      0004E7 0D                    1591 	.db 0x0d
+      0004E8 0A                    1592 	.db 0x0a
+      0004E9 30 78 30 39 3A 5F 5F  1593 	.ascii "0x09:__IO uint8_t CCMR2; /*!< CC mode register 2 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 4D
+             52 32 3B 20 2F 2A 21
+             3C 20 43 43 20 6D 6F
+             64 65 20 72 65 67 69
+             73 74 65 72 20 32 20
+             2A 2F
+      00051C 0D                    1594 	.db 0x0d
+      00051D 0A                    1595 	.db 0x0a
+      00051E 30 78 30 61 3A 5F 5F  1596 	.ascii "0x0a:__IO uint8_t CCMR3; /*!< CC mode register 3 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 4D
+             52 33 3B 20 2F 2A 21
+             3C 20 43 43 20 6D 6F
+             64 65 20 72 65 67 69
+             73 74 65 72 20 33 20
+             2A 2F
+      000551 0D                    1597 	.db 0x0d
+      000552 0A                    1598 	.db 0x0a
+      000553 30 78 30 62 3A 5F 5F  1599 	.ascii "0x0b:__IO uint8_t CCMR4; /*!< CC mode register 4 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 4D
+             52 34 3B 20 2F 2A 21
+             3C 20 43 43 20 6D 6F
+             64 65 20 72 65 67 69
+             73 74 65 72 20 34 20
+             2A 2F
+      000586 0D                    1600 	.db 0x0d
+      000587 0A                    1601 	.db 0x0a
+      000588 30 78 30 63 3A 5F 5F  1602 	.ascii "0x0c:__IO uint8_t CCER1; /*!< CC enable register 1 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 45
+             52 31 3B 20 2F 2A 21
+             3C 20 43 43 20 65 6E
+             61 62 6C 65 20 72 65
+             67 69 73 74 65 72 20
+             31 20 2A 2F
+      0005BD 0D                    1603 	.db 0x0d
+      0005BE 0A                    1604 	.db 0x0a
+      0005BF 30 78 30 64 3A 5F 5F  1605 	.ascii "0x0d:__IO uint8_t CCER2; /*!< CC enable register 2 */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 45
+             52 32 3B 20 2F 2A 21
+             3C 20 43 43 20 65 6E
+             61 62 6C 65 20 72 65
+             67 69 73 74 65 72 20
+             32 20 2A 2F
+      0005F4 0D                    1606 	.db 0x0d
+      0005F5 0A                    1607 	.db 0x0a
+      0005F6 30 78 30 65 3A 5F 5F  1608 	.ascii "0x0e:__IO uint8_t CNTRH; /*!< counter high */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 4E 54
+             52 48 3B 20 2F 2A 21
+             3C 20 63 6F 75 6E 74
+             65 72 20 68 69 67 68
+             20 2A 2F
+      000623 0D                    1609 	.db 0x0d
+      000624 0A                    1610 	.db 0x0a
+      000625 30 78 30 66 3A 5F 5F  1611 	.ascii "0x0f:__IO uint8_t CNTRL; /*!< counter low */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 4E 54
+             52 4C 3B 20 2F 2A 21
+             3C 20 63 6F 75 6E 74
+             65 72 20 6C 6F 77 20
+             2A 2F
+      000651 0D                    1612 	.db 0x0d
+      000652 0A                    1613 	.db 0x0a
+      000653 30 78 31 30 3A 5F 5F  1614 	.ascii "0x10:__IO uint8_t PSCRH; /*!< prescaler high */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 50 53 43
+             52 48 3B 20 2F 2A 21
+             3C 20 70 72 65 73 63
+             61 6C 65 72 20 68 69
+             67 68 20 2A 2F
+      000682 0D                    1615 	.db 0x0d
+      000683 0A                    1616 	.db 0x0a
+      000684 30 78 31 31 3A 5F 5F  1617 	.ascii "0x11:__IO uint8_t PSCRL; /*!< prescaler low */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 50 53 43
+             52 4C 3B 20 2F 2A 21
+             3C 20 70 72 65 73 63
+             61 6C 65 72 20 6C 6F
+             77 20 2A 2F
+      0006B2 0D                    1618 	.db 0x0d
+      0006B3 0A                    1619 	.db 0x0a
+      0006B4 30 78 31 32 3A 5F 5F  1620 	.ascii "0x12:__IO uint8_t ARRH;  /*!< auto-reload register high */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 41 52 52
+             48 3B 20 20 2F 2A 21
+             3C 20 61 75 74 6F 2D
+             72 65 6C 6F 61 64 20
+             72 65 67 69 73 74 65
+             72 20 68 69 67 68 20
+             2A 2F
+      0006EE 0D                    1621 	.db 0x0d
+      0006EF 0A                    1622 	.db 0x0a
+      0006F0 30 78 31 33 3A 5F 5F  1623 	.ascii "0x13:__IO uint8_t ARRL;  /*!< auto-reload register low */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 41 52 52
+             4C 3B 20 20 2F 2A 21
+             3C 20 61 75 74 6F 2D
+             72 65 6C 6F 61 64 20
+             72 65 67 69 73 74 65
+             72 20 6C 6F 77 20 2A
+             2F
+      000729 0D                    1624 	.db 0x0d
+      00072A 0A                    1625 	.db 0x0a
+      00072B 30 78 31 34 3A 5F 5F  1626 	.ascii "0x14:__IO uint8_t RCR;   /*!< Repetition Counter register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 52 43 52
+             3B 20 20 20 2F 2A 21
+             3C 20 52 65 70 65 74
+             69 74 69 6F 6E 20 43
+             6F 75 6E 74 65 72 20
+             72 65 67 69 73 74 65
+             72 20 2A 2F
+      000767 0D                    1627 	.db 0x0d
+      000768 0A                    1628 	.db 0x0a
+      000769 30 78 31 35 3A 5F 5F  1629 	.ascii "0x15:__IO uint8_t CCR1H; /*!< capture/compare register 1 hig"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             31 48 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 31
+             20 68 69 67
+      0007A5 68 20 2A 2F           1630 	.ascii "h */"
+      0007A9 0D                    1631 	.db 0x0d
+      0007AA 0A                    1632 	.db 0x0a
+      0007AB 30 78 31 36 3A 5F 5F  1633 	.ascii "0x16:__IO uint8_t CCR1L; /*!< capture/compare register 1 low"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             31 4C 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 31
+             20 6C 6F 77
+      0007E7 20 2A 2F              1634 	.ascii " */"
+      0007EA 0D                    1635 	.db 0x0d
+      0007EB 0A                    1636 	.db 0x0a
+      0007EC 30 78 31 37 3A 5F 5F  1637 	.ascii "0x17:__IO uint8_t CCR2H; /*!< capture/compare register 2 hig"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             32 48 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 32
+             20 68 69 67
+      000828 68 20 2A 2F           1638 	.ascii "h */"
+      00082C 0D                    1639 	.db 0x0d
+      00082D 0A                    1640 	.db 0x0a
+      00082E 30 78 31 38 3A 5F 5F  1641 	.ascii "0x18:__IO uint8_t CCR2L; /*!< capture/compare register 2 low"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             32 4C 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 32
+             20 6C 6F 77
+      00086A 20 2A 2F              1642 	.ascii " */"
+      00086D 0D                    1643 	.db 0x0d
+      00086E 0A                    1644 	.db 0x0a
+      00086F 30 78 31 39 3A 5F 5F  1645 	.ascii "0x19:__IO uint8_t CCR3H; /*!< capture/compare register 3 hig"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             33 48 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 33
+             20 68 69 67
+      0008AB 68 20 2A 2F           1646 	.ascii "h */"
+      0008AF 0D                    1647 	.db 0x0d
+      0008B0 0A                    1648 	.db 0x0a
+      0008B1 30 78 31 61 3A 5F 5F  1649 	.ascii "0x1a:__IO uint8_t CCR3L; /*!< capture/compare register 3 low"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             33 4C 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 33
+             20 6C 6F 77
+      0008ED 20 2A 2F              1650 	.ascii " */"
+      0008F0 0D                    1651 	.db 0x0d
+      0008F1 0A                    1652 	.db 0x0a
+      0008F2 30 78 31 62 3A 5F 5F  1653 	.ascii "0x1b:__IO uint8_t CCR4H; /*!< capture/compare register 3 hig"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             34 48 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 33
+             20 68 69 67
+      00092E 68 20 2A 2F           1654 	.ascii "h */"
+      000932 0D                    1655 	.db 0x0d
+      000933 0A                    1656 	.db 0x0a
+      000934 30 78 31 63 3A 5F 5F  1657 	.ascii "0x1c:__IO uint8_t CCR4L; /*!< capture/compare register 3 low"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 43 43 52
+             34 4C 3B 20 2F 2A 21
+             3C 20 63 61 70 74 75
+             72 65 2F 63 6F 6D 70
+             61 72 65 20 72 65 67
+             69 73 74 65 72 20 33
+             20 6C 6F 77
+      000970 20 2A 2F              1658 	.ascii " */"
+      000973 0D                    1659 	.db 0x0d
+      000974 0A                    1660 	.db 0x0a
+      000975 30 78 31 64 3A 5F 5F  1661 	.ascii "0x1d:__IO uint8_t BKR;   /*!< Break Register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 42 4B 52
+             3B 20 20 20 2F 2A 21
+             3C 20 42 72 65 61 6B
+             20 52 65 67 69 73 74
+             65 72 20 2A 2F
+      0009A4 0D                    1662 	.db 0x0d
+      0009A5 0A                    1663 	.db 0x0a
+      0009A6 30 78 31 65 3A 5F 5F  1664 	.ascii "0x1e:__IO uint8_t DTR;   /*!< dead-time register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 44 54 52
+             3B 20 20 20 2F 2A 21
+             3C 20 64 65 61 64 2D
+             74 69 6D 65 20 72 65
+             67 69 73 74 65 72 20
+             2A 2F
+      0009D9 0D                    1665 	.db 0x0d
+      0009DA 0A                    1666 	.db 0x0a
+      0009DB 30 78 31 66 3A 5F 5F  1667 	.ascii "0x1f:__IO uint8_t OISR;  /*!< Output idle register */"
+             49 4F 20 75 69 6E 74
+             38 5F 74 20 4F 49 53
+             52 3B 20 20 2F 2A 21
+             3C 20 4F 75 74 70 75
+             74 20 69 64 6C 65 20
+             72 65 67 69 73 74 65
+             72 20 2A 2F
+      000A10 0D                    1668 	.db 0x0d
+      000A11 0A                    1669 	.db 0x0a
+      000A12 7D                    1670 	.ascii "}"
+      000A13 0D                    1671 	.db 0x0d
+      000A14 0A                    1672 	.db 0x0a
+      000A15 54 49 4D 31 5F 54 79  1673 	.ascii "TIM1_TypeDef;"
+             70 65 44 65 66 3B
+      000A22 0D                    1674 	.db 0x0d
+      000A23 0A                    1675 	.db 0x0a
+      000A24 00                    1676 	.db 0x00
+                                   1677 	.area CODE
+                                   1678 	.area CONST
+      000A25                       1679 ___str_28:
+      000A25 74 69 6D 31           1680 	.ascii "tim1"
+      000A29 00                    1681 	.db 0x00
+                                   1682 	.area CODE
+                                   1683 	.area CONST
+      000A2A                       1684 ___str_29:
+      000A2A 20 20 74 69 6D 31 20  1685 	.ascii "  tim1 {init} "
+             7B 69 6E 69 74 7D 20
+      000A38 0D                    1686 	.db 0x0d
+      000A39 0A                    1687 	.db 0x0a
+      000A3A 20 20 74 69 6D 31 20  1688 	.ascii "  tim1 {write} [addr] [data]  "
+             7B 77 72 69 74 65 7D
+             20 5B 61 64 64 72 5D
+             20 5B 64 61 74 61 5D
+             20 20
+      000A58 0D                    1689 	.db 0x0d
+      000A59 0A                    1690 	.db 0x0a
+      000A5A 20 20 74 69 6D 31 20  1691 	.ascii "  tim1 {read} [addr] "
+             7B 72 65 61 64 7D 20
+             5B 61 64 64 72 5D 20
+      000A6F 0D                    1692 	.db 0x0d
+      000A70 0A                    1693 	.db 0x0a
+      000A71 20 20 74 69 6D 31 20  1694 	.ascii "  tim1 {onepulse} {high/low} [delay] [width] usec.."
+             7B 6F 6E 65 70 75 6C
+             73 65 7D 20 7B 68 69
+             67 68 2F 6C 6F 77 7D
+             20 5B 64 65 6C 61 79
+             5D 20 5B 77 69 64 74
+             68 5D 20 75 73 65 63
+             2E 2E
+      000AA4 0D                    1695 	.db 0x0d
+      000AA5 0A                    1696 	.db 0x0a
+      000AA6 20 20 74 69 6D 31 20  1697 	.ascii "  tim1 {pwm} [period] [ratio] {N(1/2/3/4):Pin(p/n/b):(h/l)}}"
+             7B 70 77 6D 7D 20 5B
+             70 65 72 69 6F 64 5D
+             20 5B 72 61 74 69 6F
+             5D 20 7B 4E 28 31 2F
+             32 2F 33 2F 34 29 3A
+             50 69 6E 28 70 2F 6E
+             2F 62 29 3A 28 68 2F
+             6C 29 7D 7D
+      000AE2 20 75 73 65 63 20     1698 	.ascii " usec "
+      000AE8 0D                    1699 	.db 0x0d
+      000AE9 0A                    1700 	.db 0x0a
+      000AEA 20 20 74 69 6D 31 20  1701 	.ascii "  tim1 {compare} [period] usec "
+             7B 63 6F 6D 70 61 72
+             65 7D 20 5B 70 65 72
+             69 6F 64 5D 20 75 73
+             65 63 20
+      000B09 0D                    1702 	.db 0x0d
+      000B0A 0A                    1703 	.db 0x0a
+      000B0B 20 20 74 69 6D 31 20  1704 	.ascii "  tim1 {capture} "
+             7B 63 61 70 74 75 72
+             65 7D 20
+      000B1C 0D                    1705 	.db 0x0d
+      000B1D 0A                    1706 	.db 0x0a
+      000B1E 20 20 74 69 6D 31 20  1707 	.ascii "  tim1 {remap} {set/reset} "
+             7B 72 65 6D 61 70 7D
+             20 7B 73 65 74 2F 72
+             65 73 65 74 7D 20
+      000B39 0D                    1708 	.db 0x0d
+      000B3A 0A                    1709 	.db 0x0a
+      000B3B 20 20 74 69 6D 31 20  1710 	.ascii "  tim1 {reset}"
+             7B 72 65 73 65 74 7D
+      000B49 0D                    1711 	.db 0x0d
+      000B4A 0A                    1712 	.db 0x0a
+      000B4B 20 20 74 69 6D 31 20  1713 	.ascii "  tim1 {help}  tim1 help."
+             7B 68 65 6C 70 7D 20
+             20 74 69 6D 31 20 68
+             65 6C 70 2E
+      000B64 0D                    1714 	.db 0x0d
+      000B65 0A                    1715 	.db 0x0a
+      000B66 00                    1716 	.db 0x00
+                                   1717 	.area CODE
+                                   1718 	.area INITIALIZER
+      000000                       1719 __xinit__gpbHelp_TIM1_TypeDef:
+      000000r02rD0                 1720 	.dw ___str_27
+      000002                       1721 __xinit__cmdTbl_only:
+      000002r0Ar25                 1722 	.dw ___str_28
+      000004r00r66                 1723 	.dw _DoTIM1
+      000006r0Ar2A                 1724 	.dw ___str_29
+      000008 00 00                 1725 	.dw #0x0000
+      00000A 00 00                 1726 	.dw #0x0000
+      00000C 00 00                 1727 	.dw #0x0000
+                                   1728 	.area CABS (ABS)

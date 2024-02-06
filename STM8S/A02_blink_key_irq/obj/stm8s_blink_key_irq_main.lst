@@ -1,0 +1,171 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_blink_key_irq_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _EXTI_PORTB_IRQHandler
+                                     13 ;--------------------------------------------------------
+                                     14 ; ram data
+                                     15 ;--------------------------------------------------------
+                                     16 	.area DATA
+                                     17 ;--------------------------------------------------------
+                                     18 ; ram data
+                                     19 ;--------------------------------------------------------
+                                     20 	.area INITIALIZED
+                                     21 ;--------------------------------------------------------
+                                     22 ; Stack segment in internal ram
+                                     23 ;--------------------------------------------------------
+                                     24 	.area SSEG
+      000000                         25 __start__stack:
+      000000                         26 	.ds	1
+                                     27 
+                                     28 ;--------------------------------------------------------
+                                     29 ; absolute external ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area DABS (ABS)
+                                     32 
+                                     33 ; default segment ordering for linker
+                                     34 	.area HOME
+                                     35 	.area GSINIT
+                                     36 	.area GSFINAL
+                                     37 	.area CONST
+                                     38 	.area INITIALIZER
+                                     39 	.area CODE
+                                     40 
+                                     41 ;--------------------------------------------------------
+                                     42 ; interrupt vector
+                                     43 ;--------------------------------------------------------
+                                     44 	.area HOME
+      000000                         45 __interrupt_vect:
+      000000 82v00u00u00             46 	int s_GSINIT ; reset
+      000004 82 00 00 00             47 	int 0x000000 ; trap
+      000008 82 00 00 00             48 	int 0x000000 ; int0
+      00000C 82 00 00 00             49 	int 0x000000 ; int1
+      000010 82 00 00 00             50 	int 0x000000 ; int2
+      000014 82 00 00 00             51 	int 0x000000 ; int3
+      000018 82v00u00u00             52 	int _EXTI_PORTB_IRQHandler ; int4
+                                     53 ;--------------------------------------------------------
+                                     54 ; global & static initialisations
+                                     55 ;--------------------------------------------------------
+                                     56 	.area HOME
+                                     57 	.area GSINIT
+                                     58 	.area GSFINAL
+                                     59 	.area GSINIT
+      000000 CDr00r00         [ 4]   60 	call	___sdcc_external_startup
+      000003                         61 __sdcc_init_data:
+                                     62 ; stm8_genXINIT() start
+      000003 AEr00r00         [ 2]   63 	ldw x, #l_DATA
+      000006 27 07            [ 1]   64 	jreq	00002$
+      000008                         65 00001$:
+      000008 72 4FuFFuFF      [ 1]   66 	clr (s_DATA - 1, x)
+      00000C 5A               [ 2]   67 	decw x
+      00000D 26 F9            [ 1]   68 	jrne	00001$
+      00000F                         69 00002$:
+      00000F AEr00r00         [ 2]   70 	ldw	x, #l_INITIALIZER
+      000012 27 09            [ 1]   71 	jreq	00004$
+      000014                         72 00003$:
+      000014 D6uFFuFF         [ 1]   73 	ld	a, (s_INITIALIZER - 1, x)
+      000017 D7uFFuFF         [ 1]   74 	ld	(s_INITIALIZED - 1, x), a
+      00001A 5A               [ 2]   75 	decw	x
+      00001B 26 F7            [ 1]   76 	jrne	00003$
+      00001D                         77 00004$:
+                                     78 ; stm8_genXINIT() end
+                                     79 	.area GSFINAL
+      000000 CCr00r1C         [ 2]   80 	jp	__sdcc_program_startup
+                                     81 ;--------------------------------------------------------
+                                     82 ; Home
+                                     83 ;--------------------------------------------------------
+                                     84 	.area HOME
+                                     85 	.area HOME
+      00001C                         86 __sdcc_program_startup:
+      00001C CCr00r09         [ 2]   87 	jp	_main
+                                     88 ;	return from main will return to caller
+                                     89 ;--------------------------------------------------------
+                                     90 ; code
+                                     91 ;--------------------------------------------------------
+                                     92 	.area CODE
+                                     93 ;	stm8s_blink_key_irq_main.c: 63: void EXTI_PORTB_IRQHandler(void) __interrupt(4)
+                                     94 ;	-----------------------------------------
+                                     95 ;	 function EXTI_PORTB_IRQHandler
+                                     96 ;	-----------------------------------------
+      000000                         97 _EXTI_PORTB_IRQHandler:
+                                     98 ;	stm8s_blink_key_irq_main.c: 69: UCOM_LED1_GPIO->ODR ^= (uint8_t)UCOM_LED1_PIN;
+      000000 90 10 50 0F      [ 1]   99 	bcpl	0x500f, #0
+                                    100 ;	stm8s_blink_key_irq_main.c: 70: UCOM_KEY1_GPIO->CR2 &= (uint8_t)(~(UCOM_KEY1_PIN)); /* External interrupt disable */
+      000004 72 1B 50 09      [ 1]  101 	bres	0x5009, #5
+                                    102 ;	stm8s_blink_key_irq_main.c: 72: }
+      000008 80               [11]  103 	iret
+                                    104 ;	stm8s_blink_key_irq_main.c: 86: void main(void)
+                                    105 ;	-----------------------------------------
+                                    106 ;	 function main
+                                    107 ;	-----------------------------------------
+      000009                        108 _main:
+                                    109 ;	stm8s_blink_key_irq_main.c: 92: CLK->CKDIVR &= (uint8_t)(~CLK_CKDIVR_HSIDIV);    
+      000009 C6 50 C6         [ 1]  110 	ld	a, 0x50c6
+      00000C A4 E7            [ 1]  111 	and	a, #0xe7
+      00000E C7 50 C6         [ 1]  112 	ld	0x50c6, a
+                                    113 ;	stm8s_blink_key_irq_main.c: 94: CLK->CKDIVR |= (uint8_t)CLK_PRESCALER_HSIDIV1;
+      000011 C6 50 C6         [ 1]  114 	ld	a, 0x50c6
+      000014 C7 50 C6         [ 1]  115 	ld	0x50c6, a
+                                    116 ;	stm8s_blink_key_irq_main.c: 111: EXTI->CR1 &= (uint8_t)~(0x03<<EXTI_SHIFT_PORT); /* PB5 : UCOM_KEY1_GPIO */
+      000017 C6 50 A0         [ 1]  117 	ld	a, 0x50a0
+      00001A A4 F3            [ 1]  118 	and	a, #0xf3
+      00001C C7 50 A0         [ 1]  119 	ld	0x50a0, a
+                                    120 ;	stm8s_blink_key_irq_main.c: 112: EXTI->CR1 |= (vbData<<EXTI_SHIFT_PORT); /* PORT B */
+      00001F 72 14 50 A0      [ 1]  121 	bset	0x50a0, #2
+                                    122 ;	stm8s_blink_key_irq_main.c: 122: UCOM_LED1_GPIO->ODR &= (uint8_t)(~(UCOM_LED1_PIN)); /* Output mode  Low level */
+      000023 72 11 50 0F      [ 1]  123 	bres	0x500f, #0
+                                    124 ;	stm8s_blink_key_irq_main.c: 123: UCOM_LED1_GPIO->DDR |= (uint8_t)UCOM_LED1_PIN; /* Set Output mode */
+      000027 72 10 50 11      [ 1]  125 	bset	0x5011, #0
+                                    126 ;	stm8s_blink_key_irq_main.c: 124: UCOM_LED1_GPIO->CR1 |= (uint8_t)UCOM_LED1_PIN; /* Push-Pull */
+      00002B 72 10 50 12      [ 1]  127 	bset	0x5012, #0
+                                    128 ;	stm8s_blink_key_irq_main.c: 126: UCOM_LED1_GPIO->CR2 |= (uint8_t)UCOM_LED1_PIN; /* 10MHz */
+      00002F 72 10 50 13      [ 1]  129 	bset	0x5013, #0
+                                    130 ;	stm8s_blink_key_irq_main.c: 132: UCOM_KEY1_GPIO->DDR &= (uint8_t)(~(UCOM_KEY1_PIN)); /* Set Input mode */
+      000033 72 1B 50 07      [ 1]  131 	bres	0x5007, #5
+                                    132 ;	stm8s_blink_key_irq_main.c: 133: UCOM_KEY1_GPIO->CR1 |= (uint8_t)UCOM_KEY1_PIN; /* Pull-up */
+      000037 72 1A 50 08      [ 1]  133 	bset	0x5008, #5
+                                    134 ;	stm8s_blink_key_irq_main.c: 136: UCOM_KEY1_GPIO->CR2 &= (uint8_t)(~(UCOM_KEY1_PIN)); /* External interrupt disable */
+      00003B 72 1B 50 09      [ 1]  135 	bres	0x5009, #5
+                                    136 ;	stm8s_blink_key_irq_main.c: 139: UCOM_LED1_GPIO->ODR = UCOM_LED1_GPIO->ODR & ~UCOM_LED1_PIN; // led on...
+      00003F C6 50 0F         [ 1]  137 	ld	a, 0x500f
+      000042 A4 FE            [ 1]  138 	and	a, #0xfe
+      000044 C7 50 0F         [ 1]  139 	ld	0x500f, a
+                                    140 ;	stm8s_blink_key_irq_main.c: 144: enableInterrupts();
+      000047 9A               [ 1]  141 	rim
+                                    142 ;	stm8s_blink_key_irq_main.c: 147: uint32_t vwDelay = 0;
+      000048 5F               [ 1]  143 	clrw	x
+      000049 90 5F            [ 1]  144 	clrw	y
+                                    145 ;	stm8s_blink_key_irq_main.c: 148: do {
+      00004B                        146 00103$:
+                                    147 ;	stm8s_blink_key_irq_main.c: 149: if(vwDelay==0) 
+      00004B 5D               [ 2]  148 	tnzw	x
+      00004C 26 11            [ 1]  149 	jrne	00102$
+      00004E 90 5D            [ 2]  150 	tnzw	y
+      000050 26 0D            [ 1]  151 	jrne	00102$
+                                    152 ;	stm8s_blink_key_irq_main.c: 151: vwDelay = 0x20000*5*20; // 10sec..
+      000052 5F               [ 1]  153 	clrw	x
+      000053 90 AE 00 C8      [ 2]  154 	ldw	y, #0x00c8
+                                    155 ;	stm8s_blink_key_irq_main.c: 153: UCOM_LED1_GPIO->ODR ^= (uint8_t)UCOM_LED1_PIN;
+      000057 90 10 50 0F      [ 1]  156 	bcpl	0x500f, #0
+                                    157 ;	stm8s_blink_key_irq_main.c: 154: UCOM_KEY1_GPIO->CR2 |= (uint8_t)UCOM_KEY1_PIN; /* External interrupt enable */
+      00005B 72 1A 50 09      [ 1]  158 	bset	0x5009, #5
+      00005F                        159 00102$:
+                                    160 ;	stm8s_blink_key_irq_main.c: 156: vwDelay--;
+      00005F 1D 00 01         [ 2]  161 	subw	x, #0x0001
+      000062 24 E7            [ 1]  162 	jrnc	00103$
+      000064 90 5A            [ 2]  163 	decw	y
+                                    164 ;	stm8s_blink_key_irq_main.c: 157: } while(1);
+      000066 20 E3            [ 2]  165 	jra	00103$
+                                    166 ;	stm8s_blink_key_irq_main.c: 184: }
+      000068 81               [ 4]  167 	ret
+                                    168 	.area CODE
+                                    169 	.area CONST
+                                    170 	.area INITIALIZER
+                                    171 	.area CABS (ABS)

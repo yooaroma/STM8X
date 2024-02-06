@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"hancel.serialport-helper",
+			"ms-vscode.vscode-serial-monitor"
+		]
+	},
+	"settings": {
+		"vscode-serial-monitor.dataBits": 8,
+		"vscode-serial-monitor.lineEnding": "none",
+		"vscode-serial-monitor.loggingVerbosity": "off",
+		"vscode-serial-monitor.parity": "none",
+		"vscode-serial-monitor.stopBits": 1,
+		"vscode-serial-monitor.customBaudRates": [
+			9600
+		]
+	}
+}

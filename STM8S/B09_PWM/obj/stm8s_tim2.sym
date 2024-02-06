@@ -1,0 +1,74 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  9 _TI1_Config                                                    0004AD R
+  9 _TI2_Config                                                    0004E8 R
+  9 _TI3_Config                                                    000523 R
+  9 _TIM2_ARRPreloadConfig                                         000283 GR
+  9 _TIM2_CCxCmd                                                   00032F GR
+  9 _TIM2_ClearFlag                                                00047F GR
+  9 _TIM2_ClearITPendingBit                                        0004A8 GR
+  9 _TIM2_Cmd                                                      0001CD GR
+  9 _TIM2_DeInit                                                   000000 GR
+  9 _TIM2_ForcedOC1Config                                          000256 GR
+  9 _TIM2_ForcedOC2Config                                          000265 GR
+  9 _TIM2_ForcedOC3Config                                          000274 GR
+  9 _TIM2_GenerateEvent                                            0002E3 GR
+  9 _TIM2_GetCapture1                                              000406 GR
+  9 _TIM2_GetCapture2                                              00041C GR
+  9 _TIM2_GetCapture3                                              000432 GR
+  9 _TIM2_GetCounter                                               000448 GR
+  9 _TIM2_GetFlagStatus                                            000462 GR
+  9 _TIM2_GetITStatus                                              00048A GR
+  9 _TIM2_GetPrescaler                                             00045E GR
+  9 _TIM2_ICInit                                                   000116 GR
+  9 _TIM2_ITConfig                                                 0001E5 GR
+  9 _TIM2_OC1Init                                                  000065 GR
+  9 _TIM2_OC1PolarityConfig                                        0002E7 GR
+  9 _TIM2_OC1PreloadConfig                                         00029B GR
+  9 _TIM2_OC2Init                                                  0000A0 GR
+  9 _TIM2_OC2PolarityConfig                                        0002FF GR
+  9 _TIM2_OC2PreloadConfig                                         0002B3 GR
+  9 _TIM2_OC3Init                                                  0000DB GR
+  9 _TIM2_OC3PolarityConfig                                        000317 GR
+  9 _TIM2_OC3PreloadConfig                                         0002CB GR
+  9 _TIM2_PWMIConfig                                               00015E GR
+  9 _TIM2_PrescalerConfig                                          00024B GR
+  9 _TIM2_SelectOCxM                                               000375 GR
+  9 _TIM2_SelectOnePulseMode                                       000233 GR
+  9 _TIM2_SetAutoreload                                            0003B5 GR
+  9 _TIM2_SetCompare1                                              0003BE GR
+  9 _TIM2_SetCompare2                                              0003C7 GR
+  9 _TIM2_SetCompare3                                              0003D0 GR
+  9 _TIM2_SetCounter                                               0003AC GR
+  9 _TIM2_SetIC1Prescaler                                          0003D9 GR
+  9 _TIM2_SetIC2Prescaler                                          0003E8 GR
+  9 _TIM2_SetIC3Prescaler                                          0003F7 GR
+  9 _TIM2_TimeBaseInit                                             000059 GR
+  9 _TIM2_UpdateDisableConfig                                      000203 GR
+  9 _TIM2_UpdateRequestConfig                                      00021B GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size      0   flags    0
+   8 INITIALIZER                                size      0   flags    0
+   9 CODE                                       size    55E   flags    0
+   A CABS                                       size      0   flags    8
+

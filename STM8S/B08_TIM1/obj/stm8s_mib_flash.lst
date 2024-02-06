@@ -1,0 +1,167 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_mib_flash
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _mmFlashUnlock
+                                     12 	.globl _mmFlashLock
+                                     13 	.globl _mmFlashWrite
+                                     14 	.globl _mmFlashRead
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area INITIALIZED
+                                     23 ;--------------------------------------------------------
+                                     24 ; absolute external ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area DABS (ABS)
+                                     27 
+                                     28 ; default segment ordering for linker
+                                     29 	.area HOME
+                                     30 	.area GSINIT
+                                     31 	.area GSFINAL
+                                     32 	.area CONST
+                                     33 	.area INITIALIZER
+                                     34 	.area CODE
+                                     35 
+                                     36 ;--------------------------------------------------------
+                                     37 ; global & static initialisations
+                                     38 ;--------------------------------------------------------
+                                     39 	.area HOME
+                                     40 	.area GSINIT
+                                     41 	.area GSFINAL
+                                     42 	.area GSINIT
+                                     43 ;--------------------------------------------------------
+                                     44 ; Home
+                                     45 ;--------------------------------------------------------
+                                     46 	.area HOME
+                                     47 	.area HOME
+                                     48 ;--------------------------------------------------------
+                                     49 ; code
+                                     50 ;--------------------------------------------------------
+                                     51 	.area CODE
+                                     52 ;	./../../mib/stm8s_mib_flash.c: 64: uint8_t mmFlashUnlock(void) 
+                                     53 ;	-----------------------------------------
+                                     54 ;	 function mmFlashUnlock
+                                     55 ;	-----------------------------------------
+      000000                         56 _mmFlashUnlock:
+      000000 52 03            [ 2]   57 	sub	sp, #3
+                                     58 ;	./../../mib/stm8s_mib_flash.c: 66: volatile uint16_t vwDelay = 0x7fff;
+      000002 AE 7F FF         [ 2]   59 	ldw	x, #0x7fff
+      000005 1F 01            [ 2]   60 	ldw	(0x01, sp), x
+                                     61 ;	./../../mib/stm8s_mib_flash.c: 67: volatile uint8_t DataUnlocked = 0;
+      000007 0F 03            [ 1]   62 	clr	(0x03, sp)
+                                     63 ;	./../../mib/stm8s_mib_flash.c: 70: while( DataUnlocked == 0 )
+      000009                         64 00104$:
+      000009 0D 03            [ 1]   65 	tnz	(0x03, sp)
+      00000B 26 1E            [ 1]   66 	jrne	00106$
+                                     67 ;	./../../mib/stm8s_mib_flash.c: 72: FLASH->PUKR = 0x56;
+      00000D 35 56 50 62      [ 1]   68 	mov	0x5062+0, #0x56
+                                     69 ;	./../../mib/stm8s_mib_flash.c: 73: FLASH->PUKR = 0xAE;
+      000011 35 AE 50 62      [ 1]   70 	mov	0x5062+0, #0xae
+                                     71 ;	./../../mib/stm8s_mib_flash.c: 75: DataUnlocked = (uint8_t)FLASH->IAPSR;	
+      000015 C6 50 5F         [ 1]   72 	ld	a, 0x505f
+                                     73 ;	./../../mib/stm8s_mib_flash.c: 76: DataUnlocked &= FLASH_IAPSR_PUL;
+      000018 6B 03            [ 1]   74 	ld	(0x03, sp), a
+      00001A A4 02            [ 1]   75 	and	a, #0x02
+      00001C 6B 03            [ 1]   76 	ld	(0x03, sp), a
+                                     77 ;	./../../mib/stm8s_mib_flash.c: 77: if(vwDelay) vwDelay--;
+      00001E 1E 01            [ 2]   78 	ldw	x, (0x01, sp)
+      000020 27 07            [ 1]   79 	jreq	00102$
+      000022 1E 01            [ 2]   80 	ldw	x, (0x01, sp)
+      000024 5A               [ 2]   81 	decw	x
+      000025 1F 01            [ 2]   82 	ldw	(0x01, sp), x
+      000027 20 E0            [ 2]   83 	jra	00104$
+      000029                         84 00102$:
+                                     85 ;	./../../mib/stm8s_mib_flash.c: 80: return 0;
+      000029 4F               [ 1]   86 	clr	a
+                                     87 ;	./../../mib/stm8s_mib_flash.c: 83: return 1;
+      00002A C5                      88 	.byte 0xc5
+      00002B                         89 00106$:
+      00002B A6 01            [ 1]   90 	ld	a, #0x01
+      00002D                         91 00107$:
+                                     92 ;	./../../mib/stm8s_mib_flash.c: 84: }
+      00002D 5B 03            [ 2]   93 	addw	sp, #3
+      00002F 81               [ 4]   94 	ret
+                                     95 ;	./../../mib/stm8s_mib_flash.c: 94: void mmFlashLock(void) 
+                                     96 ;	-----------------------------------------
+                                     97 ;	 function mmFlashLock
+                                     98 ;	-----------------------------------------
+      000030                         99 _mmFlashLock:
+                                    100 ;	./../../mib/stm8s_mib_flash.c: 97: FLASH->IAPSR &= (uint8_t)(~FLASH_IAPSR_PUL); 
+      000030 72 13 50 5F      [ 1]  101 	bres	0x505f, #1
+                                    102 ;	./../../mib/stm8s_mib_flash.c: 98: }
+      000034 81               [ 4]  103 	ret
+                                    104 ;	./../../mib/stm8s_mib_flash.c: 109: uint8_t mmFlashWrite(uint16_t vbOffset,uint8_t vbData) 
+                                    105 ;	-----------------------------------------
+                                    106 ;	 function mmFlashWrite
+                                    107 ;	-----------------------------------------
+      000035                        108 _mmFlashWrite:
+      000035 52 03            [ 2]  109 	sub	sp, #3
+      000037 6B 03            [ 1]  110 	ld	(0x03, sp), a
+                                    111 ;	./../../mib/stm8s_mib_flash.c: 111: volatile uint16_t vwDelay = 0x7fff;
+      000039 90 AE 7F FF      [ 2]  112 	ldw	y, #0x7fff
+      00003D 17 01            [ 2]  113 	ldw	(0x01, sp), y
+                                    114 ;	./../../mib/stm8s_mib_flash.c: 112: FLASH->CR1 &= (uint8_t)(~FLASH_CR1_FIX);		// Set Standard programming time (max 6.6 ms)
+      00003F 72 11 50 5A      [ 1]  115 	bres	0x505a, #0
+                                    116 ;	./../../mib/stm8s_mib_flash.c: 113: if(vbOffset > (FLASH_PROG_END_PHYSICAL_ADDRESS - FLASH_PROG_START_PHYSICAL_ADDRESS))
+      000043 A3 7F FF         [ 2]  117 	cpw	x, #0x7fff
+      000046 23 03            [ 2]  118 	jrule	00102$
+                                    119 ;	./../../mib/stm8s_mib_flash.c: 115: return 0; // false...
+      000048 4F               [ 1]  120 	clr	a
+      000049 20 19            [ 2]  121 	jra	00109$
+      00004B                        122 00102$:
+                                    123 ;	./../../mib/stm8s_mib_flash.c: 118: *((PointerAttr uint8_t*)(FLASH_PROG_START_PHYSICAL_ADDRESS+vbOffset)) = vbData;
+      00004B 7B 03            [ 1]  124 	ld	a, (0x03, sp)
+      00004D D7 80 00         [ 1]  125 	ld	(0x8000, x), a
+                                    126 ;	./../../mib/stm8s_mib_flash.c: 120: while( !(FLASH->IAPSR & FLASH_IAPSR_EOP) )
+      000050                        127 00106$:
+      000050 72 04 50 5F 0D   [ 2]  128 	btjt	0x505f, #2, 00108$
+                                    129 ;	./../../mib/stm8s_mib_flash.c: 122: if(vwDelay) vwDelay--;
+      000055 1E 01            [ 2]  130 	ldw	x, (0x01, sp)
+      000057 27 07            [ 1]  131 	jreq	00104$
+      000059 1E 01            [ 2]  132 	ldw	x, (0x01, sp)
+      00005B 5A               [ 2]  133 	decw	x
+      00005C 1F 01            [ 2]  134 	ldw	(0x01, sp), x
+      00005E 20 F0            [ 2]  135 	jra	00106$
+      000060                        136 00104$:
+                                    137 ;	./../../mib/stm8s_mib_flash.c: 125: return 0;
+      000060 4F               [ 1]  138 	clr	a
+                                    139 ;	./../../mib/stm8s_mib_flash.c: 128: return 1;
+      000061 C5                     140 	.byte 0xc5
+      000062                        141 00108$:
+      000062 A6 01            [ 1]  142 	ld	a, #0x01
+      000064                        143 00109$:
+                                    144 ;	./../../mib/stm8s_mib_flash.c: 129: }
+      000064 5B 03            [ 2]  145 	addw	sp, #3
+      000066 81               [ 4]  146 	ret
+                                    147 ;	./../../mib/stm8s_mib_flash.c: 142: uint8_t mmFlashRead(uint16_t vbOffset)
+                                    148 ;	-----------------------------------------
+                                    149 ;	 function mmFlashRead
+                                    150 ;	-----------------------------------------
+      000067                        151 _mmFlashRead:
+                                    152 ;	./../../mib/stm8s_mib_flash.c: 145: if(vbOffset > (FLASH_PROG_END_PHYSICAL_ADDRESS - FLASH_PROG_START_PHYSICAL_ADDRESS))
+      000067 A3 7F FF         [ 2]  153 	cpw	x, #0x7fff
+      00006A 23 02            [ 2]  154 	jrule	00102$
+                                    155 ;	./../../mib/stm8s_mib_flash.c: 147: return 0; // false...
+      00006C 4F               [ 1]  156 	clr	a
+      00006D 81               [ 4]  157 	ret
+      00006E                        158 00102$:
+                                    159 ;	./../../mib/stm8s_mib_flash.c: 150: vbData = *((uint8_t *)(FLASH_PROG_START_PHYSICAL_ADDRESS+vbOffset));
+      00006E D6 80 00         [ 1]  160 	ld	a, (0x8000, x)
+                                    161 ;	./../../mib/stm8s_mib_flash.c: 151: return vbData;
+                                    162 ;	./../../mib/stm8s_mib_flash.c: 153: }
+      000071 81               [ 4]  163 	ret
+                                    164 	.area CODE
+                                    165 	.area CONST
+                                    166 	.area INITIALIZER
+                                    167 	.area CABS (ABS)

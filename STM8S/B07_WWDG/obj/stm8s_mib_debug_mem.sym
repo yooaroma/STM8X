@@ -1,0 +1,68 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  9 _DoMem                                                         000062 R
+    _HexDump                                                       ****** GX
+    _HexToInt                                                      ****** GX
+    _MibWriteDebugString                                           ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_13                                                      0000B1 R
+  7 ___str_14                                                      0000B5 R
+  7 ___str_19                                                      0000E8 R
+  7 ___str_2                                                       000026 R
+  7 ___str_20                                                      0000EE R
+  7 ___str_22                                                      00010F R
+  7 ___str_25                                                      000129 R
+  7 ___str_26                                                      00012D R
+  7 ___str_27                                                      000131 R
+  7 ___str_5                                                       000067 R
+  7 __str_0                                                        000000 R
+  7 __str_1                                                        000013 R
+  7 __str_10                                                       00009C R
+  7 __str_11                                                       0000A4 R
+  7 __str_12                                                       0000AD R
+  7 __str_15                                                       0000B9 R
+  7 __str_16                                                       0000CC R
+  7 __str_17                                                       0000D7 R
+  7 __str_18                                                       0000DF R
+  7 __str_21                                                       0000F2 R
+  7 __str_23                                                       000113 R
+  7 __str_24                                                       00011C R
+  7 __str_3                                                        00002C R
+  7 __str_4                                                        000049 R
+  7 __str_6                                                        00006C R
+  7 __str_7                                                        000081 R
+  7 __str_8                                                        00008D R
+  7 __str_9                                                        000095 R
+  8 __xinit__cmdTbl_only                                           000000 R
+    _cmdTbl                                                        ****** GX
+  2 _cmdTbl_only                                                   000000 R
+  9 _cmd_mem                                                       000000 GR
+    _memcmp                                                        ****** GX
+    _memset                                                        ****** GX
+    _mib_printf                                                    ****** GX
+    _strcmp                                                        ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      C   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size    352   flags    0
+   8 INITIALIZER                                size      C   flags    0
+   9 CODE                                       size    7DD   flags    0
+   A CABS                                       size      0   flags    8
+

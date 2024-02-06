@@ -1,0 +1,93 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _DecToLong                                                     ****** GX
+  9 _Delay                                                         0005AB GR
+  9 _DoBEEP                                                        000066 R
+    _FLASH_ProgramOptionByte                                       ****** GX
+    _FLASH_ReadByte                                                ****** GX
+    _FLASH_ReadOptionByte                                          ****** GX
+    _FLASH_Unlock                                                  ****** GX
+  9 _GPIO_Configuration                                            00047D GR
+    _HexToInt                                                      ****** GX
+    _MibWriteDebugString                                           ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_11                                                      0000C4 R
+  7 ___str_13                                                      0000E5 R
+  7 ___str_16                                                      000118 R
+  7 ___str_2                                                       000028 R
+  7 ___str_22                                                      000196 R
+  7 ___str_23                                                      00019C R
+  7 ___str_24                                                      0001A0 R
+  7 ___str_28                                                      0001ED R
+  7 ___str_29                                                      0001F2 R
+  7 ___str_30                                                      0001F7 R
+  7 ___str_33                                                      00038E R
+  7 ___str_34                                                      000393 R
+  7 ___str_5                                                       000068 R
+  7 ___str_7                                                       00008A R
+  7 ___str_9                                                       0000A5 R
+    __divulong                                                     ****** GX
+  7 __str_0                                                        000000 R
+  7 __str_1                                                        000014 R
+  7 __str_10                                                       0000AC R
+  7 __str_12                                                       0000CC R
+  7 __str_14                                                       0000EB R
+  7 __str_15                                                       000100 R
+  7 __str_17                                                       00011F R
+  7 __str_18                                                       000139 R
+  7 __str_19                                                       000151 R
+  7 __str_20                                                       000167 R
+  7 __str_21                                                       000183 R
+  7 __str_25                                                       0001A6 R
+  7 __str_26                                                       0001BF R
+  7 __str_27                                                       0001D7 R
+  7 __str_3                                                        00002E R
+  7 __str_31                                                       000349 R
+  7 __str_32                                                       000371 R
+  7 __str_4                                                        00004B R
+  7 __str_6                                                        00006D R
+  7 __str_8                                                        00008F R
+  8 __xinit__cmdTbl_only                                           000001 R
+  8 __xinit__gbDelayData                                           000000 R
+  9 _calConfigBEEP_test                                            0004AA GR
+    _cmdTbl                                                        ****** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  2 _cmdTbl_only                                                   000001 R
+  9 _cmd_beep                                                      000000 GR
+  9 _cmd_test                                                      000062 GR
+  9 _cmd_test_init_before_irq_enable                               000065 GR
+    _fnBeepStart                                                   ****** GX
+  2 _gbDelayData                                                   000000 GR
+    _gwMibMiliSec                                                  ****** GX
+    _mib_printf                                                    ****** GX
+    _strcmp                                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 3
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      D   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size    4B9   flags    0
+   8 INITIALIZER                                size      D   flags    0
+   9 CODE                                       size    5B3   flags    0
+   A CABS                                       size      0   flags    8
+

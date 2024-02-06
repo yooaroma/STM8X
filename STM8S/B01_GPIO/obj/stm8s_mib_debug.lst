@@ -1,0 +1,503 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_mib_debug
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _UART_RX_IRQHandler
+                                     12 	.globl _MibWriteDebugByte
+                                     13 	.globl _MibWriteDebugByte485
+                                     14 	.globl _MibWriteDebugEmptyCheck
+                                     15 	.globl _MibWriteDebugString
+                                     16 	.globl _MibWriteDebugStringN
+                                     17 	.globl _MibReadDebugByte
+                                     18 	.globl _MibDebugInit
+                                     19 	.globl _MibWriteDebugTransmitHex
+                                     20 	.globl _MibWriteDebugTransmitHex2
+                                     21 ;--------------------------------------------------------
+                                     22 ; ram data
+                                     23 ;--------------------------------------------------------
+                                     24 	.area DATA
+      000000                         25 _rx_buffer:
+      000000                         26 	.ds 64
+      000040                         27 _rx_buffer_head:
+      000040                         28 	.ds 1
+      000041                         29 _rx_buffer_tail:
+      000041                         30 	.ds 1
+                                     31 ;--------------------------------------------------------
+                                     32 ; ram data
+                                     33 ;--------------------------------------------------------
+                                     34 	.area INITIALIZED
+      000000                         35 _g_TableHex:
+      000000                         36 	.ds 2
+                                     37 ;--------------------------------------------------------
+                                     38 ; absolute external ram data
+                                     39 ;--------------------------------------------------------
+                                     40 	.area DABS (ABS)
+                                     41 
+                                     42 ; default segment ordering for linker
+                                     43 	.area HOME
+                                     44 	.area GSINIT
+                                     45 	.area GSFINAL
+                                     46 	.area CONST
+                                     47 	.area INITIALIZER
+                                     48 	.area CODE
+                                     49 
+                                     50 ;--------------------------------------------------------
+                                     51 ; global & static initialisations
+                                     52 ;--------------------------------------------------------
+                                     53 	.area HOME
+                                     54 	.area GSINIT
+                                     55 	.area GSFINAL
+                                     56 	.area GSINIT
+                                     57 ;--------------------------------------------------------
+                                     58 ; Home
+                                     59 ;--------------------------------------------------------
+                                     60 	.area HOME
+                                     61 	.area HOME
+                                     62 ;--------------------------------------------------------
+                                     63 ; code
+                                     64 ;--------------------------------------------------------
+                                     65 	.area CODE
+                                     66 ;	./../../mib/stm8s_mib_debug.c: 206: void MibWriteDebugByte(uint8_t ch)
+                                     67 ;	-----------------------------------------
+                                     68 ;	 function MibWriteDebugByte
+                                     69 ;	-----------------------------------------
+      000000                         70 _MibWriteDebugByte:
+      000000 88               [ 1]   71 	push	a
+      000001 6B 01            [ 1]   72 	ld	(0x01, sp), a
+                                     73 ;	./../../mib/stm8s_mib_debug.c: 227: while (!(UARTXdebug->SR & UARTX_SR_TXE));
+      000003                         74 00101$:
+      000003 C6 52 40         [ 1]   75 	ld	a, 0x5240
+      000006 2A FB            [ 1]   76 	jrpl	00101$
+                                     77 ;	./../../mib/stm8s_mib_debug.c: 228: UARTXdebug->DR = ch;
+      000008 AE 52 41         [ 2]   78 	ldw	x, #0x5241
+      00000B 7B 01            [ 1]   79 	ld	a, (0x01, sp)
+      00000D F7               [ 1]   80 	ld	(x), a
+                                     81 ;	./../../mib/stm8s_mib_debug.c: 231: }
+      00000E 84               [ 1]   82 	pop	a
+      00000F 81               [ 4]   83 	ret
+                                     84 ;	./../../mib/stm8s_mib_debug.c: 240: void MibWriteDebugByte485(uint8_t ch)
+                                     85 ;	-----------------------------------------
+                                     86 ;	 function MibWriteDebugByte485
+                                     87 ;	-----------------------------------------
+      000010                         88 _MibWriteDebugByte485:
+                                     89 ;	./../../mib/stm8s_mib_debug.c: 248: MibWriteDebugByte(ch);
+                                     90 ;	./../../mib/stm8s_mib_debug.c: 257: }
+      000010 CCr00r00         [ 2]   91 	jp	_MibWriteDebugByte
+                                     92 ;	./../../mib/stm8s_mib_debug.c: 266: void MibWriteDebugEmptyCheck(void)
+                                     93 ;	-----------------------------------------
+                                     94 ;	 function MibWriteDebugEmptyCheck
+                                     95 ;	-----------------------------------------
+      000013                         96 _MibWriteDebugEmptyCheck:
+                                     97 ;	./../../mib/stm8s_mib_debug.c: 269: while (!(UARTXdebug->SR & UARTX_SR_TC));
+      000013                         98 00101$:
+      000013 72 0D 52 40 FB   [ 2]   99 	btjf	0x5240, #6, 00101$
+                                    100 ;	./../../mib/stm8s_mib_debug.c: 270: UARTXdebug->SR &= ~UARTX_SR_TC;
+      000018 72 1D 52 40      [ 1]  101 	bres	0x5240, #6
+                                    102 ;	./../../mib/stm8s_mib_debug.c: 272: }
+      00001C 81               [ 4]  103 	ret
+                                    104 ;	./../../mib/stm8s_mib_debug.c: 281: void MibWriteDebugString(uint8_t *v_pStr)
+                                    105 ;	-----------------------------------------
+                                    106 ;	 function MibWriteDebugString
+                                    107 ;	-----------------------------------------
+      00001D                        108 _MibWriteDebugString:
+                                    109 ;	./../../mib/stm8s_mib_debug.c: 288: while (*v_pStr)
+      00001D                        110 00101$:
+      00001D F6               [ 1]  111 	ld	a, (x)
+      00001E 26 01            [ 1]  112 	jrne	00117$
+      000020 81               [ 4]  113 	ret
+      000021                        114 00117$:
+                                    115 ;	./../../mib/stm8s_mib_debug.c: 290: MibWriteDebugByte(*v_pStr++);
+      000021 5C               [ 1]  116 	incw	x
+      000022 89               [ 2]  117 	pushw	x
+      000023 CDr00r00         [ 4]  118 	call	_MibWriteDebugByte
+      000026 85               [ 2]  119 	popw	x
+      000027 20 F4            [ 2]  120 	jra	00101$
+                                    121 ;	./../../mib/stm8s_mib_debug.c: 299: }
+      000029 81               [ 4]  122 	ret
+                                    123 ;	./../../mib/stm8s_mib_debug.c: 308: void MibWriteDebugStringN(uint8_t *v_pStr, uint8_t nSize)
+                                    124 ;	-----------------------------------------
+                                    125 ;	 function MibWriteDebugStringN
+                                    126 ;	-----------------------------------------
+      00002A                        127 _MibWriteDebugStringN:
+      00002A 88               [ 1]  128 	push	a
+      00002B 6B 01            [ 1]  129 	ld	(0x01, sp), a
+                                    130 ;	./../../mib/stm8s_mib_debug.c: 315: while (1)
+      00002D                        131 00104$:
+                                    132 ;	./../../mib/stm8s_mib_debug.c: 317: if (nSize == 0)	break;		
+      00002D 0D 01            [ 1]  133 	tnz	(0x01, sp)
+      00002F 27 0B            [ 1]  134 	jreq	00106$
+                                    135 ;	./../../mib/stm8s_mib_debug.c: 318: MibWriteDebugByte(*v_pStr++);
+      000031 F6               [ 1]  136 	ld	a, (x)
+      000032 5C               [ 1]  137 	incw	x
+      000033 89               [ 2]  138 	pushw	x
+      000034 CDr00r00         [ 4]  139 	call	_MibWriteDebugByte
+      000037 85               [ 2]  140 	popw	x
+                                    141 ;	./../../mib/stm8s_mib_debug.c: 319: nSize--;
+      000038 0A 01            [ 1]  142 	dec	(0x01, sp)
+      00003A 20 F1            [ 2]  143 	jra	00104$
+      00003C                        144 00106$:
+                                    145 ;	./../../mib/stm8s_mib_debug.c: 328: }
+      00003C 84               [ 1]  146 	pop	a
+      00003D 81               [ 4]  147 	ret
+                                    148 ;	./../../mib/stm8s_mib_debug.c: 337: uint16_t MibReadDebugByte( void )
+                                    149 ;	-----------------------------------------
+                                    150 ;	 function MibReadDebugByte
+                                    151 ;	-----------------------------------------
+      00003E                        152 _MibReadDebugByte:
+                                    153 ;	./../../mib/stm8s_mib_debug.c: 344: if (rx_buffer_head == rx_buffer_tail) // wait for character
+      00003E C6u00u41         [ 1]  154 	ld	a, _rx_buffer_tail+0
+      000041 C1u00u40         [ 1]  155 	cp	a, _rx_buffer_head+0
+      000044 26 03            [ 1]  156 	jrne	00102$
+                                    157 ;	./../../mib/stm8s_mib_debug.c: 346: return MIB_DEBUG_READ_NODATA; // no data
+      000046 5F               [ 1]  158 	clrw	x
+      000047 5A               [ 2]  159 	decw	x
+      000048 81               [ 4]  160 	ret
+      000049                        161 00102$:
+                                    162 ;	./../../mib/stm8s_mib_debug.c: 348: vbIndex = rx_buffer_tail + 1;
+      000049 C6u00u41         [ 1]  163 	ld	a, _rx_buffer_tail+0
+      00004C 4C               [ 1]  164 	inc	a
+                                    165 ;	./../../mib/stm8s_mib_debug.c: 349: if (vbIndex >= RX_BUFFER_SIZE) vbIndex = 0;
+      00004D A1 40            [ 1]  166 	cp	a, #0x40
+      00004F 25 01            [ 1]  167 	jrc	00104$
+      000051 4F               [ 1]  168 	clr	a
+      000052                        169 00104$:
+                                    170 ;	./../../mib/stm8s_mib_debug.c: 350: vbCh = rx_buffer[vbIndex];
+      000052 5F               [ 1]  171 	clrw	x
+      000053 97               [ 1]  172 	ld	xl, a
+      000054 1Cr00r00         [ 2]  173 	addw	x, #(_rx_buffer+0)
+      000057 88               [ 1]  174 	push	a
+      000058 F6               [ 1]  175 	ld	a, (x)
+      000059 97               [ 1]  176 	ld	xl, a
+      00005A 84               [ 1]  177 	pop	a
+                                    178 ;	./../../mib/stm8s_mib_debug.c: 351: rx_buffer_tail = vbIndex;
+      00005B C7u00u41         [ 1]  179 	ld	_rx_buffer_tail+0, a
+                                    180 ;	./../../mib/stm8s_mib_debug.c: 352: return (uint16_t)vbCh;
+      00005E 4F               [ 1]  181 	clr	a
+      00005F 95               [ 1]  182 	ld	xh, a
+                                    183 ;	./../../mib/stm8s_mib_debug.c: 367: }
+      000060 81               [ 4]  184 	ret
+                                    185 ;	./../../mib/stm8s_mib_debug.c: 442: void MibDebugInit(uint32_t baudrate)
+                                    186 ;	-----------------------------------------
+                                    187 ;	 function MibDebugInit
+                                    188 ;	-----------------------------------------
+      000061                        189 _MibDebugInit:
+      000061 52 10            [ 2]  190 	sub	sp, #16
+                                    191 ;	./../../mib/stm8s_mib_debug.c: 446: rx_buffer_head = 0;
+      000063 72 5Fu00u40      [ 1]  192 	clr	_rx_buffer_head+0
+                                    193 ;	./../../mib/stm8s_mib_debug.c: 447: rx_buffer_tail = 0;
+      000067 72 5Fu00u41      [ 1]  194 	clr	_rx_buffer_tail+0
+                                    195 ;	./../../mib/stm8s_mib_debug.c: 480: uint32_t BaudRate = baudrate;
+      00006B 1E 15            [ 2]  196 	ldw	x, (0x15, sp)
+      00006D 16 13            [ 2]  197 	ldw	y, (0x13, sp)
+                                    198 ;	./../../mib/stm8s_mib_debug.c: 486: UARTXdebug->CR1 &= (uint8_t)(~UARTX_CR1_M);			 /**< Clear the word length bit */
+      00006F 72 19 52 44      [ 1]  199 	bres	0x5244, #4
+                                    200 ;	./../../mib/stm8s_mib_debug.c: 487: UARTXdebug->CR1 |= (uint8_t)UARTX_WORDLENGTH_8D; /**< Set the word length bit according to UART1_WordLength value */
+      000073 55 52 44 52 44   [ 1]  201 	mov	0x5244, 0x5244
+                                    202 ;	./../../mib/stm8s_mib_debug.c: 489: UARTXdebug->CR3 &= (uint8_t)(~UARTX_CR3_STOP); /**< Clear the STOP bits */
+      000078 C6 52 46         [ 1]  203 	ld	a, 0x5246
+      00007B A4 CF            [ 1]  204 	and	a, #0xcf
+      00007D C7 52 46         [ 1]  205 	ld	0x5246, a
+                                    206 ;	./../../mib/stm8s_mib_debug.c: 490: UARTXdebug->CR3 |= (uint8_t)UARTX_STOPBITS_1;	 /**< Set the STOP bits number according to UART1_StopBits value  */
+      000080 55 52 46 52 46   [ 1]  207 	mov	0x5246, 0x5246
+                                    208 ;	./../../mib/stm8s_mib_debug.c: 492: UARTXdebug->CR1 &= (uint8_t)(~(UARTX_CR1_PCEN | UARTX_CR1_PS)); /**< Clear the Parity Control bit */
+      000085 C6 52 44         [ 1]  209 	ld	a, 0x5244
+      000088 A4 F9            [ 1]  210 	and	a, #0xf9
+      00008A C7 52 44         [ 1]  211 	ld	0x5244, a
+                                    212 ;	./../../mib/stm8s_mib_debug.c: 493: UARTXdebug->CR1 |= (uint8_t)UARTX_PARITY_NO;										/**< Set the Parity Control bit to UART1_Parity value */
+      00008D 55 52 44 52 44   [ 1]  213 	mov	0x5244, 0x5244
+                                    214 ;	./../../mib/stm8s_mib_debug.c: 495: UARTXdebug->BRR1 &= (uint8_t)(~UARTX_BRR1_DIVM); /**< Clear the LSB mantissa of UARTDIV  */
+      000092 C6 52 42         [ 1]  215 	ld	a, 0x5242
+      000095 35 00 52 42      [ 1]  216 	mov	0x5242+0, #0x00
+                                    217 ;	./../../mib/stm8s_mib_debug.c: 496: UARTXdebug->BRR2 &= (uint8_t)(~UARTX_BRR2_DIVM); /**< Clear the MSB mantissa of UARTDIV  */
+      000099 C6 52 43         [ 1]  218 	ld	a, 0x5243
+      00009C A4 0F            [ 1]  219 	and	a, #0x0f
+      00009E C7 52 43         [ 1]  220 	ld	0x5243, a
+                                    221 ;	./../../mib/stm8s_mib_debug.c: 497: UARTXdebug->BRR2 &= (uint8_t)(~UARTX_BRR2_DIVF); /**< Clear the Fraction bits of UARTDIV */
+      0000A1 C6 52 43         [ 1]  222 	ld	a, 0x5243
+      0000A4 A4 F0            [ 1]  223 	and	a, #0xf0
+      0000A6 C7 52 43         [ 1]  224 	ld	0x5243, a
+                                    225 ;	./../../mib/stm8s_mib_debug.c: 500: BaudRate_Mantissa = ((uint32_t)v_ClkValue / (BaudRate << 4));
+      0000A9 A6 04            [ 1]  226 	ld	a, #0x04
+      0000AB                        227 00103$:
+      0000AB 58               [ 2]  228 	sllw	x
+      0000AC 90 59            [ 2]  229 	rlcw	y
+      0000AE 4A               [ 1]  230 	dec	a
+      0000AF 26 FA            [ 1]  231 	jrne	00103$
+      0000B1 1F 0F            [ 2]  232 	ldw	(0x0f, sp), x
+      0000B3 17 0D            [ 2]  233 	ldw	(0x0d, sp), y
+      0000B5 1E 0F            [ 2]  234 	ldw	x, (0x0f, sp)
+      0000B7 89               [ 2]  235 	pushw	x
+      0000B8 1E 0F            [ 2]  236 	ldw	x, (0x0f, sp)
+      0000BA 89               [ 2]  237 	pushw	x
+      0000BB 4B 00            [ 1]  238 	push	#0x00
+      0000BD 4B 24            [ 1]  239 	push	#0x24
+      0000BF 4B F4            [ 1]  240 	push	#0xf4
+      0000C1 4B 00            [ 1]  241 	push	#0x00
+      0000C3 CDr00r00         [ 4]  242 	call	__divulong
+      0000C6 5B 08            [ 2]  243 	addw	sp, #8
+      0000C8 1F 03            [ 2]  244 	ldw	(0x03, sp), x
+                                    245 ;	./../../mib/stm8s_mib_debug.c: 501: BaudRate_Mantissa100 = (((uint32_t)v_ClkValue * 100) / (BaudRate << 4));
+      0000CA 90 89            [ 2]  246 	pushw	y
+      0000CC 1E 11            [ 2]  247 	ldw	x, (0x11, sp)
+      0000CE 89               [ 2]  248 	pushw	x
+      0000CF 1E 11            [ 2]  249 	ldw	x, (0x11, sp)
+      0000D1 89               [ 2]  250 	pushw	x
+      0000D2 4B 00            [ 1]  251 	push	#0x00
+      0000D4 4B 10            [ 1]  252 	push	#0x10
+      0000D6 4B 5E            [ 1]  253 	push	#0x5e
+      0000D8 4B 5F            [ 1]  254 	push	#0x5f
+      0000DA CDr00r00         [ 4]  255 	call	__divulong
+      0000DD 5B 08            [ 2]  256 	addw	sp, #8
+      0000DF 17 0F            [ 2]  257 	ldw	(0x0f, sp), y
+      0000E1 90 85            [ 2]  258 	popw	y
+      0000E3 1F 07            [ 2]  259 	ldw	(0x07, sp), x
+      0000E5 1E 0D            [ 2]  260 	ldw	x, (0x0d, sp)
+      0000E7 1F 05            [ 2]  261 	ldw	(0x05, sp), x
+                                    262 ;	./../../mib/stm8s_mib_debug.c: 503: BRR2_1 = (uint8_t)((uint8_t)(((BaudRate_Mantissa100 - (BaudRate_Mantissa * 100)) << 4) / 100) & (u8)0x0F); /**< Set the fraction of UARTDIV  */
+      0000E9 90 89            [ 2]  263 	pushw	y
+      0000EB 1E 05            [ 2]  264 	ldw	x, (0x05, sp)
+      0000ED 89               [ 2]  265 	pushw	x
+      0000EE 90 89            [ 2]  266 	pushw	y
+      0000F0 4B 64            [ 1]  267 	push	#0x64
+      0000F2 5F               [ 1]  268 	clrw	x
+      0000F3 89               [ 2]  269 	pushw	x
+      0000F4 4B 00            [ 1]  270 	push	#0x00
+      0000F6 CDr00r00         [ 4]  271 	call	__mullong
+      0000F9 5B 08            [ 2]  272 	addw	sp, #8
+      0000FB 1F 0D            [ 2]  273 	ldw	(0x0d, sp), x
+      0000FD 17 0B            [ 2]  274 	ldw	(0x0b, sp), y
+      0000FF 90 85            [ 2]  275 	popw	y
+      000101 1E 07            [ 2]  276 	ldw	x, (0x07, sp)
+      000103 72 F0 0B         [ 2]  277 	subw	x, (0x0b, sp)
+      000106 1F 0F            [ 2]  278 	ldw	(0x0f, sp), x
+      000108 7B 06            [ 1]  279 	ld	a, (0x06, sp)
+      00010A 12 0A            [ 1]  280 	sbc	a, (0x0a, sp)
+      00010C 97               [ 1]  281 	ld	xl, a
+      00010D 7B 05            [ 1]  282 	ld	a, (0x05, sp)
+      00010F 12 09            [ 1]  283 	sbc	a, (0x09, sp)
+      000111 95               [ 1]  284 	ld	xh, a
+      000112 1F 0D            [ 2]  285 	ldw	(0x0d, sp), x
+      000114 1E 0F            [ 2]  286 	ldw	x, (0x0f, sp)
+      000116 A6 04            [ 1]  287 	ld	a, #0x04
+      000118                        288 00105$:
+      000118 58               [ 2]  289 	sllw	x
+      000119 09 0E            [ 1]  290 	rlc	(0x0e, sp)
+      00011B 09 0D            [ 1]  291 	rlc	(0x0d, sp)
+      00011D 4A               [ 1]  292 	dec	a
+      00011E 26 F8            [ 1]  293 	jrne	00105$
+      000120 90 89            [ 2]  294 	pushw	y
+      000122 4B 64            [ 1]  295 	push	#0x64
+      000124 4B 00            [ 1]  296 	push	#0x00
+      000126 4B 00            [ 1]  297 	push	#0x00
+      000128 4B 00            [ 1]  298 	push	#0x00
+      00012A 89               [ 2]  299 	pushw	x
+      00012B 1E 15            [ 2]  300 	ldw	x, (0x15, sp)
+      00012D 89               [ 2]  301 	pushw	x
+      00012E CDr00r00         [ 4]  302 	call	__divulong
+      000131 5B 08            [ 2]  303 	addw	sp, #8
+      000133 17 0F            [ 2]  304 	ldw	(0x0f, sp), y
+      000135 9F               [ 1]  305 	ld	a, xl
+      000136 90 85            [ 2]  306 	popw	y
+      000138 A4 0F            [ 1]  307 	and	a, #0x0f
+      00013A 6B 0E            [ 1]  308 	ld	(0x0e, sp), a
+                                    309 ;	./../../mib/stm8s_mib_debug.c: 504: BRR2_2 = (uint8_t)((BaudRate_Mantissa >> 4) & (u8)0xF0);
+      00013C 1E 03            [ 2]  310 	ldw	x, (0x03, sp)
+      00013E A6 10            [ 1]  311 	ld	a, #0x10
+      000140 62               [ 2]  312 	div	x, a
+      000141 02               [ 1]  313 	rlwa	x
+      000142 6B 0F            [ 1]  314 	ld	(0x0f, sp), a
+      000144 01               [ 1]  315 	rrwa	x
+      000145 9F               [ 1]  316 	ld	a, xl
+      000146 A4 F0            [ 1]  317 	and	a, #0xf0
+                                    318 ;	./../../mib/stm8s_mib_debug.c: 506: UARTXdebug->BRR2 = (uint8_t)(BRR2_1 | BRR2_2);
+      000148 1A 0E            [ 1]  319 	or	a, (0x0e, sp)
+      00014A C7 52 43         [ 1]  320 	ld	0x5243, a
+                                    321 ;	./../../mib/stm8s_mib_debug.c: 507: UARTXdebug->BRR1 = (uint8_t)BaudRate_Mantissa; /**< Set the LSB mantissa of UARTDIV  */
+      00014D 7B 04            [ 1]  322 	ld	a, (0x04, sp)
+      00014F C7 52 42         [ 1]  323 	ld	0x5242, a
+                                    324 ;	./../../mib/stm8s_mib_debug.c: 509: UARTXdebug->CR2 &= (uint8_t) ~(UARTX_CR2_TEN | UARTX_CR2_REN);																																		 /**< Disable the Transmitter and Receiver before seting the LBCL, CPOL and CPHA bits */
+      000152 C6 52 45         [ 1]  325 	ld	a, 0x5245
+      000155 A4 F3            [ 1]  326 	and	a, #0xf3
+      000157 C7 52 45         [ 1]  327 	ld	0x5245, a
+                                    328 ;	./../../mib/stm8s_mib_debug.c: 510: UARTXdebug->CR3 &= (uint8_t) ~(UARTX_CR3_CPOL | UARTX_CR3_CPHA | UARTX_CR3_LBCL);																									 /**< Clear the Clock Polarity, lock Phase, Last Bit Clock pulse */
+      00015A C6 52 46         [ 1]  329 	ld	a, 0x5246
+      00015D A4 F8            [ 1]  330 	and	a, #0xf8
+      00015F C7 52 46         [ 1]  331 	ld	0x5246, a
+                                    332 ;	./../../mib/stm8s_mib_debug.c: 511: UARTXdebug->CR3 |= (uint8_t)((uint8_t)UARTX_SYNCMODE_CLOCK_DISABLE & (uint8_t)(UARTX_CR3_CPOL | UARTX_CR3_CPHA | UARTX_CR3_LBCL)); /**< Set the Clock Polarity, lock Phase, Last Bit Clock pulse */
+      000162 55 52 46 52 46   [ 1]  333 	mov	0x5246, 0x5246
+                                    334 ;	./../../mib/stm8s_mib_debug.c: 513: UARTXdebug->CR2 |= (uint8_t)UARTX_CR2_TEN;									/**< Set the Transmitter Enable bit */
+      000167 72 16 52 45      [ 1]  335 	bset	0x5245, #3
+                                    336 ;	./../../mib/stm8s_mib_debug.c: 517: UARTXdebug->CR2 |= (uint8_t)UARTX_CR2_REN | UARTX_CR2_RIEN; /**< Set the Receiver Enable bit */
+      00016B C6 52 45         [ 1]  337 	ld	a, 0x5245
+      00016E AA 24            [ 1]  338 	or	a, #0x24
+      000170 C7 52 45         [ 1]  339 	ld	0x5245, a
+                                    340 ;	./../../mib/stm8s_mib_debug.c: 525: UARTXdebug->CR3 &= (uint8_t)(~UARTX_CR3_CKEN); /**< Clear the Clock Enable bit */
+      000173 72 17 52 46      [ 1]  341 	bres	0x5246, #3
+                                    342 ;	./../../mib/stm8s_mib_debug.c: 531: UCOM_TXD_GPIO->DDR |= (UCOM_TXD_PIN); /* Set Output mode */
+      000177 72 1A 50 11      [ 1]  343 	bset	0x5011, #5
+                                    344 ;	./../../mib/stm8s_mib_debug.c: 532: UCOM_TXD_GPIO->CR1 |= (UCOM_TXD_PIN);	/* Pull-Up or Push-Pull */
+      00017B 72 1A 50 12      [ 1]  345 	bset	0x5012, #5
+                                    346 ;	./../../mib/stm8s_mib_debug.c: 533: UCOM_TXD_GPIO->CR2 |= (UCOM_TXD_PIN);	/* Output speed up to 10 MHz */
+      00017F 72 1A 50 13      [ 1]  347 	bset	0x5013, #5
+                                    348 ;	./../../mib/stm8s_mib_debug.c: 534: UCOM_TXD_GPIO->ODR |= (UCOM_TXD_PIN); // high... 
+      000183 72 1A 50 0F      [ 1]  349 	bset	0x500f, #5
+                                    350 ;	./../../mib/stm8s_mib_debug.c: 538: UCOM_RXD_GPIO->DDR &= ~(UCOM_RXD_PIN); // Set input mode 
+      000187 72 1D 50 11      [ 1]  351 	bres	0x5011, #6
+                                    352 ;	./../../mib/stm8s_mib_debug.c: 539: UCOM_RXD_GPIO->CR1 |= (UCOM_RXD_PIN);	 /* Pull-Up or Push-Pull */
+      00018B 72 1C 50 12      [ 1]  353 	bset	0x5012, #6
+                                    354 ;	./../../mib/stm8s_mib_debug.c: 540: UCOM_RXD_GPIO->CR2 &= ~(UCOM_RXD_PIN); /*  External interrupt disabled */
+      00018F C6 50 13         [ 1]  355 	ld	a, 0x5013
+      000192 A4 BF            [ 1]  356 	and	a, #0xbf
+      000194 C7 50 13         [ 1]  357 	ld	0x5013, a
+                                    358 ;	./../../mib/stm8s_mib_debug.c: 548: }
+      000197 1E 11            [ 2]  359 	ldw	x, (17, sp)
+      000199 5B 16            [ 2]  360 	addw	sp, #22
+      00019B FC               [ 2]  361 	jp	(x)
+                                    362 ;	./../../mib/stm8s_mib_debug.c: 554: void MibWriteDebugTransmitHex(uint8_t data)
+                                    363 ;	-----------------------------------------
+                                    364 ;	 function MibWriteDebugTransmitHex
+                                    365 ;	-----------------------------------------
+      00019C                        366 _MibWriteDebugTransmitHex:
+      00019C 88               [ 1]  367 	push	a
+      00019D 6B 01            [ 1]  368 	ld	(0x01, sp), a
+                                    369 ;	./../../mib/stm8s_mib_debug.c: 561: MibWriteDebugByte('.');
+      00019F A6 2E            [ 1]  370 	ld	a, #0x2e
+      0001A1 CDr00r00         [ 4]  371 	call	_MibWriteDebugByte
+                                    372 ;	./../../mib/stm8s_mib_debug.c: 562: if (data > 0xd)	MibWriteDebugByte(data);
+      0001A4 7B 01            [ 1]  373 	ld	a, (0x01, sp)
+      0001A6 A1 0D            [ 1]  374 	cp	a, #0x0d
+      0001A8 23 05            [ 2]  375 	jrule	00102$
+      0001AA 7B 01            [ 1]  376 	ld	a, (0x01, sp)
+      0001AC CDr00r00         [ 4]  377 	call	_MibWriteDebugByte
+      0001AF                        378 00102$:
+                                    379 ;	./../../mib/stm8s_mib_debug.c: 563: MibWriteDebugByte('[');
+      0001AF A6 5B            [ 1]  380 	ld	a, #0x5b
+      0001B1 CDr00r00         [ 4]  381 	call	_MibWriteDebugByte
+                                    382 ;	./../../mib/stm8s_mib_debug.c: 564: MibWriteDebugByte(g_TableHex[data >> 4]);
+      0001B4 7B 01            [ 1]  383 	ld	a, (0x01, sp)
+      0001B6 4E               [ 1]  384 	swap	a
+      0001B7 A4 0F            [ 1]  385 	and	a, #0x0f
+      0001B9 5F               [ 1]  386 	clrw	x
+      0001BA 97               [ 1]  387 	ld	xl, a
+      0001BB 72 BBu00u00      [ 2]  388 	addw	x, _g_TableHex+0
+      0001BF F6               [ 1]  389 	ld	a, (x)
+      0001C0 CDr00r00         [ 4]  390 	call	_MibWriteDebugByte
+                                    391 ;	./../../mib/stm8s_mib_debug.c: 565: MibWriteDebugByte(g_TableHex[data & 0xf]);
+      0001C3 7B 01            [ 1]  392 	ld	a, (0x01, sp)
+      0001C5 A4 0F            [ 1]  393 	and	a, #0x0f
+      0001C7 97               [ 1]  394 	ld	xl, a
+      0001C8 4F               [ 1]  395 	clr	a
+      0001C9 95               [ 1]  396 	ld	xh, a
+      0001CA 72 BBu00u00      [ 2]  397 	addw	x, _g_TableHex+0
+      0001CE F6               [ 1]  398 	ld	a, (x)
+      0001CF CDr00r00         [ 4]  399 	call	_MibWriteDebugByte
+                                    400 ;	./../../mib/stm8s_mib_debug.c: 566: MibWriteDebugByte(']');
+      0001D2 A6 5D            [ 1]  401 	ld	a, #0x5d
+      0001D4 CDr00r00         [ 4]  402 	call	_MibWriteDebugByte
+                                    403 ;	./../../mib/stm8s_mib_debug.c: 567: while (!(UARTXdebug->SR & UARTX_SR_TC));
+      0001D7                        404 00103$:
+      0001D7 72 0D 52 40 FB   [ 2]  405 	btjf	0x5240, #6, 00103$
+                                    406 ;	./../../mib/stm8s_mib_debug.c: 568: UARTXdebug->SR &= ~UARTX_SR_TC;	
+      0001DC 72 1D 52 40      [ 1]  407 	bres	0x5240, #6
+                                    408 ;	./../../mib/stm8s_mib_debug.c: 574: }
+      0001E0 84               [ 1]  409 	pop	a
+      0001E1 81               [ 4]  410 	ret
+                                    411 ;	./../../mib/stm8s_mib_debug.c: 579: void MibWriteDebugTransmitHex2(uint8_t data)
+                                    412 ;	-----------------------------------------
+                                    413 ;	 function MibWriteDebugTransmitHex2
+                                    414 ;	-----------------------------------------
+      0001E2                        415 _MibWriteDebugTransmitHex2:
+      0001E2 88               [ 1]  416 	push	a
+      0001E3 6B 01            [ 1]  417 	ld	(0x01, sp), a
+                                    418 ;	./../../mib/stm8s_mib_debug.c: 586: MibWriteDebugByte('.');
+      0001E5 A6 2E            [ 1]  419 	ld	a, #0x2e
+      0001E7 CDr00r00         [ 4]  420 	call	_MibWriteDebugByte
+                                    421 ;	./../../mib/stm8s_mib_debug.c: 587: MibWriteDebugByte(g_TableHex[data >> 4]);
+      0001EA 7B 01            [ 1]  422 	ld	a, (0x01, sp)
+      0001EC 4E               [ 1]  423 	swap	a
+      0001ED A4 0F            [ 1]  424 	and	a, #0x0f
+      0001EF 5F               [ 1]  425 	clrw	x
+      0001F0 97               [ 1]  426 	ld	xl, a
+      0001F1 72 BBu00u00      [ 2]  427 	addw	x, _g_TableHex+0
+      0001F5 F6               [ 1]  428 	ld	a, (x)
+      0001F6 CDr00r00         [ 4]  429 	call	_MibWriteDebugByte
+                                    430 ;	./../../mib/stm8s_mib_debug.c: 588: MibWriteDebugByte(g_TableHex[data & 0xf]);
+      0001F9 7B 01            [ 1]  431 	ld	a, (0x01, sp)
+      0001FB A4 0F            [ 1]  432 	and	a, #0x0f
+      0001FD 97               [ 1]  433 	ld	xl, a
+      0001FE 4F               [ 1]  434 	clr	a
+      0001FF 95               [ 1]  435 	ld	xh, a
+      000200 72 BBu00u00      [ 2]  436 	addw	x, _g_TableHex+0
+      000204 F6               [ 1]  437 	ld	a, (x)
+      000205 CDr00r00         [ 4]  438 	call	_MibWriteDebugByte
+                                    439 ;	./../../mib/stm8s_mib_debug.c: 589: while (!(UARTXdebug->SR & UARTX_SR_TC));
+      000208                        440 00101$:
+      000208 72 0D 52 40 FB   [ 2]  441 	btjf	0x5240, #6, 00101$
+                                    442 ;	./../../mib/stm8s_mib_debug.c: 590: UARTXdebug->SR &= ~UARTX_SR_TC;
+      00020D 72 1D 52 40      [ 1]  443 	bres	0x5240, #6
+                                    444 ;	./../../mib/stm8s_mib_debug.c: 596: }
+      000211 84               [ 1]  445 	pop	a
+      000212 81               [ 4]  446 	ret
+                                    447 ;	./../../mib/stm8s_mib_debug.c: 602: void UART_RX_IRQHandler(void) /* UART RX */
+                                    448 ;	-----------------------------------------
+                                    449 ;	 function UART_RX_IRQHandler
+                                    450 ;	-----------------------------------------
+      000213                        451 _UART_RX_IRQHandler:
+                                    452 ;	./../../mib/stm8s_mib_debug.c: 608: if (UARTXdebug->SR & UARTX_SR_RXNE) // RXNE :  ISR.bit5 // UART1_FLAG_RXNE
+      000213 72 0B 52 40 22   [ 2]  453 	btjf	0x5240, #5, 00108$
+                                    454 ;	./../../mib/stm8s_mib_debug.c: 610: vbCh = (uint8_t)(UARTXdebug->DR);
+      000218 C6 52 41         [ 1]  455 	ld	a, 0x5241
+      00021B 90 97            [ 1]  456 	ld	yl, a
+                                    457 ;	./../../mib/stm8s_mib_debug.c: 611: vbIndex = rx_buffer_head + 1;
+      00021D C6u00u40         [ 1]  458 	ld	a, _rx_buffer_head+0
+      000220 4C               [ 1]  459 	inc	a
+                                    460 ;	./../../mib/stm8s_mib_debug.c: 612: if (vbIndex >= RX_BUFFER_SIZE)
+      000221 A1 40            [ 1]  461 	cp	a, #0x40
+      000223 25 01            [ 1]  462 	jrc	00102$
+                                    463 ;	./../../mib/stm8s_mib_debug.c: 613: vbIndex = 0;
+      000225 4F               [ 1]  464 	clr	a
+      000226                        465 00102$:
+                                    466 ;	./../../mib/stm8s_mib_debug.c: 614: if (vbIndex != rx_buffer_tail)
+      000226 C1u00u41         [ 1]  467 	cp	a, _rx_buffer_tail+0
+      000229 26 01            [ 1]  468 	jrne	00135$
+      00022B 81               [ 4]  469 	ret
+      00022C                        470 00135$:
+                                    471 ;	./../../mib/stm8s_mib_debug.c: 616: rx_buffer[vbIndex] = vbCh;
+      00022C 5F               [ 1]  472 	clrw	x
+      00022D 97               [ 1]  473 	ld	xl, a
+      00022E 1Cr00r00         [ 2]  474 	addw	x, #(_rx_buffer+0)
+      000231 88               [ 1]  475 	push	a
+      000232 90 9F            [ 1]  476 	ld	a, yl
+      000234 F7               [ 1]  477 	ld	(x), a
+      000235 84               [ 1]  478 	pop	a
+                                    479 ;	./../../mib/stm8s_mib_debug.c: 617: rx_buffer_head = vbIndex;
+      000236 C7u00u40         [ 1]  480 	ld	_rx_buffer_head+0, a
+      000239 81               [ 4]  481 	ret
+      00023A                        482 00108$:
+                                    483 ;	./../../mib/stm8s_mib_debug.c: 620: else if (UARTXdebug->SR & UARTX_SR_OR) // OE : ISR.bit4 // /*!< OverRun error flag */
+      00023A 72 06 52 40 01   [ 2]  484 	btjt	0x5240, #3, 00137$
+      00023F 81               [ 4]  485 	ret
+      000240                        486 00137$:
+                                    487 ;	./../../mib/stm8s_mib_debug.c: 622: vbCh = (uint8_t)(UARTXdebug->DR);
+      000240 C6 52 41         [ 1]  488 	ld	a, 0x5241
+                                    489 ;	./../../mib/stm8s_mib_debug.c: 625: }
+      000243 81               [ 4]  490 	ret
+                                    491 	.area CODE
+                                    492 	.area CONST
+                                    493 	.area CONST
+      000000                        494 ___str_0:
+      000000 30 31 32 33 34 35 36   495 	.ascii "0123456789ABCDEF"
+             37 38 39 41 42 43 44
+             45 46
+      000010 00                     496 	.db 0x00
+                                    497 	.area CODE
+                                    498 	.area INITIALIZER
+      000000                        499 __xinit__g_TableHex:
+      000000r00r00                  500 	.dw ___str_0
+                                    501 	.area CABS (ABS)

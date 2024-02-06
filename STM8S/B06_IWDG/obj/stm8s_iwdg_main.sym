@@ -1,0 +1,61 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _DecToLong                                                     ****** GX
+  9 _DoIWDG                                                        000066 R
+  9 _GPIO_Configuration                                            000266 GR
+    _HexToInt                                                      ****** GX
+    _MibWriteDebugString                                           ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_10                                                      0000EA R
+  7 ___str_12                                                      000101 R
+  7 ___str_13                                                      000106 R
+  7 ___str_14                                                      000186 R
+  7 ___str_15                                                      00018B R
+  7 ___str_2                                                       000028 R
+  7 ___str_5                                                       000068 R
+  7 ___str_7                                                       00008A R
+    __mulint                                                       ****** GX
+  7 __str_0                                                        000000 R
+  7 __str_1                                                        000014 R
+  7 __str_11                                                       0000EF R
+  7 __str_3                                                        00002E R
+  7 __str_4                                                        00004B R
+  7 __str_6                                                        00006D R
+  7 __str_8                                                        000090 R
+  7 __str_9                                                        0000CE R
+  8 __xinit__cmdTbl_only                                           000000 R
+    _calConfigIWDG                                                 ****** GX
+    _cmdTbl                                                        ****** GX
+  2 _cmdTbl_only                                                   000000 R
+  9 _cmd_iwdg                                                      000000 GR
+  9 _cmd_test                                                      000062 GR
+  9 _cmd_test_init_before_irq_enable                               000065 GR
+    _gwMibMiliSec                                                  ****** GX
+    _mib_printf                                                    ****** GX
+    _strcmp                                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      C   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size    22F   flags    0
+   8 INITIALIZER                                size      C   flags    0
+   9 CODE                                       size    283   flags    0
+   A CABS                                       size      0   flags    8
+

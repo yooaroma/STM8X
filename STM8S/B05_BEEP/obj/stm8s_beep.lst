@@ -1,0 +1,187 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_beep
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _BEEP_DeInit
+                                     12 	.globl _BEEP_Init
+                                     13 	.globl _BEEP_Cmd
+                                     14 	.globl _BEEP_LSICalibrationConfig
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area INITIALIZED
+                                     23 ;--------------------------------------------------------
+                                     24 ; absolute external ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area DABS (ABS)
+                                     27 
+                                     28 ; default segment ordering for linker
+                                     29 	.area HOME
+                                     30 	.area GSINIT
+                                     31 	.area GSFINAL
+                                     32 	.area CONST
+                                     33 	.area INITIALIZER
+                                     34 	.area CODE
+                                     35 
+                                     36 ;--------------------------------------------------------
+                                     37 ; global & static initialisations
+                                     38 ;--------------------------------------------------------
+                                     39 	.area HOME
+                                     40 	.area GSINIT
+                                     41 	.area GSFINAL
+                                     42 	.area GSINIT
+                                     43 ;--------------------------------------------------------
+                                     44 ; Home
+                                     45 ;--------------------------------------------------------
+                                     46 	.area HOME
+                                     47 	.area HOME
+                                     48 ;--------------------------------------------------------
+                                     49 ; code
+                                     50 ;--------------------------------------------------------
+                                     51 	.area CODE
+                                     52 ;	./../../lib/src/stm8s_beep.c: 54: void BEEP_DeInit(void)
+                                     53 ;	-----------------------------------------
+                                     54 ;	 function BEEP_DeInit
+                                     55 ;	-----------------------------------------
+      000000                         56 _BEEP_DeInit:
+                                     57 ;	./../../lib/src/stm8s_beep.c: 56: BEEP->CSR = BEEP_CSR_RESET_VALUE;
+      000000 35 1F 50 F3      [ 1]   58 	mov	0x50f3+0, #0x1f
+                                     59 ;	./../../lib/src/stm8s_beep.c: 57: }
+      000004 81               [ 4]   60 	ret
+                                     61 ;	./../../lib/src/stm8s_beep.c: 67: void BEEP_Init(BEEP_Frequency_TypeDef BEEP_Frequency)
+                                     62 ;	-----------------------------------------
+                                     63 ;	 function BEEP_Init
+                                     64 ;	-----------------------------------------
+      000005                         65 _BEEP_Init:
+      000005 88               [ 1]   66 	push	a
+      000006 6B 01            [ 1]   67 	ld	(0x01, sp), a
+                                     68 ;	./../../lib/src/stm8s_beep.c: 73: if ((BEEP->CSR & BEEP_CSR_BEEPDIV) == BEEP_CSR_BEEPDIV)
+      000008 C6 50 F3         [ 1]   69 	ld	a, 0x50f3
+      00000B 43               [ 1]   70 	cpl	a
+      00000C A5 1F            [ 1]   71 	bcp	a, #0x1f
+      00000E 26 10            [ 1]   72 	jrne	00102$
+                                     73 ;	./../../lib/src/stm8s_beep.c: 75: BEEP->CSR &= (uint8_t)(~BEEP_CSR_BEEPDIV); /* Clear bits */
+      000010 C6 50 F3         [ 1]   74 	ld	a, 0x50f3
+      000013 A4 E0            [ 1]   75 	and	a, #0xe0
+      000015 C7 50 F3         [ 1]   76 	ld	0x50f3, a
+                                     77 ;	./../../lib/src/stm8s_beep.c: 76: BEEP->CSR |= BEEP_CALIBRATION_DEFAULT;
+      000018 C6 50 F3         [ 1]   78 	ld	a, 0x50f3
+      00001B AA 0B            [ 1]   79 	or	a, #0x0b
+      00001D C7 50 F3         [ 1]   80 	ld	0x50f3, a
+      000020                         81 00102$:
+                                     82 ;	./../../lib/src/stm8s_beep.c: 80: BEEP->CSR &= (uint8_t)(~BEEP_CSR_BEEPSEL);
+      000020 C6 50 F3         [ 1]   83 	ld	a, 0x50f3
+      000023 A4 3F            [ 1]   84 	and	a, #0x3f
+      000025 C7 50 F3         [ 1]   85 	ld	0x50f3, a
+                                     86 ;	./../../lib/src/stm8s_beep.c: 81: BEEP->CSR |= (uint8_t)(BEEP_Frequency);
+      000028 C6 50 F3         [ 1]   87 	ld	a, 0x50f3
+      00002B 1A 01            [ 1]   88 	or	a, (0x01, sp)
+      00002D C7 50 F3         [ 1]   89 	ld	0x50f3, a
+                                     90 ;	./../../lib/src/stm8s_beep.c: 82: }
+      000030 84               [ 1]   91 	pop	a
+      000031 81               [ 4]   92 	ret
+                                     93 ;	./../../lib/src/stm8s_beep.c: 91: void BEEP_Cmd(FunctionalState NewState)
+                                     94 ;	-----------------------------------------
+                                     95 ;	 function BEEP_Cmd
+                                     96 ;	-----------------------------------------
+      000032                         97 _BEEP_Cmd:
+      000032 88               [ 1]   98 	push	a
+      000033 6B 01            [ 1]   99 	ld	(0x01, sp), a
+                                    100 ;	./../../lib/src/stm8s_beep.c: 96: BEEP->CSR |= BEEP_CSR_BEEPEN;
+      000035 C6 50 F3         [ 1]  101 	ld	a, 0x50f3
+                                    102 ;	./../../lib/src/stm8s_beep.c: 93: if (NewState != DISABLE)
+      000038 0D 01            [ 1]  103 	tnz	(0x01, sp)
+      00003A 27 07            [ 1]  104 	jreq	00102$
+                                    105 ;	./../../lib/src/stm8s_beep.c: 96: BEEP->CSR |= BEEP_CSR_BEEPEN;
+      00003C AA 20            [ 1]  106 	or	a, #0x20
+      00003E C7 50 F3         [ 1]  107 	ld	0x50f3, a
+      000041 20 05            [ 2]  108 	jra	00104$
+      000043                        109 00102$:
+                                    110 ;	./../../lib/src/stm8s_beep.c: 101: BEEP->CSR &= (uint8_t)(~BEEP_CSR_BEEPEN);
+      000043 A4 DF            [ 1]  111 	and	a, #0xdf
+      000045 C7 50 F3         [ 1]  112 	ld	0x50f3, a
+      000048                        113 00104$:
+                                    114 ;	./../../lib/src/stm8s_beep.c: 103: }
+      000048 84               [ 1]  115 	pop	a
+      000049 81               [ 4]  116 	ret
+                                    117 ;	./../../lib/src/stm8s_beep.c: 118: void BEEP_LSICalibrationConfig(uint32_t LSIFreqHz)
+                                    118 ;	-----------------------------------------
+                                    119 ;	 function BEEP_LSICalibrationConfig
+                                    120 ;	-----------------------------------------
+      00004A                        121 _BEEP_LSICalibrationConfig:
+      00004A 52 09            [ 2]  122 	sub	sp, #9
+                                    123 ;	./../../lib/src/stm8s_beep.c: 126: lsifreqkhz = (uint16_t)(LSIFreqHz / 1000); /* Converts value in kHz */
+      00004C 4B E8            [ 1]  124 	push	#0xe8
+      00004E 4B 03            [ 1]  125 	push	#0x03
+      000050 5F               [ 1]  126 	clrw	x
+      000051 89               [ 2]  127 	pushw	x
+      000052 1E 12            [ 2]  128 	ldw	x, (0x12, sp)
+      000054 89               [ 2]  129 	pushw	x
+      000055 1E 12            [ 2]  130 	ldw	x, (0x12, sp)
+      000057 89               [ 2]  131 	pushw	x
+      000058 CDr00r00         [ 4]  132 	call	__divulong
+      00005B 5B 08            [ 2]  133 	addw	sp, #8
+      00005D 1F 01            [ 2]  134 	ldw	(0x01, sp), x
+                                    135 ;	./../../lib/src/stm8s_beep.c: 130: BEEP->CSR &= (uint8_t)(~BEEP_CSR_BEEPDIV); /* Clear bits */
+      00005F C6 50 F3         [ 1]  136 	ld	a, 0x50f3
+      000062 A4 E0            [ 1]  137 	and	a, #0xe0
+      000064 C7 50 F3         [ 1]  138 	ld	0x50f3, a
+                                    139 ;	./../../lib/src/stm8s_beep.c: 132: A = (uint16_t)(lsifreqkhz >> 3U); /* Division by 8, keep integer part only */
+      000067 1E 01            [ 2]  140 	ldw	x, (0x01, sp)
+      000069 54               [ 2]  141 	srlw	x
+      00006A 54               [ 2]  142 	srlw	x
+      00006B 54               [ 2]  143 	srlw	x
+                                    144 ;	./../../lib/src/stm8s_beep.c: 134: if ((8U * A) >= ((lsifreqkhz - (8U * A)) * (1U + (2U * A))))
+      00006C 1F 03            [ 2]  145 	ldw	(0x03, sp), x
+      00006E 1F 08            [ 2]  146 	ldw	(0x08, sp), x
+      000070 58               [ 2]  147 	sllw	x
+      000071 58               [ 2]  148 	sllw	x
+      000072 58               [ 2]  149 	sllw	x
+      000073 1F 05            [ 2]  150 	ldw	(0x05, sp), x
+      000075 16 01            [ 2]  151 	ldw	y, (0x01, sp)
+      000077 72 F2 05         [ 2]  152 	subw	y, (0x05, sp)
+      00007A 1E 08            [ 2]  153 	ldw	x, (0x08, sp)
+      00007C 58               [ 2]  154 	sllw	x
+      00007D 5C               [ 1]  155 	incw	x
+      00007E 89               [ 2]  156 	pushw	x
+      00007F 93               [ 1]  157 	ldw	x, y
+                                    158 ;	./../../lib/src/stm8s_beep.c: 130: BEEP->CSR &= (uint8_t)(~BEEP_CSR_BEEPDIV); /* Clear bits */
+      000080 CDr00r00         [ 4]  159 	call	__mulint
+      000083 1F 07            [ 2]  160 	ldw	(0x07, sp), x
+      000085 C6 50 F3         [ 1]  161 	ld	a, 0x50f3
+      000088 6B 09            [ 1]  162 	ld	(0x09, sp), a
+                                    163 ;	./../../lib/src/stm8s_beep.c: 136: BEEP->CSR |= (uint8_t)(A - 2U);
+      00008A 7B 04            [ 1]  164 	ld	a, (0x04, sp)
+                                    165 ;	./../../lib/src/stm8s_beep.c: 134: if ((8U * A) >= ((lsifreqkhz - (8U * A)) * (1U + (2U * A))))
+      00008C 1E 05            [ 2]  166 	ldw	x, (0x05, sp)
+      00008E 13 07            [ 2]  167 	cpw	x, (0x07, sp)
+      000090 25 09            [ 1]  168 	jrc	00102$
+                                    169 ;	./../../lib/src/stm8s_beep.c: 136: BEEP->CSR |= (uint8_t)(A - 2U);
+      000092 A0 02            [ 1]  170 	sub	a, #0x02
+      000094 1A 09            [ 1]  171 	or	a, (0x09, sp)
+      000096 C7 50 F3         [ 1]  172 	ld	0x50f3, a
+      000099 20 06            [ 2]  173 	jra	00104$
+      00009B                        174 00102$:
+                                    175 ;	./../../lib/src/stm8s_beep.c: 140: BEEP->CSR |= (uint8_t)(A - 1U);
+      00009B 4A               [ 1]  176 	dec	a
+      00009C 1A 09            [ 1]  177 	or	a, (0x09, sp)
+      00009E C7 50 F3         [ 1]  178 	ld	0x50f3, a
+      0000A1                        179 00104$:
+                                    180 ;	./../../lib/src/stm8s_beep.c: 142: }
+      0000A1 1E 0A            [ 2]  181 	ldw	x, (10, sp)
+      0000A3 5B 0F            [ 2]  182 	addw	sp, #15
+      0000A5 FC               [ 2]  183 	jp	(x)
+                                    184 	.area CODE
+                                    185 	.area CONST
+                                    186 	.area INITIALIZER
+                                    187 	.area CABS (ABS)

@@ -1,0 +1,1353 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_eeprom_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _cmd_test_init_before_irq_enable
+                                     12 	.globl _cmd_test
+                                     13 	.globl _cmd_eeprom
+                                     14 	.globl _mmFlashOptionErase
+                                     15 	.globl _mmFlashOptionRead
+                                     16 	.globl _mmFlashOptionWrite
+                                     17 	.globl _mmFlashOptionUnlock
+                                     18 	.globl _mmFlashOptionLock
+                                     19 	.globl _mmEepromRead
+                                     20 	.globl _mmEepromWrite
+                                     21 	.globl _mmEepromUnlock
+                                     22 	.globl _mmEepromLock
+                                     23 	.globl _HexToInt
+                                     24 	.globl _mib_printf
+                                     25 	.globl _MibWriteDebugString
+                                     26 	.globl ___memcpy
+                                     27 	.globl _strcmp
+                                     28 ;--------------------------------------------------------
+                                     29 ; ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area DATA
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area INITIALIZED
+      000000                         36 _cmdTbl_only:
+      000000                         37 	.ds 12
+                                     38 ;--------------------------------------------------------
+                                     39 ; absolute external ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area DABS (ABS)
+                                     42 
+                                     43 ; default segment ordering for linker
+                                     44 	.area HOME
+                                     45 	.area GSINIT
+                                     46 	.area GSFINAL
+                                     47 	.area CONST
+                                     48 	.area INITIALIZER
+                                     49 	.area CODE
+                                     50 
+                                     51 ;--------------------------------------------------------
+                                     52 ; global & static initialisations
+                                     53 ;--------------------------------------------------------
+                                     54 	.area HOME
+                                     55 	.area GSINIT
+                                     56 	.area GSFINAL
+                                     57 	.area GSINIT
+                                     58 ;--------------------------------------------------------
+                                     59 ; Home
+                                     60 ;--------------------------------------------------------
+                                     61 	.area HOME
+                                     62 	.area HOME
+                                     63 ;--------------------------------------------------------
+                                     64 ; code
+                                     65 ;--------------------------------------------------------
+                                     66 	.area CODE
+                                     67 ;	stm8s_eeprom_main.c: 135: void cmd_eeprom(void)
+                                     68 ;	-----------------------------------------
+                                     69 ;	 function cmd_eeprom
+                                     70 ;	-----------------------------------------
+      000000                         71 _cmd_eeprom:
+      000000 52 0A            [ 2]   72 	sub	sp, #10
+                                     73 ;	stm8s_eeprom_main.c: 141: for (cptr = cmdTbl;; cptr++) 
+      000002 AEr00r00         [ 2]   74 	ldw	x, #(_cmdTbl+0)
+      000005 1F 01            [ 2]   75 	ldw	(0x01, sp), x
+      000007 5F               [ 1]   76 	clrw	x
+      000008 1F 07            [ 2]   77 	ldw	(0x07, sp), x
+      00000A 1F 05            [ 2]   78 	ldw	(0x05, sp), x
+      00000C 16 01            [ 2]   79 	ldw	y, (0x01, sp)
+      00000E 17 09            [ 2]   80 	ldw	(0x09, sp), y
+      000010                         81 00106$:
+                                     82 ;	stm8s_eeprom_main.c: 143: if(cptr->cmd==0)
+      000010 1E 09            [ 2]   83 	ldw	x, (0x09, sp)
+      000012 FE               [ 2]   84 	ldw	x, (x)
+      000013 1F 03            [ 2]   85 	ldw	(0x03, sp), x
+      000015 26 19            [ 1]   86 	jrne	00102$
+                                     87 ;	stm8s_eeprom_main.c: 145: ccprintf(1,("INFO:+cmd_eeprom...\r\n"));
+      000017 4Br00            [ 1]   88 	push	#<(__str_0+0)
+      000019 4Bs00            [ 1]   89 	push	#((__str_0+0) >> 8)
+      00001B CDr00r00         [ 4]   90 	call	_mib_printf
+      00001E 5B 02            [ 2]   91 	addw	sp, #2
+                                     92 ;	stm8s_eeprom_main.c: 146: memcpy((void *)&(cptr->cmd),(void *)&(cmdTbl_only[0].cmd),sizeof(CMD_MY));
+      000020 AEr00r00         [ 2]   93 	ldw	x, #_cmdTbl_only+0
+      000023 16 01            [ 2]   94 	ldw	y, (0x01, sp)
+      000025 4B 06            [ 1]   95 	push	#0x06
+      000027 4B 00            [ 1]   96 	push	#0x00
+      000029 89               [ 2]   97 	pushw	x
+      00002A 93               [ 1]   98 	ldw	x, y
+      00002B CDr00r00         [ 4]   99 	call	___memcpy
+                                    100 ;	stm8s_eeprom_main.c: 147: break;
+      00002E 20 2F            [ 2]  101 	jra	00105$
+      000030                        102 00102$:
+                                    103 ;	stm8s_eeprom_main.c: 149: index++;
+      000030 1E 07            [ 2]  104 	ldw	x, (0x07, sp)
+      000032 5C               [ 1]  105 	incw	x
+      000033 1F 07            [ 2]  106 	ldw	(0x07, sp), x
+      000035 26 05            [ 1]  107 	jrne	00126$
+      000037 1E 05            [ 2]  108 	ldw	x, (0x05, sp)
+      000039 5C               [ 1]  109 	incw	x
+      00003A 1F 05            [ 2]  110 	ldw	(0x05, sp), x
+      00003C                        111 00126$:
+                                    112 ;	stm8s_eeprom_main.c: 150: if(index>MAX_COMMANDS)
+      00003C AE 00 06         [ 2]  113 	ldw	x, #0x0006
+      00003F 13 07            [ 2]  114 	cpw	x, (0x07, sp)
+      000041 4F               [ 1]  115 	clr	a
+      000042 12 06            [ 1]  116 	sbc	a, (0x06, sp)
+      000044 4F               [ 1]  117 	clr	a
+      000045 12 05            [ 1]  118 	sbc	a, (0x05, sp)
+      000047 24 0B            [ 1]  119 	jrnc	00107$
+                                    120 ;	stm8s_eeprom_main.c: 152: ccprintf(1,("INFO:-cmd_eeprom...\r\n"));
+      000049 4Br16            [ 1]  121 	push	#<(__str_1+0)
+      00004B 4Bs00            [ 1]  122 	push	#((__str_1+0) >> 8)
+      00004D CDr00r00         [ 4]  123 	call	_mib_printf
+      000050 5B 02            [ 2]  124 	addw	sp, #2
+                                    125 ;	stm8s_eeprom_main.c: 153: return;
+      000052 20 0B            [ 2]  126 	jra	00108$
+      000054                        127 00107$:
+                                    128 ;	stm8s_eeprom_main.c: 141: for (cptr = cmdTbl;; cptr++) 
+      000054 1E 09            [ 2]  129 	ldw	x, (0x09, sp)
+      000056 1C 00 06         [ 2]  130 	addw	x, #0x0006
+      000059 1F 09            [ 2]  131 	ldw	(0x09, sp), x
+      00005B 1F 01            [ 2]  132 	ldw	(0x01, sp), x
+      00005D 20 B1            [ 2]  133 	jra	00106$
+      00005F                        134 00105$:
+                                    135 ;	stm8s_eeprom_main.c: 156: return;
+      00005F                        136 00108$:
+                                    137 ;	stm8s_eeprom_main.c: 157: }
+      00005F 5B 0A            [ 2]  138 	addw	sp, #10
+      000061 81               [ 4]  139 	ret
+                                    140 ;	stm8s_eeprom_main.c: 162: void cmd_test(void)
+                                    141 ;	-----------------------------------------
+                                    142 ;	 function cmd_test
+                                    143 ;	-----------------------------------------
+      000062                        144 _cmd_test:
+                                    145 ;	stm8s_eeprom_main.c: 164: cmd_eeprom();
+                                    146 ;	stm8s_eeprom_main.c: 165: }
+      000062 CCr00r00         [ 2]  147 	jp	_cmd_eeprom
+                                    148 ;	stm8s_eeprom_main.c: 171: void cmd_test_init_before_irq_enable(void)
+                                    149 ;	-----------------------------------------
+                                    150 ;	 function cmd_test_init_before_irq_enable
+                                    151 ;	-----------------------------------------
+      000065                        152 _cmd_test_init_before_irq_enable:
+                                    153 ;	stm8s_eeprom_main.c: 174: }
+      000065 81               [ 4]  154 	ret
+                                    155 ;	stm8s_eeprom_main.c: 185: static int DoEEPROM(CMD_MY *cptr, int argc, char **argv)
+                                    156 ;	-----------------------------------------
+                                    157 ;	 function DoEEPROM
+                                    158 ;	-----------------------------------------
+      000066                        159 _DoEEPROM:
+      000066 52 0D            [ 2]  160 	sub	sp, #13
+                                    161 ;	stm8s_eeprom_main.c: 187: uint16_t vwAddr = 0;
+      000068 0F 02            [ 1]  162 	clr	(0x02, sp)
+      00006A 0F 01            [ 1]  163 	clr	(0x01, sp)
+                                    164 ;	stm8s_eeprom_main.c: 188: uint8_t vbData = 0;
+      00006C 0F 03            [ 1]  165 	clr	(0x03, sp)
+                                    166 ;	stm8s_eeprom_main.c: 192: MibWriteDebugString(cptr->usage);
+      00006E 1C 00 04         [ 2]  167 	addw	x, #0x0004
+      000071 1F 04            [ 2]  168 	ldw	(0x04, sp), x
+                                    169 ;	stm8s_eeprom_main.c: 190: if (argc < 2)
+      000073 1E 10            [ 2]  170 	ldw	x, (0x10, sp)
+      000075 A3 00 02         [ 2]  171 	cpw	x, #0x0002
+      000078 2E 0A            [ 1]  172 	jrsge	00102$
+                                    173 ;	stm8s_eeprom_main.c: 192: MibWriteDebugString(cptr->usage);
+      00007A 1E 04            [ 2]  174 	ldw	x, (0x04, sp)
+      00007C FE               [ 2]  175 	ldw	x, (x)
+      00007D CDr00r00         [ 4]  176 	call	_MibWriteDebugString
+                                    177 ;	stm8s_eeprom_main.c: 193: return FALSE;
+      000080 5F               [ 1]  178 	clrw	x
+      000081 CCr04r2D         [ 2]  179 	jp	00172$
+      000084                        180 00102$:
+                                    181 ;	stm8s_eeprom_main.c: 198: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      000084 1E 12            [ 2]  182 	ldw	x, (0x12, sp)
+      000086 5C               [ 1]  183 	incw	x
+      000087 5C               [ 1]  184 	incw	x
+      000088 1F 06            [ 2]  185 	ldw	(0x06, sp), x
+      00008A FE               [ 2]  186 	ldw	x, (x)
+      00008B 4Br2C            [ 1]  187 	push	#<(___str_2+0)
+      00008D 4Bs00            [ 1]  188 	push	#((___str_2+0) >> 8)
+      00008F CDr00r00         [ 4]  189 	call	_strcmp
+      000092 51               [ 1]  190 	exgw	x, y
+                                    191 ;	stm8s_eeprom_main.c: 200: if (argc < 4)
+      000093 1E 10            [ 2]  192 	ldw	x, (0x10, sp)
+      000095 A3 00 04         [ 2]  193 	cpw	x, #0x0004
+      000098 2F 04            [ 1]  194 	jrslt	00315$
+      00009A 0F 08            [ 1]  195 	clr	(0x08, sp)
+      00009C 20 04            [ 2]  196 	jra	00316$
+      00009E                        197 00315$:
+      00009E A6 01            [ 1]  198 	ld	a, #0x01
+      0000A0 6B 08            [ 1]  199 	ld	(0x08, sp), a
+      0000A2                        200 00316$:
+                                    201 ;	stm8s_eeprom_main.c: 205: if (!HexToInt(argv[2], &vwAddr, 16))
+      0000A2 1E 12            [ 2]  202 	ldw	x, (0x12, sp)
+      0000A4 1C 00 04         [ 2]  203 	addw	x, #0x0004
+      0000A7 1F 09            [ 2]  204 	ldw	(0x09, sp), x
+                                    205 ;	stm8s_eeprom_main.c: 210: if (!HexToInt(argv[3], &vbData, 8))
+      0000A9 1E 12            [ 2]  206 	ldw	x, (0x12, sp)
+      0000AB 1C 00 06         [ 2]  207 	addw	x, #0x0006
+      0000AE 1F 0B            [ 2]  208 	ldw	(0x0b, sp), x
+                                    209 ;	stm8s_eeprom_main.c: 198: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      0000B0 90 5D            [ 2]  210 	tnzw	y
+      0000B2 27 03            [ 1]  211 	jreq	00317$
+      0000B4 CCr01r35         [ 2]  212 	jp	00170$
+      0000B7                        213 00317$:
+                                    214 ;	stm8s_eeprom_main.c: 200: if (argc < 4)
+      0000B7 0D 08            [ 1]  215 	tnz	(0x08, sp)
+      0000B9 27 0A            [ 1]  216 	jreq	00104$
+                                    217 ;	stm8s_eeprom_main.c: 202: MibWriteDebugString(cptr->usage);
+      0000BB 1E 04            [ 2]  218 	ldw	x, (0x04, sp)
+      0000BD FE               [ 2]  219 	ldw	x, (x)
+      0000BE CDr00r00         [ 4]  220 	call	_MibWriteDebugString
+                                    221 ;	stm8s_eeprom_main.c: 203: return FALSE;
+      0000C1 5F               [ 1]  222 	clrw	x
+      0000C2 CCr04r2D         [ 2]  223 	jp	00172$
+      0000C5                        224 00104$:
+                                    225 ;	stm8s_eeprom_main.c: 205: if (!HexToInt(argv[2], &vwAddr, 16))
+      0000C5 96               [ 1]  226 	ldw	x, sp
+      0000C6 5C               [ 1]  227 	incw	x
+      0000C7 16 09            [ 2]  228 	ldw	y, (0x09, sp)
+      0000C9 90 FE            [ 2]  229 	ldw	y, (y)
+      0000CB 4B 10            [ 1]  230 	push	#0x10
+      0000CD 4B 00            [ 1]  231 	push	#0x00
+      0000CF 89               [ 2]  232 	pushw	x
+      0000D0 93               [ 1]  233 	ldw	x, y
+      0000D1 CDr00r00         [ 4]  234 	call	_HexToInt
+      0000D4 5D               [ 2]  235 	tnzw	x
+      0000D5 26 0D            [ 1]  236 	jrne	00106$
+                                    237 ;	stm8s_eeprom_main.c: 207: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000D7 4Br32            [ 1]  238 	push	#<(__str_3+0)
+      0000D9 4Bs00            [ 1]  239 	push	#((__str_3+0) >> 8)
+      0000DB CDr00r00         [ 4]  240 	call	_mib_printf
+      0000DE 5B 02            [ 2]  241 	addw	sp, #2
+                                    242 ;	stm8s_eeprom_main.c: 208: return FALSE;
+      0000E0 5F               [ 1]  243 	clrw	x
+      0000E1 CCr04r2D         [ 2]  244 	jp	00172$
+      0000E4                        245 00106$:
+                                    246 ;	stm8s_eeprom_main.c: 210: if (!HexToInt(argv[3], &vbData, 8))
+      0000E4 96               [ 1]  247 	ldw	x, sp
+      0000E5 1C 00 03         [ 2]  248 	addw	x, #3
+      0000E8 16 0B            [ 2]  249 	ldw	y, (0x0b, sp)
+      0000EA 90 FE            [ 2]  250 	ldw	y, (y)
+      0000EC 4B 08            [ 1]  251 	push	#0x08
+      0000EE 4B 00            [ 1]  252 	push	#0x00
+      0000F0 89               [ 2]  253 	pushw	x
+      0000F1 93               [ 1]  254 	ldw	x, y
+      0000F2 CDr00r00         [ 4]  255 	call	_HexToInt
+      0000F5 5D               [ 2]  256 	tnzw	x
+      0000F6 26 0D            [ 1]  257 	jrne	00108$
+                                    258 ;	stm8s_eeprom_main.c: 212: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000F8 4Br32            [ 1]  259 	push	#<(__str_3+0)
+      0000FA 4Bs00            [ 1]  260 	push	#((__str_3+0) >> 8)
+      0000FC CDr00r00         [ 4]  261 	call	_mib_printf
+      0000FF 5B 02            [ 2]  262 	addw	sp, #2
+                                    263 ;	stm8s_eeprom_main.c: 213: return FALSE;
+      000101 5F               [ 1]  264 	clrw	x
+      000102 CCr04r2D         [ 2]  265 	jp	00172$
+      000105                        266 00108$:
+                                    267 ;	stm8s_eeprom_main.c: 216: if(mmEepromWrite(vwAddr, vbData)==0)
+      000105 7B 03            [ 1]  268 	ld	a, (0x03, sp)
+      000107 1E 01            [ 2]  269 	ldw	x, (0x01, sp)
+      000109 CDr00r00         [ 4]  270 	call	_mmEepromWrite
+                                    271 ;	stm8s_eeprom_main.c: 219: ccprintf(_DEBUG_CMD_A_,("mmEepromWrite ERROR!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      00010C 5F               [ 1]  272 	clrw	x
+      00010D 41               [ 1]  273 	exg	a, xl
+      00010E 7B 03            [ 1]  274 	ld	a, (0x03, sp)
+      000110 41               [ 1]  275 	exg	a, xl
+                                    276 ;	stm8s_eeprom_main.c: 216: if(mmEepromWrite(vwAddr, vbData)==0)
+      000111 4D               [ 1]  277 	tnz	a
+      000112 26 11            [ 1]  278 	jrne	00110$
+                                    279 ;	stm8s_eeprom_main.c: 219: ccprintf(_DEBUG_CMD_A_,("mmEepromWrite ERROR!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      000114 89               [ 2]  280 	pushw	x
+      000115 1E 03            [ 2]  281 	ldw	x, (0x03, sp)
+      000117 89               [ 2]  282 	pushw	x
+      000118 4Br4F            [ 1]  283 	push	#<(__str_4+0)
+      00011A 4Bs00            [ 1]  284 	push	#((__str_4+0) >> 8)
+      00011C CDr00r00         [ 4]  285 	call	_mib_printf
+      00011F 5B 06            [ 2]  286 	addw	sp, #6
+                                    287 ;	stm8s_eeprom_main.c: 220: return 0; // false...
+      000121 5F               [ 1]  288 	clrw	x
+      000122 CCr04r2D         [ 2]  289 	jp	00172$
+      000125                        290 00110$:
+                                    291 ;	stm8s_eeprom_main.c: 224: ccprintf(_DEBUG_CMD_A_,("mmEepromWrite OK!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      000125 89               [ 2]  292 	pushw	x
+      000126 1E 03            [ 2]  293 	ldw	x, (0x03, sp)
+      000128 89               [ 2]  294 	pushw	x
+      000129 4Br78            [ 1]  295 	push	#<(__str_5+0)
+      00012B 4Bs00            [ 1]  296 	push	#((__str_5+0) >> 8)
+      00012D CDr00r00         [ 4]  297 	call	_mib_printf
+      000130 5B 06            [ 2]  298 	addw	sp, #6
+      000132 CCr04r2B         [ 2]  299 	jp	00171$
+      000135                        300 00170$:
+                                    301 ;	stm8s_eeprom_main.c: 230: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      000135 1E 06            [ 2]  302 	ldw	x, (0x06, sp)
+      000137 FE               [ 2]  303 	ldw	x, (x)
+      000138 4Br9E            [ 1]  304 	push	#<(___str_6+0)
+      00013A 4Bs00            [ 1]  305 	push	#((___str_6+0) >> 8)
+      00013C CDr00r00         [ 4]  306 	call	_strcmp
+      00013F 51               [ 1]  307 	exgw	x, y
+                                    308 ;	stm8s_eeprom_main.c: 232: if (argc < 3)
+      000140 1E 10            [ 2]  309 	ldw	x, (0x10, sp)
+      000142 A3 00 03         [ 2]  310 	cpw	x, #0x0003
+      000145 2F 04            [ 1]  311 	jrslt	00322$
+      000147 0F 0D            [ 1]  312 	clr	(0x0d, sp)
+      000149 20 04            [ 2]  313 	jra	00323$
+      00014B                        314 00322$:
+      00014B A6 01            [ 1]  315 	ld	a, #0x01
+      00014D 6B 0D            [ 1]  316 	ld	(0x0d, sp), a
+      00014F                        317 00323$:
+                                    318 ;	stm8s_eeprom_main.c: 230: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      00014F 90 5D            [ 2]  319 	tnzw	y
+      000151 26 46            [ 1]  320 	jrne	00167$
+                                    321 ;	stm8s_eeprom_main.c: 232: if (argc < 3)
+      000153 0D 0D            [ 1]  322 	tnz	(0x0d, sp)
+      000155 27 0A            [ 1]  323 	jreq	00113$
+                                    324 ;	stm8s_eeprom_main.c: 234: MibWriteDebugString(cptr->usage);
+      000157 1E 04            [ 2]  325 	ldw	x, (0x04, sp)
+      000159 FE               [ 2]  326 	ldw	x, (x)
+      00015A CDr00r00         [ 4]  327 	call	_MibWriteDebugString
+                                    328 ;	stm8s_eeprom_main.c: 235: return FALSE;
+      00015D 5F               [ 1]  329 	clrw	x
+      00015E CCr04r2D         [ 2]  330 	jp	00172$
+      000161                        331 00113$:
+                                    332 ;	stm8s_eeprom_main.c: 237: if (!HexToInt(argv[2], &vwAddr, 16))
+      000161 96               [ 1]  333 	ldw	x, sp
+      000162 5C               [ 1]  334 	incw	x
+      000163 16 09            [ 2]  335 	ldw	y, (0x09, sp)
+      000165 90 FE            [ 2]  336 	ldw	y, (y)
+      000167 4B 10            [ 1]  337 	push	#0x10
+      000169 4B 00            [ 1]  338 	push	#0x00
+      00016B 89               [ 2]  339 	pushw	x
+      00016C 93               [ 1]  340 	ldw	x, y
+      00016D CDr00r00         [ 4]  341 	call	_HexToInt
+      000170 5D               [ 2]  342 	tnzw	x
+      000171 26 0D            [ 1]  343 	jrne	00115$
+                                    344 ;	stm8s_eeprom_main.c: 239: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      000173 4Br32            [ 1]  345 	push	#<(__str_3+0)
+      000175 4Bs00            [ 1]  346 	push	#((__str_3+0) >> 8)
+      000177 CDr00r00         [ 4]  347 	call	_mib_printf
+      00017A 5B 02            [ 2]  348 	addw	sp, #2
+                                    349 ;	stm8s_eeprom_main.c: 240: return FALSE;
+      00017C 5F               [ 1]  350 	clrw	x
+      00017D CCr04r2D         [ 2]  351 	jp	00172$
+      000180                        352 00115$:
+                                    353 ;	stm8s_eeprom_main.c: 244: vbData = mmEepromRead(vwAddr);
+      000180 1E 01            [ 2]  354 	ldw	x, (0x01, sp)
+      000182 CDr00r00         [ 4]  355 	call	_mmEepromRead
+      000185 6B 03            [ 1]  356 	ld	(0x03, sp), a
+                                    357 ;	stm8s_eeprom_main.c: 246: ccprintf(_DEBUG_CMD_A_,("mmEepromRead : 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      000187 5F               [ 1]  358 	clrw	x
+      000188 97               [ 1]  359 	ld	xl, a
+      000189 89               [ 2]  360 	pushw	x
+      00018A 1E 03            [ 2]  361 	ldw	x, (0x03, sp)
+      00018C 89               [ 2]  362 	pushw	x
+      00018D 4BrA3            [ 1]  363 	push	#<(__str_7+0)
+      00018F 4Bs00            [ 1]  364 	push	#((__str_7+0) >> 8)
+      000191 CDr00r00         [ 4]  365 	call	_mib_printf
+      000194 5B 06            [ 2]  366 	addw	sp, #6
+      000196 CCr04r2B         [ 2]  367 	jp	00171$
+      000199                        368 00167$:
+                                    369 ;	stm8s_eeprom_main.c: 251: else if (!strcmp(argv[1], "init")) // _CMD_MY_READ_
+      000199 1E 06            [ 2]  370 	ldw	x, (0x06, sp)
+      00019B FE               [ 2]  371 	ldw	x, (x)
+      00019C 4BrC3            [ 1]  372 	push	#<(___str_8+0)
+      00019E 4Bs00            [ 1]  373 	push	#((___str_8+0) >> 8)
+      0001A0 CDr00r00         [ 4]  374 	call	_strcmp
+      0001A3 5D               [ 2]  375 	tnzw	x
+      0001A4 26 1F            [ 1]  376 	jrne	00164$
+                                    377 ;	stm8s_eeprom_main.c: 253: if(mmEepromUnlock()==0)
+      0001A6 CDr00r00         [ 4]  378 	call	_mmEepromUnlock
+      0001A9 4D               [ 1]  379 	tnz	a
+      0001AA 26 0D            [ 1]  380 	jrne	00117$
+                                    381 ;	stm8s_eeprom_main.c: 256: ccprintf(_DEBUG_CMD_A_, ("eeprom init ERROR!!!....mmEepromUnlock()\r\n"));		
+      0001AC 4BrC8            [ 1]  382 	push	#<(__str_9+0)
+      0001AE 4Bs00            [ 1]  383 	push	#((__str_9+0) >> 8)
+      0001B0 CDr00r00         [ 4]  384 	call	_mib_printf
+      0001B3 5B 02            [ 2]  385 	addw	sp, #2
+                                    386 ;	stm8s_eeprom_main.c: 257: return FALSE;
+      0001B5 5F               [ 1]  387 	clrw	x
+      0001B6 CCr04r2D         [ 2]  388 	jp	00172$
+      0001B9                        389 00117$:
+                                    390 ;	stm8s_eeprom_main.c: 261: ccprintf(_DEBUG_CMD_A_, ("eeprom init OK!!!....mmEepromUnlock()\r\n"));		
+      0001B9 4BrF3            [ 1]  391 	push	#<(__str_10+0)
+      0001BB 4Bs00            [ 1]  392 	push	#((__str_10+0) >> 8)
+      0001BD CDr00r00         [ 4]  393 	call	_mib_printf
+      0001C0 5B 02            [ 2]  394 	addw	sp, #2
+      0001C2 CCr04r2B         [ 2]  395 	jp	00171$
+      0001C5                        396 00164$:
+                                    397 ;	stm8s_eeprom_main.c: 267: else if (!strcmp(argv[1], "lock")) // _CMD_MY_READ_
+      0001C5 1E 06            [ 2]  398 	ldw	x, (0x06, sp)
+      0001C7 FE               [ 2]  399 	ldw	x, (x)
+      0001C8 4Br1B            [ 1]  400 	push	#<(___str_11+0)
+      0001CA 4Bs01            [ 1]  401 	push	#((___str_11+0) >> 8)
+      0001CC CDr00r00         [ 4]  402 	call	_strcmp
+      0001CF 5D               [ 2]  403 	tnzw	x
+      0001D0 26 0F            [ 1]  404 	jrne	00161$
+                                    405 ;	stm8s_eeprom_main.c: 269: ccprintf(_DEBUG_CMD_A_, ("eeprom lock....mmEepromLock()\r\n"));		
+      0001D2 4Br20            [ 1]  406 	push	#<(__str_12+0)
+      0001D4 4Bs01            [ 1]  407 	push	#((__str_12+0) >> 8)
+      0001D6 CDr00r00         [ 4]  408 	call	_mib_printf
+      0001D9 5B 02            [ 2]  409 	addw	sp, #2
+                                    410 ;	stm8s_eeprom_main.c: 270: mmEepromLock();
+      0001DB CDr00r00         [ 4]  411 	call	_mmEepromLock
+      0001DE CCr04r2B         [ 2]  412 	jp	00171$
+      0001E1                        413 00161$:
+                                    414 ;	stm8s_eeprom_main.c: 275: else if (!strcmp(argv[1], "help")) // _CMD_MY_READ_
+      0001E1 1E 06            [ 2]  415 	ldw	x, (0x06, sp)
+      0001E3 FE               [ 2]  416 	ldw	x, (x)
+      0001E4 4Br40            [ 1]  417 	push	#<(___str_13+0)
+      0001E6 4Bs01            [ 1]  418 	push	#((___str_13+0) >> 8)
+      0001E8 CDr00r00         [ 4]  419 	call	_strcmp
+      0001EB 5D               [ 2]  420 	tnzw	x
+      0001EC 27 03            [ 1]  421 	jreq	00330$
+      0001EE CCr02r90         [ 2]  422 	jp	00158$
+      0001F1                        423 00330$:
+                                    424 ;	stm8s_eeprom_main.c: 277: ccprintf(_DEBUG_CMD_A_, ("FLASH_PROG_START_PHYSICAL_ADDRESS  [0x%08lx]\r\n",FLASH_PROG_START_PHYSICAL_ADDRESS  ));		
+      0001F1 4B 00            [ 1]  425 	push	#0x00
+      0001F3 4B 80            [ 1]  426 	push	#0x80
+      0001F5 5F               [ 1]  427 	clrw	x
+      0001F6 89               [ 2]  428 	pushw	x
+      0001F7 4Br45            [ 1]  429 	push	#<(__str_14+0)
+      0001F9 4Bs01            [ 1]  430 	push	#((__str_14+0) >> 8)
+      0001FB CDr00r00         [ 4]  431 	call	_mib_printf
+      0001FE 5B 06            [ 2]  432 	addw	sp, #6
+                                    433 ;	stm8s_eeprom_main.c: 278: ccprintf(_DEBUG_CMD_A_, ("FLASH_PROG_END_PHYSICAL_ADDRESS    [0x%08lx]\r\n",FLASH_PROG_END_PHYSICAL_ADDRESS    ));		
+      000200 4B FF            [ 1]  434 	push	#0xff
+      000202 4B FF            [ 1]  435 	push	#0xff
+      000204 5F               [ 1]  436 	clrw	x
+      000205 89               [ 2]  437 	pushw	x
+      000206 4Br74            [ 1]  438 	push	#<(__str_15+0)
+      000208 4Bs01            [ 1]  439 	push	#((__str_15+0) >> 8)
+      00020A CDr00r00         [ 4]  440 	call	_mib_printf
+      00020D 5B 06            [ 2]  441 	addw	sp, #6
+                                    442 ;	stm8s_eeprom_main.c: 279: ccprintf(_DEBUG_CMD_A_, ("FLASH_PROG_BLOCKS_NUMBER           [%d]\r\n" ,FLASH_PROG_BLOCKS_NUMBER             ));		
+      00020F 4B 00            [ 1]  443 	push	#0x00
+      000211 4B 01            [ 1]  444 	push	#0x01
+      000213 4BrA3            [ 1]  445 	push	#<(__str_16+0)
+      000215 4Bs01            [ 1]  446 	push	#((__str_16+0) >> 8)
+      000217 CDr00r00         [ 4]  447 	call	_mib_printf
+      00021A 5B 04            [ 2]  448 	addw	sp, #4
+                                    449 ;	stm8s_eeprom_main.c: 280: ccprintf(_DEBUG_CMD_A_, ("FLASH_DATA_START_PHYSICAL_ADDRESS  [0x%08lx]\r\n",FLASH_DATA_START_PHYSICAL_ADDRESS));		
+      00021C 4B 00            [ 1]  450 	push	#0x00
+      00021E 4B 40            [ 1]  451 	push	#0x40
+      000220 5F               [ 1]  452 	clrw	x
+      000221 89               [ 2]  453 	pushw	x
+      000222 4BrCD            [ 1]  454 	push	#<(__str_17+0)
+      000224 4Bs01            [ 1]  455 	push	#((__str_17+0) >> 8)
+      000226 CDr00r00         [ 4]  456 	call	_mib_printf
+      000229 5B 06            [ 2]  457 	addw	sp, #6
+                                    458 ;	stm8s_eeprom_main.c: 281: ccprintf(_DEBUG_CMD_A_, ("FLASH_DATA_END_PHYSICAL_ADDRESS    [0x%08lx]\r\n",FLASH_DATA_END_PHYSICAL_ADDRESS  ));		
+      00022B 4B FF            [ 1]  459 	push	#0xff
+      00022D 4B 43            [ 1]  460 	push	#0x43
+      00022F 5F               [ 1]  461 	clrw	x
+      000230 89               [ 2]  462 	pushw	x
+      000231 4BrFC            [ 1]  463 	push	#<(__str_18+0)
+      000233 4Bs01            [ 1]  464 	push	#((__str_18+0) >> 8)
+      000235 CDr00r00         [ 4]  465 	call	_mib_printf
+      000238 5B 06            [ 2]  466 	addw	sp, #6
+                                    467 ;	stm8s_eeprom_main.c: 282: ccprintf(_DEBUG_CMD_A_, ("FLASH_DATA_BLOCKS_NUMBER           [%d]\r\n" ,FLASH_DATA_BLOCKS_NUMBER      ));		
+      00023A 4B 08            [ 1]  468 	push	#0x08
+      00023C 4B 00            [ 1]  469 	push	#0x00
+      00023E 4Br2B            [ 1]  470 	push	#<(__str_19+0)
+      000240 4Bs02            [ 1]  471 	push	#((__str_19+0) >> 8)
+      000242 CDr00r00         [ 4]  472 	call	_mib_printf
+      000245 5B 04            [ 2]  473 	addw	sp, #4
+                                    474 ;	stm8s_eeprom_main.c: 283: ccprintf(_DEBUG_CMD_A_, ("FLASH_BLOCK_SIZE                   [%d]\r\n" ,(uint16_t)FLASH_BLOCK_SIZE       ));		
+      000247 4B 80            [ 1]  475 	push	#0x80
+      000249 4B 00            [ 1]  476 	push	#0x00
+      00024B 4Br55            [ 1]  477 	push	#<(__str_20+0)
+      00024D 4Bs02            [ 1]  478 	push	#((__str_20+0) >> 8)
+      00024F CDr00r00         [ 4]  479 	call	_mib_printf
+      000252 5B 04            [ 2]  480 	addw	sp, #4
+                                    481 ;	stm8s_eeprom_main.c: 284: ccprintf(_DEBUG_CMD_A_, ("OPTION_BYTE_START_PHYSICAL_ADDRESS [0x%08lx]\r\n",(uint32_t)OPTION_BYTE_START_PHYSICAL_ADDRESS));		
+      000254 4B 00            [ 1]  482 	push	#0x00
+      000256 4B 48            [ 1]  483 	push	#0x48
+      000258 5F               [ 1]  484 	clrw	x
+      000259 89               [ 2]  485 	pushw	x
+      00025A 4Br7F            [ 1]  486 	push	#<(__str_21+0)
+      00025C 4Bs02            [ 1]  487 	push	#((__str_21+0) >> 8)
+      00025E CDr00r00         [ 4]  488 	call	_mib_printf
+      000261 5B 06            [ 2]  489 	addw	sp, #6
+                                    490 ;	stm8s_eeprom_main.c: 285: ccprintf(_DEBUG_CMD_A_, ("OPTION_BYTE_END_PHYSICAL_ADDRESS   [0x%08lx]\r\n",(uint32_t)OPTION_BYTE_END_PHYSICAL_ADDRESS  ));		
+      000263 4B 7F            [ 1]  491 	push	#0x7f
+      000265 4B 48            [ 1]  492 	push	#0x48
+      000267 5F               [ 1]  493 	clrw	x
+      000268 89               [ 2]  494 	pushw	x
+      000269 4BrAE            [ 1]  495 	push	#<(__str_22+0)
+      00026B 4Bs02            [ 1]  496 	push	#((__str_22+0) >> 8)
+      00026D CDr00r00         [ 4]  497 	call	_mib_printf
+      000270 5B 06            [ 2]  498 	addw	sp, #6
+                                    499 ;	stm8s_eeprom_main.c: 286: ccprintf(_DEBUG_CMD_A_, (" eeprom help\r\n eeprom init\r\n eeprom write 100 aa\r\n eeprom read 100\r\n eeprom lock\r\n"));	
+      000272 4BrDD            [ 1]  500 	push	#<(__str_23+0)
+      000274 4Bs02            [ 1]  501 	push	#((__str_23+0) >> 8)
+      000276 CDr00r00         [ 4]  502 	call	_mib_printf
+      000279 5B 02            [ 2]  503 	addw	sp, #2
+                                    504 ;	stm8s_eeprom_main.c: 287: ccprintf(_DEBUG_CMD_A_, (" eeprom oinit\r\n eeprom oread 4803\r\n eeprom owrite 4803 80\r\n eeprom oerase 4803\r\n eeprom olock\r\n"));	
+      00027B 4Br30            [ 1]  505 	push	#<(__str_24+0)
+      00027D 4Bs03            [ 1]  506 	push	#((__str_24+0) >> 8)
+      00027F CDr00r00         [ 4]  507 	call	_mib_printf
+      000282 5B 02            [ 2]  508 	addw	sp, #2
+                                    509 ;	stm8s_eeprom_main.c: 288: ccprintf(_DEBUG_CMD_A_, (" https://www.st.com/resource/en/datasheet/stm8s105c6.pdf page 46, AFR7 (beep) / page 29 PD4 (BEEP output, AFR7 bit)\r\n"));		
+      000284 4Br90            [ 1]  510 	push	#<(__str_25+0)
+      000286 4Bs03            [ 1]  511 	push	#((__str_25+0) >> 8)
+      000288 CDr00r00         [ 4]  512 	call	_mib_printf
+      00028B 5B 02            [ 2]  513 	addw	sp, #2
+      00028D CCr04r2B         [ 2]  514 	jp	00171$
+      000290                        515 00158$:
+                                    516 ;	stm8s_eeprom_main.c: 294: else if (!strcmp(argv[1], "owrite")) // _CMD_MY_WRITE_
+      000290 1E 06            [ 2]  517 	ldw	x, (0x06, sp)
+      000292 FE               [ 2]  518 	ldw	x, (x)
+      000293 4Br06            [ 1]  519 	push	#<(___str_26+0)
+      000295 4Bs04            [ 1]  520 	push	#((___str_26+0) >> 8)
+      000297 CDr00r00         [ 4]  521 	call	_strcmp
+      00029A 5D               [ 2]  522 	tnzw	x
+      00029B 27 03            [ 1]  523 	jreq	00331$
+      00029D CCr03r1E         [ 2]  524 	jp	00155$
+      0002A0                        525 00331$:
+                                    526 ;	stm8s_eeprom_main.c: 296: if (argc < 4)
+      0002A0 0D 08            [ 1]  527 	tnz	(0x08, sp)
+      0002A2 27 0A            [ 1]  528 	jreq	00120$
+                                    529 ;	stm8s_eeprom_main.c: 298: MibWriteDebugString(cptr->usage);
+      0002A4 1E 04            [ 2]  530 	ldw	x, (0x04, sp)
+      0002A6 FE               [ 2]  531 	ldw	x, (x)
+      0002A7 CDr00r00         [ 4]  532 	call	_MibWriteDebugString
+                                    533 ;	stm8s_eeprom_main.c: 299: return FALSE;
+      0002AA 5F               [ 1]  534 	clrw	x
+      0002AB CCr04r2D         [ 2]  535 	jp	00172$
+      0002AE                        536 00120$:
+                                    537 ;	stm8s_eeprom_main.c: 301: if (!HexToInt(argv[2], &vwAddr, 16))
+      0002AE 96               [ 1]  538 	ldw	x, sp
+      0002AF 5C               [ 1]  539 	incw	x
+      0002B0 16 09            [ 2]  540 	ldw	y, (0x09, sp)
+      0002B2 90 FE            [ 2]  541 	ldw	y, (y)
+      0002B4 4B 10            [ 1]  542 	push	#0x10
+      0002B6 4B 00            [ 1]  543 	push	#0x00
+      0002B8 89               [ 2]  544 	pushw	x
+      0002B9 93               [ 1]  545 	ldw	x, y
+      0002BA CDr00r00         [ 4]  546 	call	_HexToInt
+      0002BD 5D               [ 2]  547 	tnzw	x
+      0002BE 26 0D            [ 1]  548 	jrne	00122$
+                                    549 ;	stm8s_eeprom_main.c: 303: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0002C0 4Br32            [ 1]  550 	push	#<(__str_3+0)
+      0002C2 4Bs00            [ 1]  551 	push	#((__str_3+0) >> 8)
+      0002C4 CDr00r00         [ 4]  552 	call	_mib_printf
+      0002C7 5B 02            [ 2]  553 	addw	sp, #2
+                                    554 ;	stm8s_eeprom_main.c: 304: return FALSE;
+      0002C9 5F               [ 1]  555 	clrw	x
+      0002CA CCr04r2D         [ 2]  556 	jp	00172$
+      0002CD                        557 00122$:
+                                    558 ;	stm8s_eeprom_main.c: 306: if (!HexToInt(argv[3], &vbData, 8))
+      0002CD 96               [ 1]  559 	ldw	x, sp
+      0002CE 1C 00 03         [ 2]  560 	addw	x, #3
+      0002D1 16 0B            [ 2]  561 	ldw	y, (0x0b, sp)
+      0002D3 90 FE            [ 2]  562 	ldw	y, (y)
+      0002D5 4B 08            [ 1]  563 	push	#0x08
+      0002D7 4B 00            [ 1]  564 	push	#0x00
+      0002D9 89               [ 2]  565 	pushw	x
+      0002DA 93               [ 1]  566 	ldw	x, y
+      0002DB CDr00r00         [ 4]  567 	call	_HexToInt
+      0002DE 5D               [ 2]  568 	tnzw	x
+      0002DF 26 0D            [ 1]  569 	jrne	00124$
+                                    570 ;	stm8s_eeprom_main.c: 308: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0002E1 4Br32            [ 1]  571 	push	#<(__str_3+0)
+      0002E3 4Bs00            [ 1]  572 	push	#((__str_3+0) >> 8)
+      0002E5 CDr00r00         [ 4]  573 	call	_mib_printf
+      0002E8 5B 02            [ 2]  574 	addw	sp, #2
+                                    575 ;	stm8s_eeprom_main.c: 309: return FALSE;
+      0002EA 5F               [ 1]  576 	clrw	x
+      0002EB CCr04r2D         [ 2]  577 	jp	00172$
+      0002EE                        578 00124$:
+                                    579 ;	stm8s_eeprom_main.c: 312: if(mmFlashOptionWrite(vwAddr, vbData)==0)
+      0002EE 7B 03            [ 1]  580 	ld	a, (0x03, sp)
+      0002F0 1E 01            [ 2]  581 	ldw	x, (0x01, sp)
+      0002F2 CDr00r00         [ 4]  582 	call	_mmFlashOptionWrite
+                                    583 ;	stm8s_eeprom_main.c: 219: ccprintf(_DEBUG_CMD_A_,("mmEepromWrite ERROR!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      0002F5 5F               [ 1]  584 	clrw	x
+      0002F6 41               [ 1]  585 	exg	a, xl
+      0002F7 7B 03            [ 1]  586 	ld	a, (0x03, sp)
+      0002F9 41               [ 1]  587 	exg	a, xl
+                                    588 ;	stm8s_eeprom_main.c: 312: if(mmFlashOptionWrite(vwAddr, vbData)==0)
+      0002FA 4D               [ 1]  589 	tnz	a
+      0002FB 26 11            [ 1]  590 	jrne	00126$
+                                    591 ;	stm8s_eeprom_main.c: 315: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionWrite ERROR!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      0002FD 89               [ 2]  592 	pushw	x
+      0002FE 1E 03            [ 2]  593 	ldw	x, (0x03, sp)
+      000300 89               [ 2]  594 	pushw	x
+      000301 4Br0D            [ 1]  595 	push	#<(__str_27+0)
+      000303 4Bs04            [ 1]  596 	push	#((__str_27+0) >> 8)
+      000305 CDr00r00         [ 4]  597 	call	_mib_printf
+      000308 5B 06            [ 2]  598 	addw	sp, #6
+                                    599 ;	stm8s_eeprom_main.c: 316: return 0; // false...
+      00030A 5F               [ 1]  600 	clrw	x
+      00030B CCr04r2D         [ 2]  601 	jp	00172$
+      00030E                        602 00126$:
+                                    603 ;	stm8s_eeprom_main.c: 320: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionWrite OK!!!: 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      00030E 89               [ 2]  604 	pushw	x
+      00030F 1E 03            [ 2]  605 	ldw	x, (0x03, sp)
+      000311 89               [ 2]  606 	pushw	x
+      000312 4Br3B            [ 1]  607 	push	#<(__str_28+0)
+      000314 4Bs04            [ 1]  608 	push	#((__str_28+0) >> 8)
+      000316 CDr00r00         [ 4]  609 	call	_mib_printf
+      000319 5B 06            [ 2]  610 	addw	sp, #6
+      00031B CCr04r2B         [ 2]  611 	jp	00171$
+      00031E                        612 00155$:
+                                    613 ;	stm8s_eeprom_main.c: 326: else if (!strcmp(argv[1], "oread")) // _CMD_MY_READ_
+      00031E 1E 06            [ 2]  614 	ldw	x, (0x06, sp)
+      000320 FE               [ 2]  615 	ldw	x, (x)
+      000321 4Br66            [ 1]  616 	push	#<(___str_29+0)
+      000323 4Bs04            [ 1]  617 	push	#((___str_29+0) >> 8)
+      000325 CDr00r00         [ 4]  618 	call	_strcmp
+      000328 5D               [ 2]  619 	tnzw	x
+      000329 26 42            [ 1]  620 	jrne	00152$
+                                    621 ;	stm8s_eeprom_main.c: 329: if (argc < 3)
+      00032B 0D 0D            [ 1]  622 	tnz	(0x0d, sp)
+      00032D 27 0A            [ 1]  623 	jreq	00129$
+                                    624 ;	stm8s_eeprom_main.c: 331: MibWriteDebugString(cptr->usage);
+      00032F 1E 04            [ 2]  625 	ldw	x, (0x04, sp)
+      000331 FE               [ 2]  626 	ldw	x, (x)
+      000332 CDr00r00         [ 4]  627 	call	_MibWriteDebugString
+                                    628 ;	stm8s_eeprom_main.c: 332: return FALSE;
+      000335 5F               [ 1]  629 	clrw	x
+      000336 CCr04r2D         [ 2]  630 	jp	00172$
+      000339                        631 00129$:
+                                    632 ;	stm8s_eeprom_main.c: 334: if (!HexToInt(argv[2], &vwAddr, 16))
+      000339 96               [ 1]  633 	ldw	x, sp
+      00033A 5C               [ 1]  634 	incw	x
+      00033B 16 09            [ 2]  635 	ldw	y, (0x09, sp)
+      00033D 90 FE            [ 2]  636 	ldw	y, (y)
+      00033F 4B 10            [ 1]  637 	push	#0x10
+      000341 4B 00            [ 1]  638 	push	#0x00
+      000343 89               [ 2]  639 	pushw	x
+      000344 93               [ 1]  640 	ldw	x, y
+      000345 CDr00r00         [ 4]  641 	call	_HexToInt
+      000348 5D               [ 2]  642 	tnzw	x
+      000349 26 0D            [ 1]  643 	jrne	00131$
+                                    644 ;	stm8s_eeprom_main.c: 336: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      00034B 4Br32            [ 1]  645 	push	#<(__str_3+0)
+      00034D 4Bs00            [ 1]  646 	push	#((__str_3+0) >> 8)
+      00034F CDr00r00         [ 4]  647 	call	_mib_printf
+      000352 5B 02            [ 2]  648 	addw	sp, #2
+                                    649 ;	stm8s_eeprom_main.c: 337: return FALSE;
+      000354 5F               [ 1]  650 	clrw	x
+      000355 CCr04r2D         [ 2]  651 	jp	00172$
+      000358                        652 00131$:
+                                    653 ;	stm8s_eeprom_main.c: 341: vwData = mmFlashOptionRead(vwAddr);
+      000358 1E 01            [ 2]  654 	ldw	x, (0x01, sp)
+      00035A CDr00r00         [ 4]  655 	call	_mmFlashOptionRead
+                                    656 ;	stm8s_eeprom_main.c: 343: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionRead : 0x%04x[0x%04x]\r\n", vwAddr,vwData));
+      00035D 89               [ 2]  657 	pushw	x
+      00035E 1E 03            [ 2]  658 	ldw	x, (0x03, sp)
+      000360 89               [ 2]  659 	pushw	x
+      000361 4Br6C            [ 1]  660 	push	#<(__str_30+0)
+      000363 4Bs04            [ 1]  661 	push	#((__str_30+0) >> 8)
+      000365 CDr00r00         [ 4]  662 	call	_mib_printf
+      000368 5B 06            [ 2]  663 	addw	sp, #6
+      00036A CCr04r2B         [ 2]  664 	jp	00171$
+      00036D                        665 00152$:
+                                    666 ;	stm8s_eeprom_main.c: 348: else if (!strcmp(argv[1], "oerase")) // _CMD_MY_READ_
+      00036D 1E 06            [ 2]  667 	ldw	x, (0x06, sp)
+      00036F FE               [ 2]  668 	ldw	x, (x)
+      000370 4Br91            [ 1]  669 	push	#<(___str_31+0)
+      000372 4Bs04            [ 1]  670 	push	#((___str_31+0) >> 8)
+      000374 CDr00r00         [ 4]  671 	call	_strcmp
+      000377 5D               [ 2]  672 	tnzw	x
+      000378 26 64            [ 1]  673 	jrne	00149$
+                                    674 ;	stm8s_eeprom_main.c: 351: if (argc < 3)
+      00037A 0D 0D            [ 1]  675 	tnz	(0x0d, sp)
+      00037C 27 0A            [ 1]  676 	jreq	00133$
+                                    677 ;	stm8s_eeprom_main.c: 353: MibWriteDebugString(cptr->usage);
+      00037E 1E 04            [ 2]  678 	ldw	x, (0x04, sp)
+      000380 FE               [ 2]  679 	ldw	x, (x)
+      000381 CDr00r00         [ 4]  680 	call	_MibWriteDebugString
+                                    681 ;	stm8s_eeprom_main.c: 354: return FALSE;
+      000384 5F               [ 1]  682 	clrw	x
+      000385 CCr04r2D         [ 2]  683 	jp	00172$
+      000388                        684 00133$:
+                                    685 ;	stm8s_eeprom_main.c: 356: if (!HexToInt(argv[2], &vwAddr, 16))
+      000388 96               [ 1]  686 	ldw	x, sp
+      000389 5C               [ 1]  687 	incw	x
+      00038A 16 09            [ 2]  688 	ldw	y, (0x09, sp)
+      00038C 90 FE            [ 2]  689 	ldw	y, (y)
+      00038E 4B 10            [ 1]  690 	push	#0x10
+      000390 4B 00            [ 1]  691 	push	#0x00
+      000392 89               [ 2]  692 	pushw	x
+      000393 93               [ 1]  693 	ldw	x, y
+      000394 CDr00r00         [ 4]  694 	call	_HexToInt
+      000397 5D               [ 2]  695 	tnzw	x
+      000398 26 0D            [ 1]  696 	jrne	00135$
+                                    697 ;	stm8s_eeprom_main.c: 358: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      00039A 4Br32            [ 1]  698 	push	#<(__str_3+0)
+      00039C 4Bs00            [ 1]  699 	push	#((__str_3+0) >> 8)
+      00039E CDr00r00         [ 4]  700 	call	_mib_printf
+      0003A1 5B 02            [ 2]  701 	addw	sp, #2
+                                    702 ;	stm8s_eeprom_main.c: 359: return FALSE;
+      0003A3 5F               [ 1]  703 	clrw	x
+      0003A4 CCr04r2D         [ 2]  704 	jp	00172$
+      0003A7                        705 00135$:
+                                    706 ;	stm8s_eeprom_main.c: 363: if(mmFlashOptionErase(vwAddr)==0)
+      0003A7 1E 01            [ 2]  707 	ldw	x, (0x01, sp)
+      0003A9 CDr00r00         [ 4]  708 	call	_mmFlashOptionErase
+      0003AC 4D               [ 1]  709 	tnz	a
+      0003AD 26 0F            [ 1]  710 	jrne	00137$
+                                    711 ;	stm8s_eeprom_main.c: 366: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionErase ERROR!!!: 0x%04x\r\n", vwAddr));
+      0003AF 1E 01            [ 2]  712 	ldw	x, (0x01, sp)
+      0003B1 89               [ 2]  713 	pushw	x
+      0003B2 4Br98            [ 1]  714 	push	#<(__str_32+0)
+      0003B4 4Bs04            [ 1]  715 	push	#((__str_32+0) >> 8)
+      0003B6 CDr00r00         [ 4]  716 	call	_mib_printf
+      0003B9 5B 04            [ 2]  717 	addw	sp, #4
+                                    718 ;	stm8s_eeprom_main.c: 367: return 0; // false...
+      0003BB 5F               [ 1]  719 	clrw	x
+      0003BC 20 6F            [ 2]  720 	jra	00172$
+      0003BE                        721 00137$:
+                                    722 ;	stm8s_eeprom_main.c: 371: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionErase OK!!!: 0x%04x\r\n", vwAddr));
+      0003BE 1E 01            [ 2]  723 	ldw	x, (0x01, sp)
+      0003C0 89               [ 2]  724 	pushw	x
+      0003C1 4BrBE            [ 1]  725 	push	#<(__str_33+0)
+      0003C3 4Bs04            [ 1]  726 	push	#((__str_33+0) >> 8)
+      0003C5 CDr00r00         [ 4]  727 	call	_mib_printf
+      0003C8 5B 04            [ 2]  728 	addw	sp, #4
+                                    729 ;	stm8s_eeprom_main.c: 373: vwData = mmFlashOptionRead(vwAddr);
+      0003CA 1E 01            [ 2]  730 	ldw	x, (0x01, sp)
+      0003CC CDr00r00         [ 4]  731 	call	_mmFlashOptionRead
+                                    732 ;	stm8s_eeprom_main.c: 375: ccprintf(_DEBUG_CMD_A_,("mmFlashOptionErase : 0x%04x[0x%04x]\r\n", vwAddr,vwData));
+      0003CF 89               [ 2]  733 	pushw	x
+      0003D0 1E 03            [ 2]  734 	ldw	x, (0x03, sp)
+      0003D2 89               [ 2]  735 	pushw	x
+      0003D3 4BrE1            [ 1]  736 	push	#<(__str_34+0)
+      0003D5 4Bs04            [ 1]  737 	push	#((__str_34+0) >> 8)
+      0003D7 CDr00r00         [ 4]  738 	call	_mib_printf
+      0003DA 5B 06            [ 2]  739 	addw	sp, #6
+      0003DC 20 4D            [ 2]  740 	jra	00171$
+      0003DE                        741 00149$:
+                                    742 ;	stm8s_eeprom_main.c: 380: else if (!strcmp(argv[1], "oinit")) // _CMD_MY_READ_
+      0003DE 1E 06            [ 2]  743 	ldw	x, (0x06, sp)
+      0003E0 FE               [ 2]  744 	ldw	x, (x)
+      0003E1 4Br07            [ 1]  745 	push	#<(___str_35+0)
+      0003E3 4Bs05            [ 1]  746 	push	#((___str_35+0) >> 8)
+      0003E5 CDr00r00         [ 4]  747 	call	_strcmp
+      0003E8 5D               [ 2]  748 	tnzw	x
+      0003E9 26 1D            [ 1]  749 	jrne	00146$
+                                    750 ;	stm8s_eeprom_main.c: 382: if(mmFlashOptionUnlock()==0)
+      0003EB CDr00r00         [ 4]  751 	call	_mmFlashOptionUnlock
+      0003EE 4D               [ 1]  752 	tnz	a
+      0003EF 26 0C            [ 1]  753 	jrne	00140$
+                                    754 ;	stm8s_eeprom_main.c: 385: ccprintf(_DEBUG_CMD_A_, ("flash Option bytes init ERROR!!!....mmFlashOptionUnlock()\r\n"));		
+      0003F1 4Br0D            [ 1]  755 	push	#<(__str_36+0)
+      0003F3 4Bs05            [ 1]  756 	push	#((__str_36+0) >> 8)
+      0003F5 CDr00r00         [ 4]  757 	call	_mib_printf
+      0003F8 5B 02            [ 2]  758 	addw	sp, #2
+                                    759 ;	stm8s_eeprom_main.c: 386: return FALSE;
+      0003FA 5F               [ 1]  760 	clrw	x
+      0003FB 20 30            [ 2]  761 	jra	00172$
+      0003FD                        762 00140$:
+                                    763 ;	stm8s_eeprom_main.c: 390: ccprintf(_DEBUG_CMD_A_, ("flash Option bytes init OK!!!....mmFlashOptionUnlock()\r\n"));		
+      0003FD 4Br49            [ 1]  764 	push	#<(__str_37+0)
+      0003FF 4Bs05            [ 1]  765 	push	#((__str_37+0) >> 8)
+      000401 CDr00r00         [ 4]  766 	call	_mib_printf
+      000404 5B 02            [ 2]  767 	addw	sp, #2
+      000406 20 23            [ 2]  768 	jra	00171$
+      000408                        769 00146$:
+                                    770 ;	stm8s_eeprom_main.c: 396: else if (!strcmp(argv[1], "olock")) // _CMD_MY_READ_
+      000408 1E 06            [ 2]  771 	ldw	x, (0x06, sp)
+      00040A FE               [ 2]  772 	ldw	x, (x)
+      00040B 4Br82            [ 1]  773 	push	#<(___str_38+0)
+      00040D 4Bs05            [ 1]  774 	push	#((___str_38+0) >> 8)
+      00040F CDr00r00         [ 4]  775 	call	_strcmp
+      000412 5D               [ 2]  776 	tnzw	x
+      000413 26 0E            [ 1]  777 	jrne	00143$
+                                    778 ;	stm8s_eeprom_main.c: 398: ccprintf(_DEBUG_CMD_A_, ("flash Option bytes lock....mmFlashOptionLock()\r\n"));		
+      000415 4Br88            [ 1]  779 	push	#<(__str_39+0)
+      000417 4Bs05            [ 1]  780 	push	#((__str_39+0) >> 8)
+      000419 CDr00r00         [ 4]  781 	call	_mib_printf
+      00041C 5B 02            [ 2]  782 	addw	sp, #2
+                                    783 ;	stm8s_eeprom_main.c: 399: mmFlashOptionLock();
+      00041E CDr00r00         [ 4]  784 	call	_mmFlashOptionLock
+      000421 20 08            [ 2]  785 	jra	00171$
+      000423                        786 00143$:
+                                    787 ;	stm8s_eeprom_main.c: 403: MibWriteDebugString(cptr->usage);
+      000423 1E 04            [ 2]  788 	ldw	x, (0x04, sp)
+      000425 FE               [ 2]  789 	ldw	x, (x)
+      000426 CDr00r00         [ 4]  790 	call	_MibWriteDebugString
+                                    791 ;	stm8s_eeprom_main.c: 404: return FALSE;
+      000429 5F               [ 1]  792 	clrw	x
+                                    793 ;	stm8s_eeprom_main.c: 406: return TRUE;
+      00042A C5                     794 	.byte 0xc5
+      00042B                        795 00171$:
+      00042B 5F               [ 1]  796 	clrw	x
+      00042C 5C               [ 1]  797 	incw	x
+      00042D                        798 00172$:
+                                    799 ;	stm8s_eeprom_main.c: 407: }
+      00042D 16 0E            [ 2]  800 	ldw	y, (14, sp)
+      00042F 5B 13            [ 2]  801 	addw	sp, #19
+      000431 90 FC            [ 2]  802 	jp	(y)
+                                    803 	.area CODE
+                                    804 	.area CONST
+                                    805 	.area CONST
+      000000                        806 __str_0:
+      000000 49 4E 46 4F 3A 2B 63   807 	.ascii "INFO:+cmd_eeprom..."
+             6D 64 5F 65 65 70 72
+             6F 6D 2E 2E 2E
+      000013 0D                     808 	.db 0x0d
+      000014 0A                     809 	.db 0x0a
+      000015 00                     810 	.db 0x00
+                                    811 	.area CODE
+                                    812 	.area CONST
+      000016                        813 __str_1:
+      000016 49 4E 46 4F 3A 2D 63   814 	.ascii "INFO:-cmd_eeprom..."
+             6D 64 5F 65 65 70 72
+             6F 6D 2E 2E 2E
+      000029 0D                     815 	.db 0x0d
+      00002A 0A                     816 	.db 0x0a
+      00002B 00                     817 	.db 0x00
+                                    818 	.area CODE
+                                    819 	.area CONST
+      00002C                        820 ___str_2:
+      00002C 77 72 69 74 65         821 	.ascii "write"
+      000031 00                     822 	.db 0x00
+                                    823 	.area CODE
+                                    824 	.area CONST
+      000032                        825 __str_3:
+      000032 49 6C 6C 75 67 61 6C   826 	.ascii "Illugal character is used."
+             20 63 68 61 72 61 63
+             74 65 72 20 69 73 20
+             75 73 65 64 2E
+      00004C 0D                     827 	.db 0x0d
+      00004D 0A                     828 	.db 0x0a
+      00004E 00                     829 	.db 0x00
+                                    830 	.area CODE
+                                    831 	.area CONST
+      00004F                        832 __str_4:
+      00004F 6D 6D 45 65 70 72 6F   833 	.ascii "mmEepromWrite ERROR!!!: 0x%04x[0x%02x]"
+             6D 57 72 69 74 65 20
+             45 52 52 4F 52 21 21
+             21 3A 20 30 78 25 30
+             34 78 5B 30 78 25 30
+             32 78 5D
+      000075 0D                     834 	.db 0x0d
+      000076 0A                     835 	.db 0x0a
+      000077 00                     836 	.db 0x00
+                                    837 	.area CODE
+                                    838 	.area CONST
+      000078                        839 __str_5:
+      000078 6D 6D 45 65 70 72 6F   840 	.ascii "mmEepromWrite OK!!!: 0x%04x[0x%02x]"
+             6D 57 72 69 74 65 20
+             4F 4B 21 21 21 3A 20
+             30 78 25 30 34 78 5B
+             30 78 25 30 32 78 5D
+      00009B 0D                     841 	.db 0x0d
+      00009C 0A                     842 	.db 0x0a
+      00009D 00                     843 	.db 0x00
+                                    844 	.area CODE
+                                    845 	.area CONST
+      00009E                        846 ___str_6:
+      00009E 72 65 61 64            847 	.ascii "read"
+      0000A2 00                     848 	.db 0x00
+                                    849 	.area CODE
+                                    850 	.area CONST
+      0000A3                        851 __str_7:
+      0000A3 6D 6D 45 65 70 72 6F   852 	.ascii "mmEepromRead : 0x%04x[0x%02x]"
+             6D 52 65 61 64 20 3A
+             20 30 78 25 30 34 78
+             5B 30 78 25 30 32 78
+             5D
+      0000C0 0D                     853 	.db 0x0d
+      0000C1 0A                     854 	.db 0x0a
+      0000C2 00                     855 	.db 0x00
+                                    856 	.area CODE
+                                    857 	.area CONST
+      0000C3                        858 ___str_8:
+      0000C3 69 6E 69 74            859 	.ascii "init"
+      0000C7 00                     860 	.db 0x00
+                                    861 	.area CODE
+                                    862 	.area CONST
+      0000C8                        863 __str_9:
+      0000C8 65 65 70 72 6F 6D 20   864 	.ascii "eeprom init ERROR!!!....mmEepromUnlock()"
+             69 6E 69 74 20 45 52
+             52 4F 52 21 21 21 2E
+             2E 2E 2E 6D 6D 45 65
+             70 72 6F 6D 55 6E 6C
+             6F 63 6B 28 29
+      0000F0 0D                     865 	.db 0x0d
+      0000F1 0A                     866 	.db 0x0a
+      0000F2 00                     867 	.db 0x00
+                                    868 	.area CODE
+                                    869 	.area CONST
+      0000F3                        870 __str_10:
+      0000F3 65 65 70 72 6F 6D 20   871 	.ascii "eeprom init OK!!!....mmEepromUnlock()"
+             69 6E 69 74 20 4F 4B
+             21 21 21 2E 2E 2E 2E
+             6D 6D 45 65 70 72 6F
+             6D 55 6E 6C 6F 63 6B
+             28 29
+      000118 0D                     872 	.db 0x0d
+      000119 0A                     873 	.db 0x0a
+      00011A 00                     874 	.db 0x00
+                                    875 	.area CODE
+                                    876 	.area CONST
+      00011B                        877 ___str_11:
+      00011B 6C 6F 63 6B            878 	.ascii "lock"
+      00011F 00                     879 	.db 0x00
+                                    880 	.area CODE
+                                    881 	.area CONST
+      000120                        882 __str_12:
+      000120 65 65 70 72 6F 6D 20   883 	.ascii "eeprom lock....mmEepromLock()"
+             6C 6F 63 6B 2E 2E 2E
+             2E 6D 6D 45 65 70 72
+             6F 6D 4C 6F 63 6B 28
+             29
+      00013D 0D                     884 	.db 0x0d
+      00013E 0A                     885 	.db 0x0a
+      00013F 00                     886 	.db 0x00
+                                    887 	.area CODE
+                                    888 	.area CONST
+      000140                        889 ___str_13:
+      000140 68 65 6C 70            890 	.ascii "help"
+      000144 00                     891 	.db 0x00
+                                    892 	.area CODE
+                                    893 	.area CONST
+      000145                        894 __str_14:
+      000145 46 4C 41 53 48 5F 50   895 	.ascii "FLASH_PROG_START_PHYSICAL_ADDRESS  [0x%08lx]"
+             52 4F 47 5F 53 54 41
+             52 54 5F 50 48 59 53
+             49 43 41 4C 5F 41 44
+             44 52 45 53 53 20 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      000171 0D                     896 	.db 0x0d
+      000172 0A                     897 	.db 0x0a
+      000173 00                     898 	.db 0x00
+                                    899 	.area CODE
+                                    900 	.area CONST
+      000174                        901 __str_15:
+      000174 46 4C 41 53 48 5F 50   902 	.ascii "FLASH_PROG_END_PHYSICAL_ADDRESS    [0x%08lx]"
+             52 4F 47 5F 45 4E 44
+             5F 50 48 59 53 49 43
+             41 4C 5F 41 44 44 52
+             45 53 53 20 20 20 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      0001A0 0D                     903 	.db 0x0d
+      0001A1 0A                     904 	.db 0x0a
+      0001A2 00                     905 	.db 0x00
+                                    906 	.area CODE
+                                    907 	.area CONST
+      0001A3                        908 __str_16:
+      0001A3 46 4C 41 53 48 5F 50   909 	.ascii "FLASH_PROG_BLOCKS_NUMBER           [%d]"
+             52 4F 47 5F 42 4C 4F
+             43 4B 53 5F 4E 55 4D
+             42 45 52 20 20 20 20
+             20 20 20 20 20 20 20
+             5B 25 64 5D
+      0001CA 0D                     910 	.db 0x0d
+      0001CB 0A                     911 	.db 0x0a
+      0001CC 00                     912 	.db 0x00
+                                    913 	.area CODE
+                                    914 	.area CONST
+      0001CD                        915 __str_17:
+      0001CD 46 4C 41 53 48 5F 44   916 	.ascii "FLASH_DATA_START_PHYSICAL_ADDRESS  [0x%08lx]"
+             41 54 41 5F 53 54 41
+             52 54 5F 50 48 59 53
+             49 43 41 4C 5F 41 44
+             44 52 45 53 53 20 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      0001F9 0D                     917 	.db 0x0d
+      0001FA 0A                     918 	.db 0x0a
+      0001FB 00                     919 	.db 0x00
+                                    920 	.area CODE
+                                    921 	.area CONST
+      0001FC                        922 __str_18:
+      0001FC 46 4C 41 53 48 5F 44   923 	.ascii "FLASH_DATA_END_PHYSICAL_ADDRESS    [0x%08lx]"
+             41 54 41 5F 45 4E 44
+             5F 50 48 59 53 49 43
+             41 4C 5F 41 44 44 52
+             45 53 53 20 20 20 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      000228 0D                     924 	.db 0x0d
+      000229 0A                     925 	.db 0x0a
+      00022A 00                     926 	.db 0x00
+                                    927 	.area CODE
+                                    928 	.area CONST
+      00022B                        929 __str_19:
+      00022B 46 4C 41 53 48 5F 44   930 	.ascii "FLASH_DATA_BLOCKS_NUMBER           [%d]"
+             41 54 41 5F 42 4C 4F
+             43 4B 53 5F 4E 55 4D
+             42 45 52 20 20 20 20
+             20 20 20 20 20 20 20
+             5B 25 64 5D
+      000252 0D                     931 	.db 0x0d
+      000253 0A                     932 	.db 0x0a
+      000254 00                     933 	.db 0x00
+                                    934 	.area CODE
+                                    935 	.area CONST
+      000255                        936 __str_20:
+      000255 46 4C 41 53 48 5F 42   937 	.ascii "FLASH_BLOCK_SIZE                   [%d]"
+             4C 4F 43 4B 5F 53 49
+             5A 45 20 20 20 20 20
+             20 20 20 20 20 20 20
+             20 20 20 20 20 20 20
+             5B 25 64 5D
+      00027C 0D                     938 	.db 0x0d
+      00027D 0A                     939 	.db 0x0a
+      00027E 00                     940 	.db 0x00
+                                    941 	.area CODE
+                                    942 	.area CONST
+      00027F                        943 __str_21:
+      00027F 4F 50 54 49 4F 4E 5F   944 	.ascii "OPTION_BYTE_START_PHYSICAL_ADDRESS [0x%08lx]"
+             42 59 54 45 5F 53 54
+             41 52 54 5F 50 48 59
+             53 49 43 41 4C 5F 41
+             44 44 52 45 53 53 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      0002AB 0D                     945 	.db 0x0d
+      0002AC 0A                     946 	.db 0x0a
+      0002AD 00                     947 	.db 0x00
+                                    948 	.area CODE
+                                    949 	.area CONST
+      0002AE                        950 __str_22:
+      0002AE 4F 50 54 49 4F 4E 5F   951 	.ascii "OPTION_BYTE_END_PHYSICAL_ADDRESS   [0x%08lx]"
+             42 59 54 45 5F 45 4E
+             44 5F 50 48 59 53 49
+             43 41 4C 5F 41 44 44
+             52 45 53 53 20 20 20
+             5B 30 78 25 30 38 6C
+             78 5D
+      0002DA 0D                     952 	.db 0x0d
+      0002DB 0A                     953 	.db 0x0a
+      0002DC 00                     954 	.db 0x00
+                                    955 	.area CODE
+                                    956 	.area CONST
+      0002DD                        957 __str_23:
+      0002DD 20 65 65 70 72 6F 6D   958 	.ascii " eeprom help"
+             20 68 65 6C 70
+      0002E9 0D                     959 	.db 0x0d
+      0002EA 0A                     960 	.db 0x0a
+      0002EB 20 65 65 70 72 6F 6D   961 	.ascii " eeprom init"
+             20 69 6E 69 74
+      0002F7 0D                     962 	.db 0x0d
+      0002F8 0A                     963 	.db 0x0a
+      0002F9 20 65 65 70 72 6F 6D   964 	.ascii " eeprom write 100 aa"
+             20 77 72 69 74 65 20
+             31 30 30 20 61 61
+      00030D 0D                     965 	.db 0x0d
+      00030E 0A                     966 	.db 0x0a
+      00030F 20 65 65 70 72 6F 6D   967 	.ascii " eeprom read 100"
+             20 72 65 61 64 20 31
+             30 30
+      00031F 0D                     968 	.db 0x0d
+      000320 0A                     969 	.db 0x0a
+      000321 20 65 65 70 72 6F 6D   970 	.ascii " eeprom lock"
+             20 6C 6F 63 6B
+      00032D 0D                     971 	.db 0x0d
+      00032E 0A                     972 	.db 0x0a
+      00032F 00                     973 	.db 0x00
+                                    974 	.area CODE
+                                    975 	.area CONST
+      000330                        976 __str_24:
+      000330 20 65 65 70 72 6F 6D   977 	.ascii " eeprom oinit"
+             20 6F 69 6E 69 74
+      00033D 0D                     978 	.db 0x0d
+      00033E 0A                     979 	.db 0x0a
+      00033F 20 65 65 70 72 6F 6D   980 	.ascii " eeprom oread 4803"
+             20 6F 72 65 61 64 20
+             34 38 30 33
+      000351 0D                     981 	.db 0x0d
+      000352 0A                     982 	.db 0x0a
+      000353 20 65 65 70 72 6F 6D   983 	.ascii " eeprom owrite 4803 80"
+             20 6F 77 72 69 74 65
+             20 34 38 30 33 20 38
+             30
+      000369 0D                     984 	.db 0x0d
+      00036A 0A                     985 	.db 0x0a
+      00036B 20 65 65 70 72 6F 6D   986 	.ascii " eeprom oerase 4803"
+             20 6F 65 72 61 73 65
+             20 34 38 30 33
+      00037E 0D                     987 	.db 0x0d
+      00037F 0A                     988 	.db 0x0a
+      000380 20 65 65 70 72 6F 6D   989 	.ascii " eeprom olock"
+             20 6F 6C 6F 63 6B
+      00038D 0D                     990 	.db 0x0d
+      00038E 0A                     991 	.db 0x0a
+      00038F 00                     992 	.db 0x00
+                                    993 	.area CODE
+                                    994 	.area CONST
+      000390                        995 __str_25:
+      000390 20 68 74 74 70 73 3A   996 	.ascii " https://www.st.com/resource/en/datasheet/stm8s105c6.pdf pag"
+             2F 2F 77 77 77 2E 73
+             74 2E 63 6F 6D 2F 72
+             65 73 6F 75 72 63 65
+             2F 65 6E 2F 64 61 74
+             61 73 68 65 65 74 2F
+             73 74 6D 38 73 31 30
+             35 63 36 2E 70 64 66
+             20 70 61 67
+      0003CC 65 20 34 36 2C 20 41   997 	.ascii "e 46, AFR7 (beep) / page 29 PD4 (BEEP output, AFR7 bit)"
+             46 52 37 20 28 62 65
+             65 70 29 20 2F 20 70
+             61 67 65 20 32 39 20
+             50 44 34 20 28 42 45
+             45 50 20 6F 75 74 70
+             75 74 2C 20 41 46 52
+             37 20 62 69 74 29
+      000403 0D                     998 	.db 0x0d
+      000404 0A                     999 	.db 0x0a
+      000405 00                    1000 	.db 0x00
+                                   1001 	.area CODE
+                                   1002 	.area CONST
+      000406                       1003 ___str_26:
+      000406 6F 77 72 69 74 65     1004 	.ascii "owrite"
+      00040C 00                    1005 	.db 0x00
+                                   1006 	.area CODE
+                                   1007 	.area CONST
+      00040D                       1008 __str_27:
+      00040D 6D 6D 46 6C 61 73 68  1009 	.ascii "mmFlashOptionWrite ERROR!!!: 0x%04x[0x%02x]"
+             4F 70 74 69 6F 6E 57
+             72 69 74 65 20 45 52
+             52 4F 52 21 21 21 3A
+             20 30 78 25 30 34 78
+             5B 30 78 25 30 32 78
+             5D
+      000438 0D                    1010 	.db 0x0d
+      000439 0A                    1011 	.db 0x0a
+      00043A 00                    1012 	.db 0x00
+                                   1013 	.area CODE
+                                   1014 	.area CONST
+      00043B                       1015 __str_28:
+      00043B 6D 6D 46 6C 61 73 68  1016 	.ascii "mmFlashOptionWrite OK!!!: 0x%04x[0x%02x]"
+             4F 70 74 69 6F 6E 57
+             72 69 74 65 20 4F 4B
+             21 21 21 3A 20 30 78
+             25 30 34 78 5B 30 78
+             25 30 32 78 5D
+      000463 0D                    1017 	.db 0x0d
+      000464 0A                    1018 	.db 0x0a
+      000465 00                    1019 	.db 0x00
+                                   1020 	.area CODE
+                                   1021 	.area CONST
+      000466                       1022 ___str_29:
+      000466 6F 72 65 61 64        1023 	.ascii "oread"
+      00046B 00                    1024 	.db 0x00
+                                   1025 	.area CODE
+                                   1026 	.area CONST
+      00046C                       1027 __str_30:
+      00046C 6D 6D 46 6C 61 73 68  1028 	.ascii "mmFlashOptionRead : 0x%04x[0x%04x]"
+             4F 70 74 69 6F 6E 52
+             65 61 64 20 3A 20 30
+             78 25 30 34 78 5B 30
+             78 25 30 34 78 5D
+      00048E 0D                    1029 	.db 0x0d
+      00048F 0A                    1030 	.db 0x0a
+      000490 00                    1031 	.db 0x00
+                                   1032 	.area CODE
+                                   1033 	.area CONST
+      000491                       1034 ___str_31:
+      000491 6F 65 72 61 73 65     1035 	.ascii "oerase"
+      000497 00                    1036 	.db 0x00
+                                   1037 	.area CODE
+                                   1038 	.area CONST
+      000498                       1039 __str_32:
+      000498 6D 6D 46 6C 61 73 68  1040 	.ascii "mmFlashOptionErase ERROR!!!: 0x%04x"
+             4F 70 74 69 6F 6E 45
+             72 61 73 65 20 45 52
+             52 4F 52 21 21 21 3A
+             20 30 78 25 30 34 78
+      0004BB 0D                    1041 	.db 0x0d
+      0004BC 0A                    1042 	.db 0x0a
+      0004BD 00                    1043 	.db 0x00
+                                   1044 	.area CODE
+                                   1045 	.area CONST
+      0004BE                       1046 __str_33:
+      0004BE 6D 6D 46 6C 61 73 68  1047 	.ascii "mmFlashOptionErase OK!!!: 0x%04x"
+             4F 70 74 69 6F 6E 45
+             72 61 73 65 20 4F 4B
+             21 21 21 3A 20 30 78
+             25 30 34 78
+      0004DE 0D                    1048 	.db 0x0d
+      0004DF 0A                    1049 	.db 0x0a
+      0004E0 00                    1050 	.db 0x00
+                                   1051 	.area CODE
+                                   1052 	.area CONST
+      0004E1                       1053 __str_34:
+      0004E1 6D 6D 46 6C 61 73 68  1054 	.ascii "mmFlashOptionErase : 0x%04x[0x%04x]"
+             4F 70 74 69 6F 6E 45
+             72 61 73 65 20 3A 20
+             30 78 25 30 34 78 5B
+             30 78 25 30 34 78 5D
+      000504 0D                    1055 	.db 0x0d
+      000505 0A                    1056 	.db 0x0a
+      000506 00                    1057 	.db 0x00
+                                   1058 	.area CODE
+                                   1059 	.area CONST
+      000507                       1060 ___str_35:
+      000507 6F 69 6E 69 74        1061 	.ascii "oinit"
+      00050C 00                    1062 	.db 0x00
+                                   1063 	.area CODE
+                                   1064 	.area CONST
+      00050D                       1065 __str_36:
+      00050D 66 6C 61 73 68 20 4F  1066 	.ascii "flash Option bytes init ERROR!!!....mmFlashOptionUnlock()"
+             70 74 69 6F 6E 20 62
+             79 74 65 73 20 69 6E
+             69 74 20 45 52 52 4F
+             52 21 21 21 2E 2E 2E
+             2E 6D 6D 46 6C 61 73
+             68 4F 70 74 69 6F 6E
+             55 6E 6C 6F 63 6B 28
+             29
+      000546 0D                    1067 	.db 0x0d
+      000547 0A                    1068 	.db 0x0a
+      000548 00                    1069 	.db 0x00
+                                   1070 	.area CODE
+                                   1071 	.area CONST
+      000549                       1072 __str_37:
+      000549 66 6C 61 73 68 20 4F  1073 	.ascii "flash Option bytes init OK!!!....mmFlashOptionUnlock()"
+             70 74 69 6F 6E 20 62
+             79 74 65 73 20 69 6E
+             69 74 20 4F 4B 21 21
+             21 2E 2E 2E 2E 6D 6D
+             46 6C 61 73 68 4F 70
+             74 69 6F 6E 55 6E 6C
+             6F 63 6B 28 29
+      00057F 0D                    1074 	.db 0x0d
+      000580 0A                    1075 	.db 0x0a
+      000581 00                    1076 	.db 0x00
+                                   1077 	.area CODE
+                                   1078 	.area CONST
+      000582                       1079 ___str_38:
+      000582 6F 6C 6F 63 6B        1080 	.ascii "olock"
+      000587 00                    1081 	.db 0x00
+                                   1082 	.area CODE
+                                   1083 	.area CONST
+      000588                       1084 __str_39:
+      000588 66 6C 61 73 68 20 4F  1085 	.ascii "flash Option bytes lock....mmFlashOptionLock()"
+             70 74 69 6F 6E 20 62
+             79 74 65 73 20 6C 6F
+             63 6B 2E 2E 2E 2E 6D
+             6D 46 6C 61 73 68 4F
+             70 74 69 6F 6E 4C 6F
+             63 6B 28 29
+      0005B6 0D                    1086 	.db 0x0d
+      0005B7 0A                    1087 	.db 0x0a
+      0005B8 00                    1088 	.db 0x00
+                                   1089 	.area CODE
+                                   1090 	.area CONST
+      0005B9                       1091 ___str_40:
+      0005B9 65 65 70 72 6F 6D     1092 	.ascii "eeprom"
+      0005BF 00                    1093 	.db 0x00
+                                   1094 	.area CODE
+                                   1095 	.area CONST
+      0005C0                       1096 ___str_41:
+      0005C0 20 20 65 65 70 72 6F  1097 	.ascii "  eeprom {init} : EEPROM init"
+             6D 20 7B 69 6E 69 74
+             7D 20 3A 20 45 45 50
+             52 4F 4D 20 69 6E 69
+             74
+      0005DD 0D                    1098 	.db 0x0d
+      0005DE 0A                    1099 	.db 0x0a
+      0005DF 20 20 65 65 70 72 6F  1100 	.ascii "  eeprom {lock} "
+             6D 20 7B 6C 6F 63 6B
+             7D 20
+      0005EF 0D                    1101 	.db 0x0d
+      0005F0 0A                    1102 	.db 0x0a
+      0005F1 20 20 65 65 70 72 6F  1103 	.ascii "  eeprom {write} [offset] [data] : (0x4000) <= addr <= (0x40"
+             6D 20 7B 77 72 69 74
+             65 7D 20 5B 6F 66 66
+             73 65 74 5D 20 5B 64
+             61 74 61 5D 20 3A 20
+             28 30 78 34 30 30 30
+             29 20 3C 3D 20 61 64
+             64 72 20 3C 3D 20 28
+             30 78 34 30
+      00062D 30 30 20 2B 20 30 78  1104 	.ascii "00 + 0x03FF(1K))"
+             30 33 46 46 28 31 4B
+             29 29
+      00063D 0D                    1105 	.db 0x0d
+      00063E 0A                    1106 	.db 0x0a
+      00063F 20 20 65 65 70 72 6F  1107 	.ascii "  eeprom {read} [offset] : offset 1K(0x3FF)"
+             6D 20 7B 72 65 61 64
+             7D 20 5B 6F 66 66 73
+             65 74 5D 20 3A 20 6F
+             66 66 73 65 74 20 31
+             4B 28 30 78 33 46 46
+             29
+      00066A 0D                    1108 	.db 0x0d
+      00066B 0A                    1109 	.db 0x0a
+      00066C 20 20 65 65 70 72 6F  1110 	.ascii "  eeprom {oinit} : EEPROM OPTION BYTE init(0x4800 to 0x483F "
+             6D 20 7B 6F 69 6E 69
+             74 7D 20 3A 20 45 45
+             50 52 4F 4D 20 4F 50
+             54 49 4F 4E 20 42 59
+             54 45 20 69 6E 69 74
+             28 30 78 34 38 30 30
+             20 74 6F 20 30 78 34
+             38 33 46 20
+      0006A8 3A 20 36 34 62 79 74  1111 	.ascii ": 64bytes) "
+             65 73 29 20
+      0006B3 0D                    1112 	.db 0x0d
+      0006B4 0A                    1113 	.db 0x0a
+      0006B5 20 20 65 65 70 72 6F  1114 	.ascii "  eeprom {olock} "
+             6D 20 7B 6F 6C 6F 63
+             6B 7D 20
+      0006C6 0D                    1115 	.db 0x0d
+      0006C7 0A                    1116 	.db 0x0a
+      0006C8 20 20 65 65 70 72 6F  1117 	.ascii "  eeprom {owrite} [addr] [data] : addr(4800h to 487Fh) "
+             6D 20 7B 6F 77 72 69
+             74 65 7D 20 5B 61 64
+             64 72 5D 20 5B 64 61
+             74 61 5D 20 3A 20 61
+             64 64 72 28 34 38 30
+             30 68 20 74 6F 20 34
+             38 37 46 68 29 20
+      0006FF 0D                    1118 	.db 0x0d
+      000700 0A                    1119 	.db 0x0a
+      000701 20 20 65 65 70 72 6F  1120 	.ascii "  eeprom {oread} [addr] "
+             6D 20 7B 6F 72 65 61
+             64 7D 20 5B 61 64 64
+             72 5D 20
+      000719 0D                    1121 	.db 0x0d
+      00071A 0A                    1122 	.db 0x0a
+      00071B 20 20 65 65 70 72 6F  1123 	.ascii "  eeprom {oerase} [addr] "
+             6D 20 7B 6F 65 72 61
+             73 65 7D 20 5B 61 64
+             64 72 5D 20
+      000734 0D                    1124 	.db 0x0d
+      000735 0A                    1125 	.db 0x0a
+      000736 20 20 65 65 70 72 6F  1126 	.ascii "  eeprom {help}  eeprom help."
+             6D 20 7B 68 65 6C 70
+             7D 20 20 65 65 70 72
+             6F 6D 20 68 65 6C 70
+             2E
+      000753 0D                    1127 	.db 0x0d
+      000754 0A                    1128 	.db 0x0a
+      000755 00                    1129 	.db 0x00
+                                   1130 	.area CODE
+                                   1131 	.area INITIALIZER
+      000000                       1132 __xinit__cmdTbl_only:
+      000000r05rB9                 1133 	.dw ___str_40
+      000002r00r66                 1134 	.dw _DoEEPROM
+      000004r05rC0                 1135 	.dw ___str_41
+      000006 00 00                 1136 	.dw #0x0000
+      000008 00 00                 1137 	.dw #0x0000
+      00000A 00 00                 1138 	.dw #0x0000
+                                   1139 	.area CABS (ABS)

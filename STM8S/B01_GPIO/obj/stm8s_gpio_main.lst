@@ -1,0 +1,1151 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_gpio_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _cmd_test_init_before_irq_enable
+                                     12 	.globl _cmd_test
+                                     13 	.globl _cmd_gpio
+                                     14 	.globl _HexToInt
+                                     15 	.globl _mib_printf
+                                     16 	.globl _MibWriteDebugString
+                                     17 	.globl ___memcpy
+                                     18 	.globl _strcmp
+                                     19 	.globl _GPIO_WriteReverse
+                                     20 	.globl _GPIO_Init
+                                     21 	.globl _GPIO_DeInit
+                                     22 	.globl _GPIO_Configuration
+                                     23 	.globl _Toggle
+                                     24 ;--------------------------------------------------------
+                                     25 ; ram data
+                                     26 ;--------------------------------------------------------
+                                     27 	.area DATA
+                                     28 ;--------------------------------------------------------
+                                     29 ; ram data
+                                     30 ;--------------------------------------------------------
+                                     31 	.area INITIALIZED
+      000000                         32 _cmdTbl_only:
+      000000                         33 	.ds 12
+                                     34 ;--------------------------------------------------------
+                                     35 ; absolute external ram data
+                                     36 ;--------------------------------------------------------
+                                     37 	.area DABS (ABS)
+                                     38 
+                                     39 ; default segment ordering for linker
+                                     40 	.area HOME
+                                     41 	.area GSINIT
+                                     42 	.area GSFINAL
+                                     43 	.area CONST
+                                     44 	.area INITIALIZER
+                                     45 	.area CODE
+                                     46 
+                                     47 ;--------------------------------------------------------
+                                     48 ; global & static initialisations
+                                     49 ;--------------------------------------------------------
+                                     50 	.area HOME
+                                     51 	.area GSINIT
+                                     52 	.area GSFINAL
+                                     53 	.area GSINIT
+                                     54 ;--------------------------------------------------------
+                                     55 ; Home
+                                     56 ;--------------------------------------------------------
+                                     57 	.area HOME
+                                     58 	.area HOME
+                                     59 ;--------------------------------------------------------
+                                     60 ; code
+                                     61 ;--------------------------------------------------------
+                                     62 	.area CODE
+                                     63 ;	stm8s_gpio_main.c: 83: void cmd_gpio(void)
+                                     64 ;	-----------------------------------------
+                                     65 ;	 function cmd_gpio
+                                     66 ;	-----------------------------------------
+      000000                         67 _cmd_gpio:
+      000000 52 0A            [ 2]   68 	sub	sp, #10
+                                     69 ;	stm8s_gpio_main.c: 89: for (cptr = cmdTbl;; cptr++) 
+      000002 AEr00r00         [ 2]   70 	ldw	x, #(_cmdTbl+0)
+      000005 1F 01            [ 2]   71 	ldw	(0x01, sp), x
+      000007 5F               [ 1]   72 	clrw	x
+      000008 1F 07            [ 2]   73 	ldw	(0x07, sp), x
+      00000A 1F 05            [ 2]   74 	ldw	(0x05, sp), x
+      00000C 16 01            [ 2]   75 	ldw	y, (0x01, sp)
+      00000E 17 09            [ 2]   76 	ldw	(0x09, sp), y
+      000010                         77 00106$:
+                                     78 ;	stm8s_gpio_main.c: 91: if(cptr->cmd==0)
+      000010 1E 09            [ 2]   79 	ldw	x, (0x09, sp)
+      000012 FE               [ 2]   80 	ldw	x, (x)
+      000013 1F 03            [ 2]   81 	ldw	(0x03, sp), x
+      000015 26 19            [ 1]   82 	jrne	00102$
+                                     83 ;	stm8s_gpio_main.c: 93: ccprintf(1,("INFO:+cmd_gpio...\r\n"));
+      000017 4Br00            [ 1]   84 	push	#<(__str_0+0)
+      000019 4Bs00            [ 1]   85 	push	#((__str_0+0) >> 8)
+      00001B CDr00r00         [ 4]   86 	call	_mib_printf
+      00001E 5B 02            [ 2]   87 	addw	sp, #2
+                                     88 ;	stm8s_gpio_main.c: 94: memcpy((void *)&(cptr->cmd),(void *)&(cmdTbl_only[0].cmd),sizeof(CMD_MY));
+      000020 AEr00r00         [ 2]   89 	ldw	x, #_cmdTbl_only+0
+      000023 16 01            [ 2]   90 	ldw	y, (0x01, sp)
+      000025 4B 06            [ 1]   91 	push	#0x06
+      000027 4B 00            [ 1]   92 	push	#0x00
+      000029 89               [ 2]   93 	pushw	x
+      00002A 93               [ 1]   94 	ldw	x, y
+      00002B CDr00r00         [ 4]   95 	call	___memcpy
+                                     96 ;	stm8s_gpio_main.c: 95: break;
+      00002E 20 2F            [ 2]   97 	jra	00105$
+      000030                         98 00102$:
+                                     99 ;	stm8s_gpio_main.c: 97: index++;
+      000030 1E 07            [ 2]  100 	ldw	x, (0x07, sp)
+      000032 5C               [ 1]  101 	incw	x
+      000033 1F 07            [ 2]  102 	ldw	(0x07, sp), x
+      000035 26 05            [ 1]  103 	jrne	00126$
+      000037 1E 05            [ 2]  104 	ldw	x, (0x05, sp)
+      000039 5C               [ 1]  105 	incw	x
+      00003A 1F 05            [ 2]  106 	ldw	(0x05, sp), x
+      00003C                        107 00126$:
+                                    108 ;	stm8s_gpio_main.c: 98: if(index>MAX_COMMANDS)
+      00003C AE 00 06         [ 2]  109 	ldw	x, #0x0006
+      00003F 13 07            [ 2]  110 	cpw	x, (0x07, sp)
+      000041 4F               [ 1]  111 	clr	a
+      000042 12 06            [ 1]  112 	sbc	a, (0x06, sp)
+      000044 4F               [ 1]  113 	clr	a
+      000045 12 05            [ 1]  114 	sbc	a, (0x05, sp)
+      000047 24 0B            [ 1]  115 	jrnc	00107$
+                                    116 ;	stm8s_gpio_main.c: 100: ccprintf(1,("INFO:-cmd_gpio...\r\n"));
+      000049 4Br14            [ 1]  117 	push	#<(__str_1+0)
+      00004B 4Bs00            [ 1]  118 	push	#((__str_1+0) >> 8)
+      00004D CDr00r00         [ 4]  119 	call	_mib_printf
+      000050 5B 02            [ 2]  120 	addw	sp, #2
+                                    121 ;	stm8s_gpio_main.c: 101: return;
+      000052 20 0B            [ 2]  122 	jra	00108$
+      000054                        123 00107$:
+                                    124 ;	stm8s_gpio_main.c: 89: for (cptr = cmdTbl;; cptr++) 
+      000054 1E 09            [ 2]  125 	ldw	x, (0x09, sp)
+      000056 1C 00 06         [ 2]  126 	addw	x, #0x0006
+      000059 1F 09            [ 2]  127 	ldw	(0x09, sp), x
+      00005B 1F 01            [ 2]  128 	ldw	(0x01, sp), x
+      00005D 20 B1            [ 2]  129 	jra	00106$
+      00005F                        130 00105$:
+                                    131 ;	stm8s_gpio_main.c: 104: return;
+      00005F                        132 00108$:
+                                    133 ;	stm8s_gpio_main.c: 105: }
+      00005F 5B 0A            [ 2]  134 	addw	sp, #10
+      000061 81               [ 4]  135 	ret
+                                    136 ;	stm8s_gpio_main.c: 110: void cmd_test(void)
+                                    137 ;	-----------------------------------------
+                                    138 ;	 function cmd_test
+                                    139 ;	-----------------------------------------
+      000062                        140 _cmd_test:
+                                    141 ;	stm8s_gpio_main.c: 112: cmd_gpio();
+                                    142 ;	stm8s_gpio_main.c: 113: }
+      000062 CCr00r00         [ 2]  143 	jp	_cmd_gpio
+                                    144 ;	stm8s_gpio_main.c: 119: void cmd_test_init_before_irq_enable(void)
+                                    145 ;	-----------------------------------------
+                                    146 ;	 function cmd_test_init_before_irq_enable
+                                    147 ;	-----------------------------------------
+      000065                        148 _cmd_test_init_before_irq_enable:
+                                    149 ;	stm8s_gpio_main.c: 122: }
+      000065 81               [ 4]  150 	ret
+                                    151 ;	stm8s_gpio_main.c: 133: static int DoGPIO(CMD_MY *cptr, int argc, char **argv)
+                                    152 ;	-----------------------------------------
+                                    153 ;	 function DoGPIO
+                                    154 ;	-----------------------------------------
+      000066                        155 _DoGPIO:
+      000066 52 0E            [ 2]  156 	sub	sp, #14
+                                    157 ;	stm8s_gpio_main.c: 135: uint16_t vwAddr = 0;
+      000068 0F 02            [ 1]  158 	clr	(0x02, sp)
+      00006A 0F 01            [ 1]  159 	clr	(0x01, sp)
+                                    160 ;	stm8s_gpio_main.c: 136: uint8_t vbData = 0;
+      00006C 0F 03            [ 1]  161 	clr	(0x03, sp)
+                                    162 ;	stm8s_gpio_main.c: 140: MibWriteDebugString(cptr->usage);
+      00006E 1C 00 04         [ 2]  163 	addw	x, #0x0004
+      000071 1F 0D            [ 2]  164 	ldw	(0x0d, sp), x
+                                    165 ;	stm8s_gpio_main.c: 138: if (argc < 2)
+      000073 1E 11            [ 2]  166 	ldw	x, (0x11, sp)
+      000075 A3 00 02         [ 2]  167 	cpw	x, #0x0002
+      000078 2E 0A            [ 1]  168 	jrsge	00102$
+                                    169 ;	stm8s_gpio_main.c: 140: MibWriteDebugString(cptr->usage);
+      00007A 1E 0D            [ 2]  170 	ldw	x, (0x0d, sp)
+      00007C FE               [ 2]  171 	ldw	x, (x)
+      00007D CDr00r00         [ 4]  172 	call	_MibWriteDebugString
+                                    173 ;	stm8s_gpio_main.c: 141: return FALSE;
+      000080 5F               [ 1]  174 	clrw	x
+      000081 CCr04r72         [ 2]  175 	jp	00187$
+      000084                        176 00102$:
+                                    177 ;	stm8s_gpio_main.c: 146: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      000084 1E 13            [ 2]  178 	ldw	x, (0x13, sp)
+      000086 5C               [ 1]  179 	incw	x
+      000087 5C               [ 1]  180 	incw	x
+      000088 1F 05            [ 2]  181 	ldw	(0x05, sp), x
+      00008A FE               [ 2]  182 	ldw	x, (x)
+      00008B 4Br28            [ 1]  183 	push	#<(___str_2+0)
+      00008D 4Bs00            [ 1]  184 	push	#((___str_2+0) >> 8)
+      00008F CDr00r00         [ 4]  185 	call	_strcmp
+      000092 51               [ 1]  186 	exgw	x, y
+                                    187 ;	stm8s_gpio_main.c: 148: if (argc < 4)
+      000093 1E 11            [ 2]  188 	ldw	x, (0x11, sp)
+      000095 A3 00 04         [ 2]  189 	cpw	x, #0x0004
+      000098 2F 04            [ 1]  190 	jrslt	00415$
+      00009A 0F 07            [ 1]  191 	clr	(0x07, sp)
+      00009C 20 04            [ 2]  192 	jra	00416$
+      00009E                        193 00415$:
+      00009E A6 01            [ 1]  194 	ld	a, #0x01
+      0000A0 6B 07            [ 1]  195 	ld	(0x07, sp), a
+      0000A2                        196 00416$:
+                                    197 ;	stm8s_gpio_main.c: 153: if (!HexToInt(argv[2], &vwAddr, 16))
+      0000A2 1E 13            [ 2]  198 	ldw	x, (0x13, sp)
+      0000A4 1C 00 04         [ 2]  199 	addw	x, #0x0004
+      0000A7 1F 08            [ 2]  200 	ldw	(0x08, sp), x
+                                    201 ;	stm8s_gpio_main.c: 158: if (!HexToInt(argv[3], &vbData, 8))
+      0000A9 1E 13            [ 2]  202 	ldw	x, (0x13, sp)
+      0000AB 1C 00 06         [ 2]  203 	addw	x, #0x0006
+      0000AE 1F 0B            [ 2]  204 	ldw	(0x0b, sp), x
+                                    205 ;	stm8s_gpio_main.c: 146: if (!strcmp(argv[1], "write")) // _CMD_MY_WRITE_
+      0000B0 90 5D            [ 2]  206 	tnzw	y
+      0000B2 26 67            [ 1]  207 	jrne	00185$
+                                    208 ;	stm8s_gpio_main.c: 148: if (argc < 4)
+      0000B4 0D 07            [ 1]  209 	tnz	(0x07, sp)
+      0000B6 27 0A            [ 1]  210 	jreq	00104$
+                                    211 ;	stm8s_gpio_main.c: 150: MibWriteDebugString(cptr->usage);
+      0000B8 1E 0D            [ 2]  212 	ldw	x, (0x0d, sp)
+      0000BA FE               [ 2]  213 	ldw	x, (x)
+      0000BB CDr00r00         [ 4]  214 	call	_MibWriteDebugString
+                                    215 ;	stm8s_gpio_main.c: 151: return FALSE;
+      0000BE 5F               [ 1]  216 	clrw	x
+      0000BF CCr04r72         [ 2]  217 	jp	00187$
+      0000C2                        218 00104$:
+                                    219 ;	stm8s_gpio_main.c: 153: if (!HexToInt(argv[2], &vwAddr, 16))
+      0000C2 96               [ 1]  220 	ldw	x, sp
+      0000C3 5C               [ 1]  221 	incw	x
+      0000C4 51               [ 1]  222 	exgw	x, y
+      0000C5 1E 08            [ 2]  223 	ldw	x, (0x08, sp)
+      0000C7 FE               [ 2]  224 	ldw	x, (x)
+      0000C8 4B 10            [ 1]  225 	push	#0x10
+      0000CA 4B 00            [ 1]  226 	push	#0x00
+      0000CC 90 89            [ 2]  227 	pushw	y
+      0000CE CDr00r00         [ 4]  228 	call	_HexToInt
+      0000D1 5D               [ 2]  229 	tnzw	x
+      0000D2 26 0D            [ 1]  230 	jrne	00106$
+                                    231 ;	stm8s_gpio_main.c: 155: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000D4 4Br2E            [ 1]  232 	push	#<(__str_3+0)
+      0000D6 4Bs00            [ 1]  233 	push	#((__str_3+0) >> 8)
+      0000D8 CDr00r00         [ 4]  234 	call	_mib_printf
+      0000DB 5B 02            [ 2]  235 	addw	sp, #2
+                                    236 ;	stm8s_gpio_main.c: 156: return FALSE;
+      0000DD 5F               [ 1]  237 	clrw	x
+      0000DE CCr04r72         [ 2]  238 	jp	00187$
+      0000E1                        239 00106$:
+                                    240 ;	stm8s_gpio_main.c: 158: if (!HexToInt(argv[3], &vbData, 8))
+      0000E1 96               [ 1]  241 	ldw	x, sp
+      0000E2 1C 00 03         [ 2]  242 	addw	x, #3
+      0000E5 51               [ 1]  243 	exgw	x, y
+      0000E6 1E 0B            [ 2]  244 	ldw	x, (0x0b, sp)
+      0000E8 FE               [ 2]  245 	ldw	x, (x)
+      0000E9 4B 08            [ 1]  246 	push	#0x08
+      0000EB 4B 00            [ 1]  247 	push	#0x00
+      0000ED 90 89            [ 2]  248 	pushw	y
+      0000EF CDr00r00         [ 4]  249 	call	_HexToInt
+      0000F2 5D               [ 2]  250 	tnzw	x
+      0000F3 26 0D            [ 1]  251 	jrne	00108$
+                                    252 ;	stm8s_gpio_main.c: 160: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0000F5 4Br2E            [ 1]  253 	push	#<(__str_3+0)
+      0000F7 4Bs00            [ 1]  254 	push	#((__str_3+0) >> 8)
+      0000F9 CDr00r00         [ 4]  255 	call	_mib_printf
+      0000FC 5B 02            [ 2]  256 	addw	sp, #2
+                                    257 ;	stm8s_gpio_main.c: 161: return FALSE;
+      0000FE 5F               [ 1]  258 	clrw	x
+      0000FF CCr04r72         [ 2]  259 	jp	00187$
+      000102                        260 00108$:
+                                    261 ;	stm8s_gpio_main.c: 163: wr_ADDR8(vwAddr, vbData);
+      000102 1E 01            [ 2]  262 	ldw	x, (0x01, sp)
+      000104 7B 03            [ 1]  263 	ld	a, (0x03, sp)
+      000106 F7               [ 1]  264 	ld	(x), a
+                                    265 ;	stm8s_gpio_main.c: 164: ccprintf(_DEBUG_CMD_A_,("wr_ADDR8 : 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      000107 5F               [ 1]  266 	clrw	x
+      000108 7B 03            [ 1]  267 	ld	a, (0x03, sp)
+      00010A 97               [ 1]  268 	ld	xl, a
+      00010B 89               [ 2]  269 	pushw	x
+      00010C 1E 03            [ 2]  270 	ldw	x, (0x03, sp)
+      00010E 89               [ 2]  271 	pushw	x
+      00010F 4Br4B            [ 1]  272 	push	#<(__str_4+0)
+      000111 4Bs00            [ 1]  273 	push	#((__str_4+0) >> 8)
+      000113 CDr00r00         [ 4]  274 	call	_mib_printf
+      000116 5B 06            [ 2]  275 	addw	sp, #6
+      000118 CCr04r70         [ 2]  276 	jp	00186$
+      00011B                        277 00185$:
+                                    278 ;	stm8s_gpio_main.c: 169: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      00011B 1E 05            [ 2]  279 	ldw	x, (0x05, sp)
+      00011D FE               [ 2]  280 	ldw	x, (x)
+      00011E 4Br67            [ 1]  281 	push	#<(___str_5+0)
+      000120 4Bs00            [ 1]  282 	push	#((___str_5+0) >> 8)
+      000122 CDr00r00         [ 4]  283 	call	_strcmp
+      000125 51               [ 1]  284 	exgw	x, y
+                                    285 ;	stm8s_gpio_main.c: 171: if (argc < 3)
+      000126 1E 11            [ 2]  286 	ldw	x, (0x11, sp)
+      000128 A3 00 03         [ 2]  287 	cpw	x, #0x0003
+      00012B 2F 04            [ 1]  288 	jrslt	00421$
+      00012D 0F 0A            [ 1]  289 	clr	(0x0a, sp)
+      00012F 20 04            [ 2]  290 	jra	00422$
+      000131                        291 00421$:
+      000131 A6 01            [ 1]  292 	ld	a, #0x01
+      000133 6B 0A            [ 1]  293 	ld	(0x0a, sp), a
+      000135                        294 00422$:
+                                    295 ;	stm8s_gpio_main.c: 169: else if (!strcmp(argv[1], "read")) // _CMD_MY_READ_
+      000135 90 5D            [ 2]  296 	tnzw	y
+      000137 26 44            [ 1]  297 	jrne	00182$
+                                    298 ;	stm8s_gpio_main.c: 171: if (argc < 3)
+      000139 0D 0A            [ 1]  299 	tnz	(0x0a, sp)
+      00013B 27 0A            [ 1]  300 	jreq	00110$
+                                    301 ;	stm8s_gpio_main.c: 173: MibWriteDebugString(cptr->usage);
+      00013D 1E 0D            [ 2]  302 	ldw	x, (0x0d, sp)
+      00013F FE               [ 2]  303 	ldw	x, (x)
+      000140 CDr00r00         [ 4]  304 	call	_MibWriteDebugString
+                                    305 ;	stm8s_gpio_main.c: 174: return FALSE;
+      000143 5F               [ 1]  306 	clrw	x
+      000144 CCr04r72         [ 2]  307 	jp	00187$
+      000147                        308 00110$:
+                                    309 ;	stm8s_gpio_main.c: 176: if (!HexToInt(argv[2], &vwAddr, 16))
+      000147 96               [ 1]  310 	ldw	x, sp
+      000148 5C               [ 1]  311 	incw	x
+      000149 51               [ 1]  312 	exgw	x, y
+      00014A 1E 08            [ 2]  313 	ldw	x, (0x08, sp)
+      00014C FE               [ 2]  314 	ldw	x, (x)
+      00014D 4B 10            [ 1]  315 	push	#0x10
+      00014F 4B 00            [ 1]  316 	push	#0x00
+      000151 90 89            [ 2]  317 	pushw	y
+      000153 CDr00r00         [ 4]  318 	call	_HexToInt
+      000156 5D               [ 2]  319 	tnzw	x
+      000157 26 0D            [ 1]  320 	jrne	00112$
+                                    321 ;	stm8s_gpio_main.c: 178: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      000159 4Br2E            [ 1]  322 	push	#<(__str_3+0)
+      00015B 4Bs00            [ 1]  323 	push	#((__str_3+0) >> 8)
+      00015D CDr00r00         [ 4]  324 	call	_mib_printf
+      000160 5B 02            [ 2]  325 	addw	sp, #2
+                                    326 ;	stm8s_gpio_main.c: 179: return FALSE;
+      000162 5F               [ 1]  327 	clrw	x
+      000163 CCr04r72         [ 2]  328 	jp	00187$
+      000166                        329 00112$:
+                                    330 ;	stm8s_gpio_main.c: 182: vbData = rd_ADDR8(vwAddr);
+      000166 1E 01            [ 2]  331 	ldw	x, (0x01, sp)
+      000168 F6               [ 1]  332 	ld	a, (x)
+      000169 6B 03            [ 1]  333 	ld	(0x03, sp), a
+                                    334 ;	stm8s_gpio_main.c: 184: ccprintf(_DEBUG_CMD_A_,("rd_ADDR8 : 0x%04x[0x%02x]\r\n", vwAddr,vbData));
+      00016B 5F               [ 1]  335 	clrw	x
+      00016C 97               [ 1]  336 	ld	xl, a
+      00016D 89               [ 2]  337 	pushw	x
+      00016E 1E 03            [ 2]  338 	ldw	x, (0x03, sp)
+      000170 89               [ 2]  339 	pushw	x
+      000171 4Br6C            [ 1]  340 	push	#<(__str_6+0)
+      000173 4Bs00            [ 1]  341 	push	#((__str_6+0) >> 8)
+      000175 CDr00r00         [ 4]  342 	call	_mib_printf
+      000178 5B 06            [ 2]  343 	addw	sp, #6
+      00017A CCr04r70         [ 2]  344 	jp	00186$
+      00017D                        345 00182$:
+                                    346 ;	stm8s_gpio_main.c: 189: else if (!strcmp(argv[1], "in")) // _CMD_MY_READ_
+      00017D 1E 05            [ 2]  347 	ldw	x, (0x05, sp)
+      00017F FE               [ 2]  348 	ldw	x, (x)
+      000180 4Br88            [ 1]  349 	push	#<(___str_7+0)
+      000182 4Bs00            [ 1]  350 	push	#((___str_7+0) >> 8)
+      000184 CDr00r00         [ 4]  351 	call	_strcmp
+      000187 5D               [ 2]  352 	tnzw	x
+      000188 27 03            [ 1]  353 	jreq	00426$
+      00018A CCr02r6B         [ 2]  354 	jp	00179$
+      00018D                        355 00426$:
+                                    356 ;	stm8s_gpio_main.c: 191: char vbPort = *(char *)(argv[2]); // argv[2][0]
+      00018D 1E 08            [ 2]  357 	ldw	x, (0x08, sp)
+      00018F FE               [ 2]  358 	ldw	x, (x)
+      000190 F6               [ 1]  359 	ld	a, (x)
+      000191 6B 0A            [ 1]  360 	ld	(0x0a, sp), a
+                                    361 ;	stm8s_gpio_main.c: 192: char vbNum = *(char *)(argv[3]);
+      000193 1E 0B            [ 2]  362 	ldw	x, (0x0b, sp)
+      000195 FE               [ 2]  363 	ldw	x, (x)
+      000196 F6               [ 1]  364 	ld	a, (x)
+      000197 6B 09            [ 1]  365 	ld	(0x09, sp), a
+                                    366 ;	stm8s_gpio_main.c: 194: GPIO_TypeDef* GPIOx=GPIOA;
+      000199 AE 50 00         [ 2]  367 	ldw	x, #0x5000
+      00019C 1F 0B            [ 2]  368 	ldw	(0x0b, sp), x
+                                    369 ;	stm8s_gpio_main.c: 195: if (argc < 4)
+      00019E 0D 07            [ 1]  370 	tnz	(0x07, sp)
+      0001A0 27 0A            [ 1]  371 	jreq	00114$
+                                    372 ;	stm8s_gpio_main.c: 197: MibWriteDebugString(cptr->usage);
+      0001A2 1E 0D            [ 2]  373 	ldw	x, (0x0d, sp)
+      0001A4 FE               [ 2]  374 	ldw	x, (x)
+      0001A5 CDr00r00         [ 4]  375 	call	_MibWriteDebugString
+                                    376 ;	stm8s_gpio_main.c: 198: return FALSE;
+      0001A8 5F               [ 1]  377 	clrw	x
+      0001A9 CCr04r72         [ 2]  378 	jp	00187$
+      0001AC                        379 00114$:
+                                    380 ;	stm8s_gpio_main.c: 200: if((vbPort>='a')&&(vbPort<='g'))
+      0001AC 7B 0A            [ 1]  381 	ld	a, (0x0a, sp)
+      0001AE A1 61            [ 1]  382 	cp	a, #0x61
+      0001B0 24 03            [ 1]  383 	jrnc	00428$
+      0001B2 CCr04r70         [ 2]  384 	jp	00186$
+      0001B5                        385 00428$:
+      0001B5 7B 0A            [ 1]  386 	ld	a, (0x0a, sp)
+      0001B7 A1 67            [ 1]  387 	cp	a, #0x67
+      0001B9 23 03            [ 2]  388 	jrule	00429$
+      0001BB CCr04r70         [ 2]  389 	jp	00186$
+      0001BE                        390 00429$:
+                                    391 ;	stm8s_gpio_main.c: 202: switch(vbPort)
+      0001BE 7B 0A            [ 1]  392 	ld	a, (0x0a, sp)
+      0001C0 A1 61            [ 1]  393 	cp	a, #0x61
+      0001C2 27 26            [ 1]  394 	jreq	00115$
+      0001C4 7B 0A            [ 1]  395 	ld	a, (0x0a, sp)
+      0001C6 A1 62            [ 1]  396 	cp	a, #0x62
+      0001C8 27 27            [ 1]  397 	jreq	00116$
+      0001CA 7B 0A            [ 1]  398 	ld	a, (0x0a, sp)
+      0001CC A1 63            [ 1]  399 	cp	a, #0x63
+      0001CE 27 28            [ 1]  400 	jreq	00117$
+      0001D0 7B 0A            [ 1]  401 	ld	a, (0x0a, sp)
+      0001D2 A1 64            [ 1]  402 	cp	a, #0x64
+      0001D4 27 29            [ 1]  403 	jreq	00118$
+      0001D6 7B 0A            [ 1]  404 	ld	a, (0x0a, sp)
+      0001D8 A1 65            [ 1]  405 	cp	a, #0x65
+      0001DA 27 2A            [ 1]  406 	jreq	00119$
+      0001DC 7B 0A            [ 1]  407 	ld	a, (0x0a, sp)
+      0001DE A1 66            [ 1]  408 	cp	a, #0x66
+      0001E0 27 2B            [ 1]  409 	jreq	00120$
+      0001E2 7B 0A            [ 1]  410 	ld	a, (0x0a, sp)
+      0001E4 A1 67            [ 1]  411 	cp	a, #0x67
+      0001E6 27 2C            [ 1]  412 	jreq	00121$
+      0001E8 20 2F            [ 2]  413 	jra	00123$
+                                    414 ;	stm8s_gpio_main.c: 204: case 'a': GPIOx = GPIOA; break;
+      0001EA                        415 00115$:
+      0001EA AE 50 00         [ 2]  416 	ldw	x, #0x5000
+      0001ED 1F 0B            [ 2]  417 	ldw	(0x0b, sp), x
+      0001EF 20 28            [ 2]  418 	jra	00123$
+                                    419 ;	stm8s_gpio_main.c: 205: case 'b': GPIOx = GPIOB; break;
+      0001F1                        420 00116$:
+      0001F1 AE 50 05         [ 2]  421 	ldw	x, #0x5005
+      0001F4 1F 0B            [ 2]  422 	ldw	(0x0b, sp), x
+      0001F6 20 21            [ 2]  423 	jra	00123$
+                                    424 ;	stm8s_gpio_main.c: 206: case 'c': GPIOx = GPIOC; break;
+      0001F8                        425 00117$:
+      0001F8 AE 50 0A         [ 2]  426 	ldw	x, #0x500a
+      0001FB 1F 0B            [ 2]  427 	ldw	(0x0b, sp), x
+      0001FD 20 1A            [ 2]  428 	jra	00123$
+                                    429 ;	stm8s_gpio_main.c: 207: case 'd': GPIOx = GPIOD; break;
+      0001FF                        430 00118$:
+      0001FF AE 50 0F         [ 2]  431 	ldw	x, #0x500f
+      000202 1F 0B            [ 2]  432 	ldw	(0x0b, sp), x
+      000204 20 13            [ 2]  433 	jra	00123$
+                                    434 ;	stm8s_gpio_main.c: 208: case 'e': GPIOx = GPIOE; break;
+      000206                        435 00119$:
+      000206 AE 50 14         [ 2]  436 	ldw	x, #0x5014
+      000209 1F 0B            [ 2]  437 	ldw	(0x0b, sp), x
+      00020B 20 0C            [ 2]  438 	jra	00123$
+                                    439 ;	stm8s_gpio_main.c: 209: case 'f': GPIOx = GPIOF; break;
+      00020D                        440 00120$:
+      00020D AE 50 19         [ 2]  441 	ldw	x, #0x5019
+      000210 1F 0B            [ 2]  442 	ldw	(0x0b, sp), x
+      000212 20 05            [ 2]  443 	jra	00123$
+                                    444 ;	stm8s_gpio_main.c: 210: case 'g': GPIOx = GPIOG; break;
+      000214                        445 00121$:
+      000214 AE 50 1E         [ 2]  446 	ldw	x, #0x501e
+      000217 1F 0B            [ 2]  447 	ldw	(0x0b, sp), x
+                                    448 ;	stm8s_gpio_main.c: 214: }
+      000219                        449 00123$:
+                                    450 ;	stm8s_gpio_main.c: 215: if((vbNum>='0')&&(vbNum<='7'))
+      000219 7B 09            [ 1]  451 	ld	a, (0x09, sp)
+      00021B A1 30            [ 1]  452 	cp	a, #0x30
+      00021D 24 03            [ 1]  453 	jrnc	00451$
+      00021F CCr04r70         [ 2]  454 	jp	00186$
+      000222                        455 00451$:
+      000222 7B 09            [ 1]  456 	ld	a, (0x09, sp)
+      000224 A1 37            [ 1]  457 	cp	a, #0x37
+      000226 23 03            [ 2]  458 	jrule	00452$
+      000228 CCr04r70         [ 2]  459 	jp	00186$
+      00022B                        460 00452$:
+                                    461 ;	stm8s_gpio_main.c: 217: vbNum &= 0x07;
+      00022B 7B 09            [ 1]  462 	ld	a, (0x09, sp)
+      00022D A4 07            [ 1]  463 	and	a, #0x07
+      00022F 6B 0E            [ 1]  464 	ld	(0x0e, sp), a
+                                    465 ;	stm8s_gpio_main.c: 218: GPIO_Init(GPIOx,vbNum,GPIO_MODE_IN_FL_NO_IT);
+      000231 4B 00            [ 1]  466 	push	#0x00
+      000233 7B 0F            [ 1]  467 	ld	a, (0x0f, sp)
+      000235 1E 0C            [ 2]  468 	ldw	x, (0x0c, sp)
+      000237 CDr00r00         [ 4]  469 	call	_GPIO_Init
+                                    470 ;	stm8s_gpio_main.c: 219: vbBit = GPIOx->IDR >> vbNum;
+      00023A 1E 0B            [ 2]  471 	ldw	x, (0x0b, sp)
+      00023C E6 01            [ 1]  472 	ld	a, (0x1, x)
+      00023E 88               [ 1]  473 	push	a
+      00023F 7B 0F            [ 1]  474 	ld	a, (0x0f, sp)
+      000241 27 05            [ 1]  475 	jreq	00454$
+      000243                        476 00453$:
+      000243 04 01            [ 1]  477 	srl	(1, sp)
+      000245 4A               [ 1]  478 	dec	a
+      000246 26 FB            [ 1]  479 	jrne	00453$
+      000248                        480 00454$:
+      000248 84               [ 1]  481 	pop	a
+                                    482 ;	stm8s_gpio_main.c: 220: vbBit &= 1;
+      000249 A4 01            [ 1]  483 	and	a, #0x01
+                                    484 ;	stm8s_gpio_main.c: 221: ccprintf(_DEBUG_CMD_A_,("gpio in : port[%c] num[%d] bit[%d]\r\n", vbPort,vbNum,vbBit));
+      00024B 5F               [ 1]  485 	clrw	x
+      00024C 97               [ 1]  486 	ld	xl, a
+      00024D 90 5F            [ 1]  487 	clrw	y
+      00024F 7B 0E            [ 1]  488 	ld	a, (0x0e, sp)
+      000251 90 97            [ 1]  489 	ld	yl, a
+      000253 7B 0A            [ 1]  490 	ld	a, (0x0a, sp)
+      000255 6B 0E            [ 1]  491 	ld	(0x0e, sp), a
+      000257 0F 0D            [ 1]  492 	clr	(0x0d, sp)
+      000259 89               [ 2]  493 	pushw	x
+      00025A 90 89            [ 2]  494 	pushw	y
+      00025C 1E 11            [ 2]  495 	ldw	x, (0x11, sp)
+      00025E 89               [ 2]  496 	pushw	x
+      00025F 4Br8B            [ 1]  497 	push	#<(__str_8+0)
+      000261 4Bs00            [ 1]  498 	push	#((__str_8+0) >> 8)
+      000263 CDr00r00         [ 4]  499 	call	_mib_printf
+      000266 5B 08            [ 2]  500 	addw	sp, #8
+      000268 CCr04r70         [ 2]  501 	jp	00186$
+      00026B                        502 00179$:
+                                    503 ;	stm8s_gpio_main.c: 228: else if (!strcmp(argv[1], "out")) // _CMD_MY_READ_
+      00026B 1E 05            [ 2]  504 	ldw	x, (0x05, sp)
+      00026D FE               [ 2]  505 	ldw	x, (x)
+      00026E 4BrB0            [ 1]  506 	push	#<(___str_9+0)
+      000270 4Bs00            [ 1]  507 	push	#((___str_9+0) >> 8)
+      000272 CDr00r00         [ 4]  508 	call	_strcmp
+      000275 5D               [ 2]  509 	tnzw	x
+      000276 27 03            [ 1]  510 	jreq	00455$
+      000278 CCr03r99         [ 2]  511 	jp	00176$
+      00027B                        512 00455$:
+                                    513 ;	stm8s_gpio_main.c: 230: char vbPort = *(char *)(argv[2]); // argv[2][0]
+      00027B 1E 08            [ 2]  514 	ldw	x, (0x08, sp)
+      00027D FE               [ 2]  515 	ldw	x, (x)
+      00027E F6               [ 1]  516 	ld	a, (x)
+      00027F 6B 04            [ 1]  517 	ld	(0x04, sp), a
+                                    518 ;	stm8s_gpio_main.c: 231: char vbNum = *(char *)(argv[3]);
+      000281 1E 0B            [ 2]  519 	ldw	x, (0x0b, sp)
+      000283 FE               [ 2]  520 	ldw	x, (x)
+      000284 F6               [ 1]  521 	ld	a, (x)
+      000285 6B 05            [ 1]  522 	ld	(0x05, sp), a
+                                    523 ;	stm8s_gpio_main.c: 232: char vbBit = *(char *)(argv[4]);
+      000287 1E 13            [ 2]  524 	ldw	x, (0x13, sp)
+      000289 EE 08            [ 2]  525 	ldw	x, (0x8, x)
+      00028B F6               [ 1]  526 	ld	a, (x)
+      00028C 6B 06            [ 1]  527 	ld	(0x06, sp), a
+                                    528 ;	stm8s_gpio_main.c: 233: GPIO_TypeDef* GPIOx=GPIOA;
+      00028E AE 50 00         [ 2]  529 	ldw	x, #0x5000
+      000291 1F 07            [ 2]  530 	ldw	(0x07, sp), x
+                                    531 ;	stm8s_gpio_main.c: 234: if (argc < 5)
+      000293 1E 11            [ 2]  532 	ldw	x, (0x11, sp)
+      000295 A3 00 05         [ 2]  533 	cpw	x, #0x0005
+      000298 2E 0A            [ 1]  534 	jrsge	00131$
+                                    535 ;	stm8s_gpio_main.c: 236: MibWriteDebugString(cptr->usage);
+      00029A 1E 0D            [ 2]  536 	ldw	x, (0x0d, sp)
+      00029C FE               [ 2]  537 	ldw	x, (x)
+      00029D CDr00r00         [ 4]  538 	call	_MibWriteDebugString
+                                    539 ;	stm8s_gpio_main.c: 237: return FALSE;
+      0002A0 5F               [ 1]  540 	clrw	x
+      0002A1 CCr04r72         [ 2]  541 	jp	00187$
+      0002A4                        542 00131$:
+                                    543 ;	stm8s_gpio_main.c: 239: ccprintf(_DEBUG_CMD_A_,("gpio in : port[%c] num[%c] bit[%c]\r\n", vbPort,vbNum,vbBit));
+      0002A4 7B 06            [ 1]  544 	ld	a, (0x06, sp)
+      0002A6 6B 0A            [ 1]  545 	ld	(0x0a, sp), a
+      0002A8 0F 09            [ 1]  546 	clr	(0x09, sp)
+      0002AA 7B 05            [ 1]  547 	ld	a, (0x05, sp)
+      0002AC 6B 0C            [ 1]  548 	ld	(0x0c, sp), a
+      0002AE 0F 0B            [ 1]  549 	clr	(0x0b, sp)
+      0002B0 7B 04            [ 1]  550 	ld	a, (0x04, sp)
+      0002B2 6B 0E            [ 1]  551 	ld	(0x0e, sp), a
+      0002B4 0F 0D            [ 1]  552 	clr	(0x0d, sp)
+      0002B6 1E 09            [ 2]  553 	ldw	x, (0x09, sp)
+      0002B8 89               [ 2]  554 	pushw	x
+      0002B9 1E 0D            [ 2]  555 	ldw	x, (0x0d, sp)
+      0002BB 89               [ 2]  556 	pushw	x
+      0002BC 1E 11            [ 2]  557 	ldw	x, (0x11, sp)
+      0002BE 89               [ 2]  558 	pushw	x
+      0002BF 4BrB4            [ 1]  559 	push	#<(__str_10+0)
+      0002C1 4Bs00            [ 1]  560 	push	#((__str_10+0) >> 8)
+      0002C3 CDr00r00         [ 4]  561 	call	_mib_printf
+      0002C6 5B 08            [ 2]  562 	addw	sp, #8
+                                    563 ;	stm8s_gpio_main.c: 240: if((vbPort>='a')&&(vbPort<='g'))
+      0002C8 7B 04            [ 1]  564 	ld	a, (0x04, sp)
+      0002CA A1 61            [ 1]  565 	cp	a, #0x61
+      0002CC 24 03            [ 1]  566 	jrnc	00457$
+      0002CE CCr04r70         [ 2]  567 	jp	00186$
+      0002D1                        568 00457$:
+      0002D1 7B 04            [ 1]  569 	ld	a, (0x04, sp)
+      0002D3 A1 67            [ 1]  570 	cp	a, #0x67
+      0002D5 23 03            [ 2]  571 	jrule	00458$
+      0002D7 CCr04r70         [ 2]  572 	jp	00186$
+      0002DA                        573 00458$:
+                                    574 ;	stm8s_gpio_main.c: 242: switch(vbPort)
+      0002DA 7B 04            [ 1]  575 	ld	a, (0x04, sp)
+      0002DC A1 61            [ 1]  576 	cp	a, #0x61
+      0002DE 27 26            [ 1]  577 	jreq	00132$
+      0002E0 7B 04            [ 1]  578 	ld	a, (0x04, sp)
+      0002E2 A1 62            [ 1]  579 	cp	a, #0x62
+      0002E4 27 27            [ 1]  580 	jreq	00133$
+      0002E6 7B 04            [ 1]  581 	ld	a, (0x04, sp)
+      0002E8 A1 63            [ 1]  582 	cp	a, #0x63
+      0002EA 27 28            [ 1]  583 	jreq	00134$
+      0002EC 7B 04            [ 1]  584 	ld	a, (0x04, sp)
+      0002EE A1 64            [ 1]  585 	cp	a, #0x64
+      0002F0 27 29            [ 1]  586 	jreq	00135$
+      0002F2 7B 04            [ 1]  587 	ld	a, (0x04, sp)
+      0002F4 A1 65            [ 1]  588 	cp	a, #0x65
+      0002F6 27 2A            [ 1]  589 	jreq	00136$
+      0002F8 7B 04            [ 1]  590 	ld	a, (0x04, sp)
+      0002FA A1 66            [ 1]  591 	cp	a, #0x66
+      0002FC 27 2B            [ 1]  592 	jreq	00137$
+      0002FE 7B 04            [ 1]  593 	ld	a, (0x04, sp)
+      000300 A1 67            [ 1]  594 	cp	a, #0x67
+      000302 27 2C            [ 1]  595 	jreq	00138$
+      000304 20 2F            [ 2]  596 	jra	00140$
+                                    597 ;	stm8s_gpio_main.c: 244: case 'a': GPIOx = GPIOA; break;
+      000306                        598 00132$:
+      000306 AE 50 00         [ 2]  599 	ldw	x, #0x5000
+      000309 1F 07            [ 2]  600 	ldw	(0x07, sp), x
+      00030B 20 28            [ 2]  601 	jra	00140$
+                                    602 ;	stm8s_gpio_main.c: 245: case 'b': GPIOx = GPIOB; break;
+      00030D                        603 00133$:
+      00030D AE 50 05         [ 2]  604 	ldw	x, #0x5005
+      000310 1F 07            [ 2]  605 	ldw	(0x07, sp), x
+      000312 20 21            [ 2]  606 	jra	00140$
+                                    607 ;	stm8s_gpio_main.c: 246: case 'c': GPIOx = GPIOC; break;
+      000314                        608 00134$:
+      000314 AE 50 0A         [ 2]  609 	ldw	x, #0x500a
+      000317 1F 07            [ 2]  610 	ldw	(0x07, sp), x
+      000319 20 1A            [ 2]  611 	jra	00140$
+                                    612 ;	stm8s_gpio_main.c: 247: case 'd': GPIOx = GPIOD; break;
+      00031B                        613 00135$:
+      00031B AE 50 0F         [ 2]  614 	ldw	x, #0x500f
+      00031E 1F 07            [ 2]  615 	ldw	(0x07, sp), x
+      000320 20 13            [ 2]  616 	jra	00140$
+                                    617 ;	stm8s_gpio_main.c: 248: case 'e': GPIOx = GPIOE; break;
+      000322                        618 00136$:
+      000322 AE 50 14         [ 2]  619 	ldw	x, #0x5014
+      000325 1F 07            [ 2]  620 	ldw	(0x07, sp), x
+      000327 20 0C            [ 2]  621 	jra	00140$
+                                    622 ;	stm8s_gpio_main.c: 249: case 'f': GPIOx = GPIOF; break;
+      000329                        623 00137$:
+      000329 AE 50 19         [ 2]  624 	ldw	x, #0x5019
+      00032C 1F 07            [ 2]  625 	ldw	(0x07, sp), x
+      00032E 20 05            [ 2]  626 	jra	00140$
+                                    627 ;	stm8s_gpio_main.c: 250: case 'g': GPIOx = GPIOG; break;
+      000330                        628 00138$:
+      000330 AE 50 1E         [ 2]  629 	ldw	x, #0x501e
+      000333 1F 07            [ 2]  630 	ldw	(0x07, sp), x
+                                    631 ;	stm8s_gpio_main.c: 254: }
+      000335                        632 00140$:
+                                    633 ;	stm8s_gpio_main.c: 255: if((vbNum>='0')&&(vbNum<='7'))
+      000335 7B 05            [ 1]  634 	ld	a, (0x05, sp)
+      000337 A1 30            [ 1]  635 	cp	a, #0x30
+      000339 24 03            [ 1]  636 	jrnc	00480$
+      00033B CCr04r70         [ 2]  637 	jp	00186$
+      00033E                        638 00480$:
+      00033E 7B 05            [ 1]  639 	ld	a, (0x05, sp)
+      000340 A1 37            [ 1]  640 	cp	a, #0x37
+      000342 23 03            [ 2]  641 	jrule	00481$
+      000344 CCr04r70         [ 2]  642 	jp	00186$
+      000347                        643 00481$:
+                                    644 ;	stm8s_gpio_main.c: 257: vbNum &= 0x07;
+      000347 7B 05            [ 1]  645 	ld	a, (0x05, sp)
+      000349 A4 07            [ 1]  646 	and	a, #0x07
+      00034B 97               [ 1]  647 	ld	xl, a
+                                    648 ;	stm8s_gpio_main.c: 258: if((vbBit>='0')&&(vbBit<='1'))
+      00034C 7B 06            [ 1]  649 	ld	a, (0x06, sp)
+      00034E A1 30            [ 1]  650 	cp	a, #0x30
+      000350 24 03            [ 1]  651 	jrnc	00482$
+      000352 CCr04r70         [ 2]  652 	jp	00186$
+      000355                        653 00482$:
+      000355 7B 06            [ 1]  654 	ld	a, (0x06, sp)
+      000357 A1 31            [ 1]  655 	cp	a, #0x31
+      000359 23 03            [ 2]  656 	jrule	00483$
+      00035B CCr04r70         [ 2]  657 	jp	00186$
+      00035E                        658 00483$:
+                                    659 ;	stm8s_gpio_main.c: 260: vbBit &= 0x01;
+      00035E 7B 06            [ 1]  660 	ld	a, (0x06, sp)
+      000360 A4 01            [ 1]  661 	and	a, #0x01
+      000362 6B 0E            [ 1]  662 	ld	(0x0e, sp), a
+                                    663 ;	stm8s_gpio_main.c: 261: vbNum = 1 << vbNum;
+      000364 A6 01            [ 1]  664 	ld	a, #0x01
+      000366 6B 0C            [ 1]  665 	ld	(0x0c, sp), a
+      000368 9F               [ 1]  666 	ld	a, xl
+      000369 4D               [ 1]  667 	tnz	a
+      00036A 27 05            [ 1]  668 	jreq	00485$
+      00036C                        669 00484$:
+      00036C 08 0C            [ 1]  670 	sll	(0x0c, sp)
+      00036E 4A               [ 1]  671 	dec	a
+      00036F 26 FB            [ 1]  672 	jrne	00484$
+      000371                        673 00485$:
+                                    674 ;	stm8s_gpio_main.c: 262: GPIO_Init(GPIOx,vbNum,GPIO_MODE_OUT_PP_LOW_FAST);
+      000371 4B E0            [ 1]  675 	push	#0xe0
+      000373 7B 0D            [ 1]  676 	ld	a, (0x0d, sp)
+      000375 1E 08            [ 2]  677 	ldw	x, (0x08, sp)
+      000377 CDr00r00         [ 4]  678 	call	_GPIO_Init
+                                    679 ;	stm8s_gpio_main.c: 265: GPIOx->ODR |= vbNum;
+      00037A 1E 07            [ 2]  680 	ldw	x, (0x07, sp)
+      00037C F6               [ 1]  681 	ld	a, (x)
+      00037D 6B 0D            [ 1]  682 	ld	(0x0d, sp), a
+                                    683 ;	stm8s_gpio_main.c: 263: if(vbBit==1)
+      00037F 7B 0E            [ 1]  684 	ld	a, (0x0e, sp)
+      000381 4A               [ 1]  685 	dec	a
+      000382 26 0A            [ 1]  686 	jrne	00142$
+                                    687 ;	stm8s_gpio_main.c: 265: GPIOx->ODR |= vbNum;
+      000384 7B 0D            [ 1]  688 	ld	a, (0x0d, sp)
+      000386 1A 0C            [ 1]  689 	or	a, (0x0c, sp)
+      000388 1E 07            [ 2]  690 	ldw	x, (0x07, sp)
+      00038A F7               [ 1]  691 	ld	(x), a
+      00038B CCr04r70         [ 2]  692 	jp	00186$
+      00038E                        693 00142$:
+                                    694 ;	stm8s_gpio_main.c: 269: GPIOx->ODR &= ~vbNum;
+      00038E 7B 0C            [ 1]  695 	ld	a, (0x0c, sp)
+      000390 43               [ 1]  696 	cpl	a
+      000391 14 0D            [ 1]  697 	and	a, (0x0d, sp)
+      000393 1E 07            [ 2]  698 	ldw	x, (0x07, sp)
+      000395 F7               [ 1]  699 	ld	(x), a
+      000396 CCr04r70         [ 2]  700 	jp	00186$
+      000399                        701 00176$:
+                                    702 ;	stm8s_gpio_main.c: 278: else if (!strcmp(argv[1], "led")) // _CMD_MY_READ_
+      000399 1E 05            [ 2]  703 	ldw	x, (0x05, sp)
+      00039B FE               [ 2]  704 	ldw	x, (x)
+      00039C 4BrD9            [ 1]  705 	push	#<(___str_11+0)
+      00039E 4Bs00            [ 1]  706 	push	#((___str_11+0) >> 8)
+      0003A0 CDr00r00         [ 4]  707 	call	_strcmp
+      0003A3 5D               [ 2]  708 	tnzw	x
+      0003A4 26 52            [ 1]  709 	jrne	00173$
+                                    710 ;	stm8s_gpio_main.c: 280: if (argc < 3)
+      0003A6 0D 0A            [ 1]  711 	tnz	(0x0a, sp)
+      0003A8 27 0A            [ 1]  712 	jreq	00154$
+                                    713 ;	stm8s_gpio_main.c: 282: MibWriteDebugString(cptr->usage);
+      0003AA 1E 0D            [ 2]  714 	ldw	x, (0x0d, sp)
+      0003AC FE               [ 2]  715 	ldw	x, (x)
+      0003AD CDr00r00         [ 4]  716 	call	_MibWriteDebugString
+                                    717 ;	stm8s_gpio_main.c: 283: return FALSE;
+      0003B0 5F               [ 1]  718 	clrw	x
+      0003B1 CCr04r72         [ 2]  719 	jp	00187$
+      0003B4                        720 00154$:
+                                    721 ;	stm8s_gpio_main.c: 285: if (!HexToInt(argv[2], &vbData, 8))
+      0003B4 96               [ 1]  722 	ldw	x, sp
+      0003B5 1C 00 03         [ 2]  723 	addw	x, #3
+      0003B8 16 08            [ 2]  724 	ldw	y, (0x08, sp)
+      0003BA 90 FE            [ 2]  725 	ldw	y, (y)
+      0003BC 4B 08            [ 1]  726 	push	#0x08
+      0003BE 4B 00            [ 1]  727 	push	#0x00
+      0003C0 89               [ 2]  728 	pushw	x
+      0003C1 93               [ 1]  729 	ldw	x, y
+      0003C2 CDr00r00         [ 4]  730 	call	_HexToInt
+      0003C5 5D               [ 2]  731 	tnzw	x
+      0003C6 26 0D            [ 1]  732 	jrne	00156$
+                                    733 ;	stm8s_gpio_main.c: 287: ccprintf(_DEBUG_CMD_A_, ("Illugal character is used.\r\n"));
+      0003C8 4Br2E            [ 1]  734 	push	#<(__str_3+0)
+      0003CA 4Bs00            [ 1]  735 	push	#((__str_3+0) >> 8)
+      0003CC CDr00r00         [ 4]  736 	call	_mib_printf
+      0003CF 5B 02            [ 2]  737 	addw	sp, #2
+                                    738 ;	stm8s_gpio_main.c: 288: return FALSE;
+      0003D1 5F               [ 1]  739 	clrw	x
+      0003D2 CCr04r72         [ 2]  740 	jp	00187$
+      0003D5                        741 00156$:
+                                    742 ;	stm8s_gpio_main.c: 292: UCOM_LED1_GPIO->ODR = UCOM_LED1_GPIO->ODR & ~UCOM_LED1_PIN;
+      0003D5 C6 50 0F         [ 1]  743 	ld	a, 0x500f
+                                    744 ;	stm8s_gpio_main.c: 290: if(vbData)
+      0003D8 0D 03            [ 1]  745 	tnz	(0x03, sp)
+      0003DA 27 07            [ 1]  746 	jreq	00158$
+                                    747 ;	stm8s_gpio_main.c: 292: UCOM_LED1_GPIO->ODR = UCOM_LED1_GPIO->ODR & ~UCOM_LED1_PIN;
+      0003DC A4 FE            [ 1]  748 	and	a, #0xfe
+      0003DE C7 50 0F         [ 1]  749 	ld	0x500f, a
+      0003E1 20 05            [ 2]  750 	jra	00159$
+      0003E3                        751 00158$:
+                                    752 ;	stm8s_gpio_main.c: 296: UCOM_LED1_GPIO->ODR = UCOM_LED1_GPIO->ODR | UCOM_LED1_PIN;
+      0003E3 AA 01            [ 1]  753 	or	a, #0x01
+      0003E5 C7 50 0F         [ 1]  754 	ld	0x500f, a
+      0003E8                        755 00159$:
+                                    756 ;	stm8s_gpio_main.c: 298: ccprintf(_DEBUG_CMD_A_, ("gpio led [%d]\r\n",(vbData)));		
+      0003E8 5F               [ 1]  757 	clrw	x
+      0003E9 7B 03            [ 1]  758 	ld	a, (0x03, sp)
+      0003EB 97               [ 1]  759 	ld	xl, a
+      0003EC 89               [ 2]  760 	pushw	x
+      0003ED 4BrDD            [ 1]  761 	push	#<(__str_12+0)
+      0003EF 4Bs00            [ 1]  762 	push	#((__str_12+0) >> 8)
+      0003F1 CDr00r00         [ 4]  763 	call	_mib_printf
+      0003F4 5B 04            [ 2]  764 	addw	sp, #4
+      0003F6 20 78            [ 2]  765 	jra	00186$
+      0003F8                        766 00173$:
+                                    767 ;	stm8s_gpio_main.c: 303: else if (!strcmp(argv[1], "key")) // _CMD_MY_READ_
+      0003F8 1E 05            [ 2]  768 	ldw	x, (0x05, sp)
+      0003FA FE               [ 2]  769 	ldw	x, (x)
+      0003FB 4BrED            [ 1]  770 	push	#<(___str_13+0)
+      0003FD 4Bs00            [ 1]  771 	push	#((___str_13+0) >> 8)
+      0003FF CDr00r00         [ 4]  772 	call	_strcmp
+      000402 5D               [ 2]  773 	tnzw	x
+      000403 26 2A            [ 1]  774 	jrne	00170$
+                                    775 ;	stm8s_gpio_main.c: 305: if((UCOM_KEY1_GPIO->IDR & UCOM_KEY1_PIN)==0)
+      000405 C6 50 06         [ 1]  776 	ld	a, 0x5006
+      000408 6B 0E            [ 1]  777 	ld	(0x0e, sp), a
+      00040A C6 50 06         [ 1]  778 	ld	a, 0x5006
+                                    779 ;	stm8s_gpio_main.c: 307: ccprintf(_DEBUG_CMD_A_, ("gpio key on [%d]\r\n",(UCOM_KEY1_GPIO->IDR & UCOM_KEY1_PIN)));		
+      00040D A4 20            [ 1]  780 	and	a, #0x20
+      00040F 5F               [ 1]  781 	clrw	x
+      000410 97               [ 1]  782 	ld	xl, a
+                                    783 ;	stm8s_gpio_main.c: 305: if((UCOM_KEY1_GPIO->IDR & UCOM_KEY1_PIN)==0)
+      000411 7B 0E            [ 1]  784 	ld	a, (0x0e, sp)
+      000413 A5 20            [ 1]  785 	bcp	a, #0x20
+      000415 26 0C            [ 1]  786 	jrne	00161$
+                                    787 ;	stm8s_gpio_main.c: 307: ccprintf(_DEBUG_CMD_A_, ("gpio key on [%d]\r\n",(UCOM_KEY1_GPIO->IDR & UCOM_KEY1_PIN)));		
+      000417 89               [ 2]  788 	pushw	x
+      000418 4BrF1            [ 1]  789 	push	#<(__str_14+0)
+      00041A 4Bs00            [ 1]  790 	push	#((__str_14+0) >> 8)
+      00041C CDr00r00         [ 4]  791 	call	_mib_printf
+      00041F 5B 04            [ 2]  792 	addw	sp, #4
+      000421 20 4D            [ 2]  793 	jra	00186$
+      000423                        794 00161$:
+                                    795 ;	stm8s_gpio_main.c: 311: ccprintf(_DEBUG_CMD_A_, ("gpio key off [%d]\r\n",(UCOM_KEY1_GPIO->IDR & UCOM_KEY1_PIN)));		
+      000423 89               [ 2]  796 	pushw	x
+      000424 4Br04            [ 1]  797 	push	#<(__str_15+0)
+      000426 4Bs01            [ 1]  798 	push	#((__str_15+0) >> 8)
+      000428 CDr00r00         [ 4]  799 	call	_mib_printf
+      00042B 5B 04            [ 2]  800 	addw	sp, #4
+      00042D 20 41            [ 2]  801 	jra	00186$
+      00042F                        802 00170$:
+                                    803 ;	stm8s_gpio_main.c: 317: else if (!strcmp(argv[1], "init")) // _CMD_MY_READ_
+      00042F 1E 05            [ 2]  804 	ldw	x, (0x05, sp)
+      000431 FE               [ 2]  805 	ldw	x, (x)
+      000432 4Br18            [ 1]  806 	push	#<(___str_16+0)
+      000434 4Bs01            [ 1]  807 	push	#((___str_16+0) >> 8)
+      000436 CDr00r00         [ 4]  808 	call	_strcmp
+      000439 5D               [ 2]  809 	tnzw	x
+      00043A 26 0E            [ 1]  810 	jrne	00167$
+                                    811 ;	stm8s_gpio_main.c: 319: ccprintf(_DEBUG_CMD_A_, ("gpio init....GPIO_Configuration()\r\n"));		
+      00043C 4Br1D            [ 1]  812 	push	#<(__str_17+0)
+      00043E 4Bs01            [ 1]  813 	push	#((__str_17+0) >> 8)
+      000440 CDr00r00         [ 4]  814 	call	_mib_printf
+      000443 5B 02            [ 2]  815 	addw	sp, #2
+                                    816 ;	stm8s_gpio_main.c: 321: GPIO_Configuration();
+      000445 CDr04r78         [ 4]  817 	call	_GPIO_Configuration
+      000448 20 26            [ 2]  818 	jra	00186$
+      00044A                        819 00167$:
+                                    820 ;	stm8s_gpio_main.c: 327: else if (!strcmp(argv[1], "help")) // _CMD_MY_READ_
+      00044A 1E 05            [ 2]  821 	ldw	x, (0x05, sp)
+      00044C FE               [ 2]  822 	ldw	x, (x)
+      00044D 4Br41            [ 1]  823 	push	#<(___str_18+0)
+      00044F 4Bs01            [ 1]  824 	push	#((___str_18+0) >> 8)
+      000451 CDr00r00         [ 4]  825 	call	_strcmp
+      000454 5D               [ 2]  826 	tnzw	x
+      000455 26 11            [ 1]  827 	jrne	00164$
+                                    828 ;	stm8s_gpio_main.c: 329: ccprintf(_DEBUG_CMD_A_, ("gpio help....argc[%x:%d]\r\n",argc,argc));		
+      000457 1E 11            [ 2]  829 	ldw	x, (0x11, sp)
+      000459 89               [ 2]  830 	pushw	x
+      00045A 1E 13            [ 2]  831 	ldw	x, (0x13, sp)
+      00045C 89               [ 2]  832 	pushw	x
+      00045D 4Br46            [ 1]  833 	push	#<(__str_19+0)
+      00045F 4Bs01            [ 1]  834 	push	#((__str_19+0) >> 8)
+      000461 CDr00r00         [ 4]  835 	call	_mib_printf
+      000464 5B 06            [ 2]  836 	addw	sp, #6
+      000466 20 08            [ 2]  837 	jra	00186$
+      000468                        838 00164$:
+                                    839 ;	stm8s_gpio_main.c: 333: MibWriteDebugString(cptr->usage);
+      000468 1E 0D            [ 2]  840 	ldw	x, (0x0d, sp)
+      00046A FE               [ 2]  841 	ldw	x, (x)
+      00046B CDr00r00         [ 4]  842 	call	_MibWriteDebugString
+                                    843 ;	stm8s_gpio_main.c: 334: return FALSE;
+      00046E 5F               [ 1]  844 	clrw	x
+                                    845 ;	stm8s_gpio_main.c: 336: return TRUE;
+      00046F C5                     846 	.byte 0xc5
+      000470                        847 00186$:
+      000470 5F               [ 1]  848 	clrw	x
+      000471 5C               [ 1]  849 	incw	x
+      000472                        850 00187$:
+                                    851 ;	stm8s_gpio_main.c: 337: }
+      000472 16 0F            [ 2]  852 	ldw	y, (15, sp)
+      000474 5B 14            [ 2]  853 	addw	sp, #20
+      000476 90 FC            [ 2]  854 	jp	(y)
+                                    855 ;	stm8s_gpio_main.c: 385: void GPIO_Configuration(void)
+                                    856 ;	-----------------------------------------
+                                    857 ;	 function GPIO_Configuration
+                                    858 ;	-----------------------------------------
+      000478                        859 _GPIO_Configuration:
+                                    860 ;	stm8s_gpio_main.c: 388: GPIO_DeInit(UCOM_LED1_GPIO);
+      000478 AE 50 0F         [ 2]  861 	ldw	x, #0x500f
+      00047B CDr00r00         [ 4]  862 	call	_GPIO_DeInit
+                                    863 ;	stm8s_gpio_main.c: 390: GPIO_Init(UCOM_LED1_GPIO, UCOM_LED1_PIN, UCOM_LED1_MODE);  
+      00047E 4B E0            [ 1]  864 	push	#0xe0
+      000480 A6 01            [ 1]  865 	ld	a, #0x01
+      000482 AE 50 0F         [ 2]  866 	ldw	x, #0x500f
+      000485 CDr00r00         [ 4]  867 	call	_GPIO_Init
+                                    868 ;	stm8s_gpio_main.c: 391: GPIO_DeInit(UCOM_KEY1_GPIO);
+      000488 AE 50 05         [ 2]  869 	ldw	x, #0x5005
+      00048B CDr00r00         [ 4]  870 	call	_GPIO_DeInit
+                                    871 ;	stm8s_gpio_main.c: 393: GPIO_Init(UCOM_KEY1_GPIO, UCOM_KEY1_PIN, UCOM_KEY1_MODE);
+      00048E 4B 40            [ 1]  872 	push	#0x40
+      000490 A6 20            [ 1]  873 	ld	a, #0x20
+      000492 AE 50 05         [ 2]  874 	ldw	x, #0x5005
+      000495 CDr00r00         [ 4]  875 	call	_GPIO_Init
+                                    876 ;	stm8s_gpio_main.c: 394: }
+      000498 81               [ 4]  877 	ret
+                                    878 ;	stm8s_gpio_main.c: 408: void Toggle(void)
+                                    879 ;	-----------------------------------------
+                                    880 ;	 function Toggle
+                                    881 ;	-----------------------------------------
+      000499                        882 _Toggle:
+                                    883 ;	stm8s_gpio_main.c: 410: GPIO_WriteReverse(UCOM_LED1_GPIO, UCOM_LED1_PIN);
+      000499 A6 01            [ 1]  884 	ld	a, #0x01
+      00049B AE 50 0F         [ 2]  885 	ldw	x, #0x500f
+                                    886 ;	stm8s_gpio_main.c: 411: }
+      00049E CCr00r00         [ 2]  887 	jp	_GPIO_WriteReverse
+                                    888 	.area CODE
+                                    889 	.area CONST
+                                    890 	.area CONST
+      000000                        891 __str_0:
+      000000 49 4E 46 4F 3A 2B 63   892 	.ascii "INFO:+cmd_gpio..."
+             6D 64 5F 67 70 69 6F
+             2E 2E 2E
+      000011 0D                     893 	.db 0x0d
+      000012 0A                     894 	.db 0x0a
+      000013 00                     895 	.db 0x00
+                                    896 	.area CODE
+                                    897 	.area CONST
+      000014                        898 __str_1:
+      000014 49 4E 46 4F 3A 2D 63   899 	.ascii "INFO:-cmd_gpio..."
+             6D 64 5F 67 70 69 6F
+             2E 2E 2E
+      000025 0D                     900 	.db 0x0d
+      000026 0A                     901 	.db 0x0a
+      000027 00                     902 	.db 0x00
+                                    903 	.area CODE
+                                    904 	.area CONST
+      000028                        905 ___str_2:
+      000028 77 72 69 74 65         906 	.ascii "write"
+      00002D 00                     907 	.db 0x00
+                                    908 	.area CODE
+                                    909 	.area CONST
+      00002E                        910 __str_3:
+      00002E 49 6C 6C 75 67 61 6C   911 	.ascii "Illugal character is used."
+             20 63 68 61 72 61 63
+             74 65 72 20 69 73 20
+             75 73 65 64 2E
+      000048 0D                     912 	.db 0x0d
+      000049 0A                     913 	.db 0x0a
+      00004A 00                     914 	.db 0x00
+                                    915 	.area CODE
+                                    916 	.area CONST
+      00004B                        917 __str_4:
+      00004B 77 72 5F 41 44 44 52   918 	.ascii "wr_ADDR8 : 0x%04x[0x%02x]"
+             38 20 3A 20 30 78 25
+             30 34 78 5B 30 78 25
+             30 32 78 5D
+      000064 0D                     919 	.db 0x0d
+      000065 0A                     920 	.db 0x0a
+      000066 00                     921 	.db 0x00
+                                    922 	.area CODE
+                                    923 	.area CONST
+      000067                        924 ___str_5:
+      000067 72 65 61 64            925 	.ascii "read"
+      00006B 00                     926 	.db 0x00
+                                    927 	.area CODE
+                                    928 	.area CONST
+      00006C                        929 __str_6:
+      00006C 72 64 5F 41 44 44 52   930 	.ascii "rd_ADDR8 : 0x%04x[0x%02x]"
+             38 20 3A 20 30 78 25
+             30 34 78 5B 30 78 25
+             30 32 78 5D
+      000085 0D                     931 	.db 0x0d
+      000086 0A                     932 	.db 0x0a
+      000087 00                     933 	.db 0x00
+                                    934 	.area CODE
+                                    935 	.area CONST
+      000088                        936 ___str_7:
+      000088 69 6E                  937 	.ascii "in"
+      00008A 00                     938 	.db 0x00
+                                    939 	.area CODE
+                                    940 	.area CONST
+      00008B                        941 __str_8:
+      00008B 67 70 69 6F 20 69 6E   942 	.ascii "gpio in : port[%c] num[%d] bit[%d]"
+             20 3A 20 70 6F 72 74
+             5B 25 63 5D 20 6E 75
+             6D 5B 25 64 5D 20 62
+             69 74 5B 25 64 5D
+      0000AD 0D                     943 	.db 0x0d
+      0000AE 0A                     944 	.db 0x0a
+      0000AF 00                     945 	.db 0x00
+                                    946 	.area CODE
+                                    947 	.area CONST
+      0000B0                        948 ___str_9:
+      0000B0 6F 75 74               949 	.ascii "out"
+      0000B3 00                     950 	.db 0x00
+                                    951 	.area CODE
+                                    952 	.area CONST
+      0000B4                        953 __str_10:
+      0000B4 67 70 69 6F 20 69 6E   954 	.ascii "gpio in : port[%c] num[%c] bit[%c]"
+             20 3A 20 70 6F 72 74
+             5B 25 63 5D 20 6E 75
+             6D 5B 25 63 5D 20 62
+             69 74 5B 25 63 5D
+      0000D6 0D                     955 	.db 0x0d
+      0000D7 0A                     956 	.db 0x0a
+      0000D8 00                     957 	.db 0x00
+                                    958 	.area CODE
+                                    959 	.area CONST
+      0000D9                        960 ___str_11:
+      0000D9 6C 65 64               961 	.ascii "led"
+      0000DC 00                     962 	.db 0x00
+                                    963 	.area CODE
+                                    964 	.area CONST
+      0000DD                        965 __str_12:
+      0000DD 67 70 69 6F 20 6C 65   966 	.ascii "gpio led [%d]"
+             64 20 5B 25 64 5D
+      0000EA 0D                     967 	.db 0x0d
+      0000EB 0A                     968 	.db 0x0a
+      0000EC 00                     969 	.db 0x00
+                                    970 	.area CODE
+                                    971 	.area CONST
+      0000ED                        972 ___str_13:
+      0000ED 6B 65 79               973 	.ascii "key"
+      0000F0 00                     974 	.db 0x00
+                                    975 	.area CODE
+                                    976 	.area CONST
+      0000F1                        977 __str_14:
+      0000F1 67 70 69 6F 20 6B 65   978 	.ascii "gpio key on [%d]"
+             79 20 6F 6E 20 5B 25
+             64 5D
+      000101 0D                     979 	.db 0x0d
+      000102 0A                     980 	.db 0x0a
+      000103 00                     981 	.db 0x00
+                                    982 	.area CODE
+                                    983 	.area CONST
+      000104                        984 __str_15:
+      000104 67 70 69 6F 20 6B 65   985 	.ascii "gpio key off [%d]"
+             79 20 6F 66 66 20 5B
+             25 64 5D
+      000115 0D                     986 	.db 0x0d
+      000116 0A                     987 	.db 0x0a
+      000117 00                     988 	.db 0x00
+                                    989 	.area CODE
+                                    990 	.area CONST
+      000118                        991 ___str_16:
+      000118 69 6E 69 74            992 	.ascii "init"
+      00011C 00                     993 	.db 0x00
+                                    994 	.area CODE
+                                    995 	.area CONST
+      00011D                        996 __str_17:
+      00011D 67 70 69 6F 20 69 6E   997 	.ascii "gpio init....GPIO_Configuration()"
+             69 74 2E 2E 2E 2E 47
+             50 49 4F 5F 43 6F 6E
+             66 69 67 75 72 61 74
+             69 6F 6E 28 29
+      00013E 0D                     998 	.db 0x0d
+      00013F 0A                     999 	.db 0x0a
+      000140 00                    1000 	.db 0x00
+                                   1001 	.area CODE
+                                   1002 	.area CONST
+      000141                       1003 ___str_18:
+      000141 68 65 6C 70           1004 	.ascii "help"
+      000145 00                    1005 	.db 0x00
+                                   1006 	.area CODE
+                                   1007 	.area CONST
+      000146                       1008 __str_19:
+      000146 67 70 69 6F 20 68 65  1009 	.ascii "gpio help....argc[%x:%d]"
+             6C 70 2E 2E 2E 2E 61
+             72 67 63 5B 25 78 3A
+             25 64 5D
+      00015E 0D                    1010 	.db 0x0d
+      00015F 0A                    1011 	.db 0x0a
+      000160 00                    1012 	.db 0x00
+                                   1013 	.area CODE
+                                   1014 	.area CONST
+      000161                       1015 ___str_20:
+      000161 67 70 69 6F           1016 	.ascii "gpio"
+      000165 00                    1017 	.db 0x00
+                                   1018 	.area CODE
+                                   1019 	.area CONST
+      000166                       1020 ___str_21:
+      000166 20 20 67 70 69 6F 20  1021 	.ascii "  gpio {init}  : gpio in/out reg init.."
+             7B 69 6E 69 74 7D 20
+             20 3A 20 67 70 69 6F
+             20 69 6E 2F 6F 75 74
+             20 72 65 67 20 69 6E
+             69 74 2E 2E
+      00018D 0D                    1022 	.db 0x0d
+      00018E 0A                    1023 	.db 0x0a
+      00018F 20 20 67 70 69 6F 20  1024 	.ascii "  gpio {write} [addr] [data] : (addr 16bit) write (data 8bit"
+             7B 77 72 69 74 65 7D
+             20 5B 61 64 64 72 5D
+             20 5B 64 61 74 61 5D
+             20 3A 20 28 61 64 64
+             72 20 31 36 62 69 74
+             29 20 77 72 69 74 65
+             20 28 64 61 74 61 20
+             38 62 69 74
+      0001CB 29                    1025 	.ascii ")"
+      0001CC 0D                    1026 	.db 0x0d
+      0001CD 0A                    1027 	.db 0x0a
+      0001CE 20 20 67 70 69 6F 20  1028 	.ascii "  gpio {read} [addr] : (addr 16bit) read (data 8bit)"
+             7B 72 65 61 64 7D 20
+             5B 61 64 64 72 5D 20
+             3A 20 28 61 64 64 72
+             20 31 36 62 69 74 29
+             20 72 65 61 64 20 28
+             64 61 74 61 20 38 62
+             69 74 29
+      000202 0D                    1029 	.db 0x0d
+      000203 0A                    1030 	.db 0x0a
+      000204 20 20 67 70 69 6F 20  1031 	.ascii "  gpio {led} [data:on/off(1/0)] : Write 0 or 1 to the PD0"
+             7B 6C 65 64 7D 20 5B
+             64 61 74 61 3A 6F 6E
+             2F 6F 66 66 28 31 2F
+             30 29 5D 20 3A 20 57
+             72 69 74 65 20 30 20
+             6F 72 20 31 20 74 6F
+             20 74 68 65 20 50 44
+             30
+      00023D 0D                    1032 	.db 0x0d
+      00023E 0A                    1033 	.db 0x0a
+      00023F 20 20 67 70 69 6F 20  1034 	.ascii "  gpio {key} : read to the PB5"
+             7B 6B 65 79 7D 20 3A
+             20 72 65 61 64 20 74
+             6F 20 74 68 65 20 50
+             42 35
+      00025D 0D                    1035 	.db 0x0d
+      00025E 0A                    1036 	.db 0x0a
+      00025F 20 20 67 70 69 6F 20  1037 	.ascii "  gpio {in}  {port : a..g} {bit : 0..7} : Read for each bit "
+             7B 69 6E 7D 20 20 7B
+             70 6F 72 74 20 3A 20
+             61 2E 2E 67 7D 20 7B
+             62 69 74 20 3A 20 30
+             2E 2E 37 7D 20 3A 20
+             52 65 61 64 20 66 6F
+             72 20 65 61 63 68 20
+             62 69 74 20
+      00029B 30 20 74 6F 20 37 20  1038 	.ascii "0 to 7 from ports A GPIO to G GPIO. "
+             66 72 6F 6D 20 70 6F
+             72 74 73 20 41 20 47
+             50 49 4F 20 74 6F 20
+             47 20 47 50 49 4F 2E
+             20
+      0002BF 0D                    1039 	.db 0x0d
+      0002C0 0A                    1040 	.db 0x0a
+      0002C1 20 20 67 70 69 6F 20  1041 	.ascii "  gpio {out} {port : a..g} {bit : 0..7} {0/1} : It writes to"
+             7B 6F 75 74 7D 20 7B
+             70 6F 72 74 20 3A 20
+             61 2E 2E 67 7D 20 7B
+             62 69 74 20 3A 20 30
+             2E 2E 37 7D 20 7B 30
+             2F 31 7D 20 3A 20 49
+             74 20 77 72 69 74 65
+             73 20 74 6F
+      0002FD 20 65 61 63 68 20 62  1042 	.ascii " each bit 0 to 7 from ports a to g."
+             69 74 20 30 20 74 6F
+             20 37 20 66 72 6F 6D
+             20 70 6F 72 74 73 20
+             61 20 74 6F 20 67 2E
+      000320 0D                    1043 	.db 0x0d
+      000321 0A                    1044 	.db 0x0a
+      000322 20 20 67 70 69 6F 20  1045 	.ascii "  gpio {help}  gpio help."
+             7B 68 65 6C 70 7D 20
+             20 67 70 69 6F 20 68
+             65 6C 70 2E
+      00033B 0D                    1046 	.db 0x0d
+      00033C 0A                    1047 	.db 0x0a
+      00033D 00                    1048 	.db 0x00
+                                   1049 	.area CODE
+                                   1050 	.area INITIALIZER
+      000000                       1051 __xinit__cmdTbl_only:
+      000000r01r61                 1052 	.dw ___str_20
+      000002r00r66                 1053 	.dw _DoGPIO
+      000004r01r66                 1054 	.dw ___str_21
+      000006 00 00                 1055 	.dw #0x0000
+      000008 00 00                 1056 	.dw #0x0000
+      00000A 00 00                 1057 	.dw #0x0000
+                                   1058 	.area CABS (ABS)

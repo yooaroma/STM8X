@@ -1,0 +1,124 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_mib_wwdg
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _mib_printf
+                                     12 	.globl _calConfigWWDG
+                                     13 ;--------------------------------------------------------
+                                     14 ; ram data
+                                     15 ;--------------------------------------------------------
+                                     16 	.area DATA
+                                     17 ;--------------------------------------------------------
+                                     18 ; ram data
+                                     19 ;--------------------------------------------------------
+                                     20 	.area INITIALIZED
+                                     21 ;--------------------------------------------------------
+                                     22 ; absolute external ram data
+                                     23 ;--------------------------------------------------------
+                                     24 	.area DABS (ABS)
+                                     25 
+                                     26 ; default segment ordering for linker
+                                     27 	.area HOME
+                                     28 	.area GSINIT
+                                     29 	.area GSFINAL
+                                     30 	.area CONST
+                                     31 	.area INITIALIZER
+                                     32 	.area CODE
+                                     33 
+                                     34 ;--------------------------------------------------------
+                                     35 ; global & static initialisations
+                                     36 ;--------------------------------------------------------
+                                     37 	.area HOME
+                                     38 	.area GSINIT
+                                     39 	.area GSFINAL
+                                     40 	.area GSINIT
+                                     41 ;--------------------------------------------------------
+                                     42 ; Home
+                                     43 ;--------------------------------------------------------
+                                     44 	.area HOME
+                                     45 	.area HOME
+                                     46 ;--------------------------------------------------------
+                                     47 ; code
+                                     48 ;--------------------------------------------------------
+                                     49 	.area CODE
+                                     50 ;	./../../mib/stm8s_mib_wwdg.c: 41: uint16_t calConfigWWDG(uint16_t vwDelay) // msec... 
+                                     51 ;	-----------------------------------------
+                                     52 ;	 function calConfigWWDG
+                                     53 ;	-----------------------------------------
+      000000                         54 _calConfigWWDG:
+      000000 52 04            [ 2]   55 	sub	sp, #4
+                                     56 ;	./../../mib/stm8s_mib_wwdg.c: 43: uint32_t vdwData = vwDelay;
+      000002 1F 03            [ 2]   57 	ldw	(0x03, sp), x
+      000004 90 5F            [ 1]   58 	clrw	y
+                                     59 ;	./../../mib/stm8s_mib_wwdg.c: 44: if(vwDelay>50)
+      000006 A3 00 32         [ 2]   60 	cpw	x, #0x0032
+      000009 23 07            [ 2]   61 	jrule	00102$
+                                     62 ;	./../../mib/stm8s_mib_wwdg.c: 46: vdwData = 0x3F;
+      00000B AE 00 3F         [ 2]   63 	ldw	x, #0x003f
+      00000E 1F 03            [ 2]   64 	ldw	(0x03, sp), x
+      000010 20 34            [ 2]   65 	jra	00103$
+      000012                         66 00102$:
+                                     67 ;	./../../mib/stm8s_mib_wwdg.c: 50: vdwData = vdwData * 16000000;
+      000012 1E 03            [ 2]   68 	ldw	x, (0x03, sp)
+      000014 89               [ 2]   69 	pushw	x
+      000015 90 89            [ 2]   70 	pushw	y
+      000017 4B 00            [ 1]   71 	push	#0x00
+      000019 4B 24            [ 1]   72 	push	#0x24
+      00001B 4B F4            [ 1]   73 	push	#0xf4
+      00001D 4B 00            [ 1]   74 	push	#0x00
+      00001F CDr00r00         [ 4]   75 	call	__mullong
+      000022 5B 08            [ 2]   76 	addw	sp, #8
+                                     77 ;	./../../mib/stm8s_mib_wwdg.c: 51: vdwData = vdwData / 12288;
+      000024 4B 00            [ 1]   78 	push	#0x00
+      000026 4B 30            [ 1]   79 	push	#0x30
+      000028 4B 00            [ 1]   80 	push	#0x00
+      00002A 4B 00            [ 1]   81 	push	#0x00
+      00002C 89               [ 2]   82 	pushw	x
+      00002D 90 89            [ 2]   83 	pushw	y
+      00002F CDr00r00         [ 4]   84 	call	__divulong
+      000032 5B 08            [ 2]   85 	addw	sp, #8
+                                     86 ;	./../../mib/stm8s_mib_wwdg.c: 52: vdwData = vdwData / 1000;
+      000034 4B E8            [ 1]   87 	push	#0xe8
+      000036 4B 03            [ 1]   88 	push	#0x03
+      000038 4B 00            [ 1]   89 	push	#0x00
+      00003A 4B 00            [ 1]   90 	push	#0x00
+      00003C 89               [ 2]   91 	pushw	x
+      00003D 90 89            [ 2]   92 	pushw	y
+      00003F CDr00r00         [ 4]   93 	call	__divulong
+      000042 5B 08            [ 2]   94 	addw	sp, #8
+      000044 1F 03            [ 2]   95 	ldw	(0x03, sp), x
+      000046                         96 00103$:
+                                     97 ;	./../../mib/stm8s_mib_wwdg.c: 54: vwDelay = vdwData;
+      000046 1E 03            [ 2]   98 	ldw	x, (0x03, sp)
+                                     99 ;	./../../mib/stm8s_mib_wwdg.c: 55: ccprintf(_DEBUG_WWDG_A_, ("calConfigWWDG : [%u][0x%x]\r\n",vwDelay));		 
+      000048 89               [ 2]  100 	pushw	x
+      000049 89               [ 2]  101 	pushw	x
+      00004A 4Br00            [ 1]  102 	push	#<(__str_0+0)
+      00004C 4Bs00            [ 1]  103 	push	#((__str_0+0) >> 8)
+      00004E CDr00r00         [ 4]  104 	call	_mib_printf
+      000051 5B 04            [ 2]  105 	addw	sp, #4
+      000053 85               [ 2]  106 	popw	x
+                                    107 ;	./../../mib/stm8s_mib_wwdg.c: 56: return vwDelay;
+                                    108 ;	./../../mib/stm8s_mib_wwdg.c: 57: }
+      000054 5B 04            [ 2]  109 	addw	sp, #4
+      000056 81               [ 4]  110 	ret
+                                    111 	.area CODE
+                                    112 	.area CONST
+                                    113 	.area CONST
+      000000                        114 __str_0:
+      000000 63 61 6C 43 6F 6E 66   115 	.ascii "calConfigWWDG : [%u][0x%x]"
+             69 67 57 57 44 47 20
+             3A 20 5B 25 75 5D 5B
+             30 78 25 78 5D
+      00001A 0D                     116 	.db 0x0d
+      00001B 0A                     117 	.db 0x0a
+      00001C 00                     118 	.db 0x00
+                                    119 	.area CODE
+                                    120 	.area INITIALIZER
+                                    121 	.area CABS (ABS)

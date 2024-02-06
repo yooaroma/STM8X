@@ -1,0 +1,64 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  9 _DecToLong                                                     00036C GR
+  9 _DoPrintHelp                                                   00062F GR
+  9 _GetArgs                                                       0001F4 GR
+  9 _GetCommand                                                    000000 GR
+  9 _HexDump                                                       0003F4 GR
+  9 _HexToInt                                                      000280 GR
+    _MibGetSecs                                                    ****** GX
+    _MibReadDebugByte                                              ****** GX
+    _MibWriteDebugByte                                             ****** GX
+    _MibWriteDebugString                                           ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_0                                                       000000 R
+  7 ___str_1                                                       000003 R
+  7 ___str_10                                                      000077 R
+  7 ___str_11                                                      00007B R
+  7 ___str_12                                                      000085 R
+  7 ___str_13                                                      0000A2 R
+  7 ___str_14                                                      0000B6 R
+  7 ___str_2                                                       000007 R
+  7 ___str_3                                                       00000A R
+  7 ___str_4                                                       000055 R
+  7 ___str_5                                                       000060 R
+  7 ___str_6                                                       000066 R
+  7 ___str_7                                                       000068 R
+  7 ___str_8                                                       00006B R
+  7 ___str_9                                                       00006D R
+    __modsint                                                      ****** GX
+    __mullong                                                      ****** GX
+  8 __xinit__cmdTbl                                                000000 R
+  2 _cmdTbl                                                        000000 GR
+  1 _cmd_list                                                      000000 GR
+  9 _getdec                                                        000696 GR
+    _memset                                                        ****** GX
+    _mib_printf                                                    ****** GX
+    _strlen                                                        ****** GX
+    _strncmp                                                       ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size    102   flags    0
+   2 INITIALIZED                                size     24   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size     B9   flags    0
+   8 INITIALIZER                                size     24   flags    0
+   9 CODE                                       size    6DB   flags    0
+   A CABS                                       size      0   flags    8
+

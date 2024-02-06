@@ -1,0 +1,98 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _ADC1_IRQHandler                                               ****** GX
+    _AWU_IRQHandler                                                ****** GX
+    _CLK_IRQHandler                                                ****** GX
+    _DoPrintHelp                                                   ****** GX
+    _EEPROM_EEC_IRQHandler                                         ****** GX
+    _EXTI_PORTA_IRQHandler                                         ****** GX
+    _EXTI_PORTB_IRQHandler                                         ****** GX
+    _EXTI_PORTC_IRQHandler                                         ****** GX
+    _EXTI_PORTD_IRQHandler                                         ****** GX
+    _EXTI_PORTE_IRQHandler                                         ****** GX
+    _GetArgs                                                       ****** GX
+    _GetCommand                                                    ****** GX
+    _I2C_IRQHandler                                                ****** GX
+    _MibDebugInit                                                  ****** GX
+    _MibWriteDebugString                                           ****** GX
+    _SPI_IRQHandler                                                ****** GX
+    _TIM1_CAP_COM_IRQHandler                                       ****** GX
+    _TIM1_UPD_OVF_TRG_BRK_IRQHandler                               ****** GX
+    _TIM2_CAP_COM_IRQHandler                                       ****** GX
+    _TIM2_UPD_OVF_BRK_IRQHandler                                   ****** GX
+    _TIM3_CAP_COM_IRQHandler                                       ****** GX
+    _TIM3_UPD_OVF_BRK_IRQHandler                                   ****** GX
+    _TIM4_UPD_OVF_IRQHandler                                       ****** GX
+    _TLI_IRQHandler                                                ****** GX
+    _TRAP_IRQHandler                                               ****** GX
+    _UART2_RX_IRQHandler                                           ****** GX
+    _UART2_TX_IRQHandler                                           ****** GX
+    ___sdcc_external_startup                                       ****** GX
+  8 ___str_11                                                      000183 R
+  8 ___str_12                                                      000188 R
+  8 ___str_13                                                      00018A R
+  8 ___str_14                                                      00018C R
+  5 __interrupt_vect                                               000000 R
+  6 __sdcc_init_data                                               000003 R
+  5 __sdcc_program_startup                                         00006C R
+  3 __start__stack                                                 000000 R
+  8 __str_0                                                        000000 R
+  8 __str_1                                                        000029 R
+  8 __str_10                                                       00017F R
+  8 __str_15                                                       00018E R
+  8 __str_2                                                        00005A R
+  8 __str_3                                                        00007E R
+  8 __str_4                                                        0000A2 R
+  8 __str_5                                                        0000C9 R
+  8 __str_6                                                        0000F3 R
+  8 __str_7                                                        00011D R
+  8 __str_8                                                        000141 R
+  8 __str_9                                                        000153 R
+    _cmdTbl                                                        ****** GX
+    _cmd_list                                                      ****** GX
+    _cmd_mem                                                       ****** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _cmd_test                                                      ****** GX
+    _cmd_test_init_before_irq_enable                               ****** GX
+  A _debug_main                                                    0000B1 GR
+  A _main                                                          000000 GR
+    _memset                                                        ****** GX
+    _mib_printf                                                    ****** GX
+    _strcmp                                                        ****** GX
+    _timIrqInit                                                    ****** GX
+    l_DATA                                                         ****** GX
+    l_INITIALIZER                                                  ****** GX
+    s_DATA                                                         ****** GX
+    s_GSINIT                                                       ****** GX
+    s_INITIALIZED                                                  ****** GX
+    s_INITIALIZER                                                  ****** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 3
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 SSEG                                       size      1   flags    0
+   4 DABS                                       size      0   flags    8
+   5 HOME                                       size     6F   flags    0
+   6 GSINIT                                     size     1D   flags    0
+   7 GSFINAL                                    size      3   flags    0
+   8 CONST                                      size    1A9   flags    0
+   9 INITIALIZER                                size      0   flags    0
+   A CODE                                       size    185   flags    0
+   B CABS                                       size      0   flags    8
+

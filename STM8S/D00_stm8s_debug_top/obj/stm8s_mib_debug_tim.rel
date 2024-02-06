@@ -1,0 +1,53 @@
+XH3
+H B areas 6 global symbols
+M stm8s_mib_debug_tim
+O -mstm8
+S .__.ABS. Def000000
+A _CODE size 0 flags 0 addr 0
+A DATA size 4 flags 0 addr 0
+S _gwMibMsec Def000000
+S _gwMibSec Def000002
+A INITIALIZED size 0 flags 0 addr 0
+A DABS size 0 flags 8 addr 0
+A HOME size 0 flags 0 addr 0
+A GSINIT size 0 flags 0 addr 0
+A GSFINAL size 0 flags 0 addr 0
+A CONST size 0 flags 0 addr 0
+A INITIALIZER size 0 flags 0 addr 0
+A CODE size 41 flags 0 addr 0
+S _timIrqMain Def000022
+S _MibGetSecs Def00003D
+S _timIrqInit Def000000
+A CABS size 0 flags 8 addr 0
+T 00 00 00
+R 00 00 00 01
+T 00 00 00
+R 00 00 00 01
+T 00 00 02
+R 00 00 00 01
+T 00 00 02
+R 00 00 00 01
+T 00 00 00
+R 00 00 00 09
+T 00 00 00 5F CF 00 02 5F CF 00 00 35 07 53 45 35
+R 00 00 00 09 10 05 00 01 10 09 00 01
+T 00 00 0D B8 53 46 55 53 46 53 44 35 FE 53 42 35
+R 00 00 00 09
+T 00 00 1A 01 53 41 35 81 53 40 81
+R 00 00 00 09
+T 00 00 22
+R 00 00 00 09
+T 00 00 22 CE 00 00 27 08 CE 00 00 5A CF
+R 00 00 00 09 10 04 00 01 10 09 00 01
+T 00 00 2C 00 00 81
+R 00 00 00 09 10 03 00 01
+T 00 00 2F
+R 00 00 00 09
+T 00 00 2F AE 02 A8 CF 00 00 CE 00 02 5C CF
+R 00 00 00 09 10 07 00 01 10 0A 00 01
+T 00 00 3A 00 02 81
+R 00 00 00 09 10 03 00 01
+T 00 00 3D
+R 00 00 00 09
+T 00 00 3D CE 00 02 81
+R 00 00 00 09 10 04 00 01

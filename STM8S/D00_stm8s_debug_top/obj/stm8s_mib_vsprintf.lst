@@ -1,0 +1,1476 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_mib_vsprintf
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _mib_printf
+                                     12 	.globl _MibWriteDebugByte
+                                     13 	.globl _mib_vsprintf
+                                     14 	.globl _mm_vsprintf
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+                                     19 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area INITIALIZED
+      000000                         23 _digits:
+      000000                         24 	.ds 2
+      000002                         25 _upper_digits:
+      000002                         26 	.ds 2
+                                     27 ;--------------------------------------------------------
+                                     28 ; absolute external ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area DABS (ABS)
+                                     31 
+                                     32 ; default segment ordering for linker
+                                     33 	.area HOME
+                                     34 	.area GSINIT
+                                     35 	.area GSFINAL
+                                     36 	.area CONST
+                                     37 	.area INITIALIZER
+                                     38 	.area CODE
+                                     39 
+                                     40 ;--------------------------------------------------------
+                                     41 ; global & static initialisations
+                                     42 ;--------------------------------------------------------
+                                     43 	.area HOME
+                                     44 	.area GSINIT
+                                     45 	.area GSFINAL
+                                     46 	.area GSINIT
+                                     47 ;--------------------------------------------------------
+                                     48 ; Home
+                                     49 ;--------------------------------------------------------
+                                     50 	.area HOME
+                                     51 	.area HOME
+                                     52 ;--------------------------------------------------------
+                                     53 ; code
+                                     54 ;--------------------------------------------------------
+                                     55 	.area CODE
+                                     56 ;	./../../mib/stm8s_mib_vsprintf.c: 71: static size_t strnlen(const char *s, size_t count)
+                                     57 ;	-----------------------------------------
+                                     58 ;	 function strnlen
+                                     59 ;	-----------------------------------------
+      000000                         60 _strnlen:
+      000000 52 06            [ 2]   61 	sub	sp, #6
+      000002 1F 03            [ 2]   62 	ldw	(0x03, sp), x
+                                     63 ;	./../../mib/stm8s_mib_vsprintf.c: 74: for (sc = s; *sc != '\0' && count--; ++sc);
+      000004 16 09            [ 2]   64 	ldw	y, (0x09, sp)
+      000006 17 05            [ 2]   65 	ldw	(0x05, sp), y
+      000008 1E 03            [ 2]   66 	ldw	x, (0x03, sp)
+      00000A                         67 00104$:
+      00000A F6               [ 1]   68 	ld	a, (x)
+      00000B 27 11            [ 1]   69 	jreq	00101$
+      00000D 16 05            [ 2]   70 	ldw	y, (0x05, sp)
+      00000F 17 01            [ 2]   71 	ldw	(0x01, sp), y
+      000011 16 05            [ 2]   72 	ldw	y, (0x05, sp)
+      000013 90 5A            [ 2]   73 	decw	y
+      000015 17 05            [ 2]   74 	ldw	(0x05, sp), y
+      000017 16 01            [ 2]   75 	ldw	y, (0x01, sp)
+      000019 27 03            [ 1]   76 	jreq	00101$
+      00001B 5C               [ 1]   77 	incw	x
+      00001C 20 EC            [ 2]   78 	jra	00104$
+      00001E                         79 00101$:
+                                     80 ;	./../../mib/stm8s_mib_vsprintf.c: 75: return sc - s;
+      00001E 72 F0 03         [ 2]   81 	subw	x, (0x03, sp)
+                                     82 ;	./../../mib/stm8s_mib_vsprintf.c: 76: }
+      000021 5B 06            [ 2]   83 	addw	sp, #6
+      000023 90 85            [ 2]   84 	popw	y
+      000025 5B 02            [ 2]   85 	addw	sp, #2
+      000027 90 FC            [ 2]   86 	jp	(y)
+                                     87 ;	./../../mib/stm8s_mib_vsprintf.c: 81: static MMINT skip_atoi(const char **s)
+                                     88 ;	-----------------------------------------
+                                     89 ;	 function skip_atoi
+                                     90 ;	-----------------------------------------
+      000029                         91 _skip_atoi:
+      000029 52 08            [ 2]   92 	sub	sp, #8
+      00002B 1F 07            [ 2]   93 	ldw	(0x07, sp), x
+                                     94 ;	./../../mib/stm8s_mib_vsprintf.c: 83: MMINT i = 0;
+      00002D 5F               [ 1]   95 	clrw	x
+      00002E 1F 05            [ 2]   96 	ldw	(0x05, sp), x
+                                     97 ;	./../../mib/stm8s_mib_vsprintf.c: 84: while (is_digit(**s)) i = i*10 + *((*s)++) - '0';
+      000030                         98 00102$:
+      000030 16 07            [ 2]   99 	ldw	y, (0x07, sp)
+      000032 90 FE            [ 2]  100 	ldw	y, (y)
+      000034 17 01            [ 2]  101 	ldw	(0x01, sp), y
+      000036 90 F6            [ 1]  102 	ld	a, (y)
+      000038 A1 30            [ 1]  103 	cp	a, #0x30
+      00003A 25 41            [ 1]  104 	jrc	00104$
+      00003C A1 39            [ 1]  105 	cp	a, #0x39
+      00003E 22 3D            [ 1]  106 	jrugt	00104$
+      000040 16 05            [ 2]  107 	ldw	y, (0x05, sp)
+      000042 90 89            [ 2]  108 	pushw	y
+      000044 89               [ 2]  109 	pushw	x
+      000045 4B 0A            [ 1]  110 	push	#0x0a
+      000047 5F               [ 1]  111 	clrw	x
+      000048 89               [ 2]  112 	pushw	x
+      000049 4B 00            [ 1]  113 	push	#0x00
+      00004B CDr00r00         [ 4]  114 	call	__mullong
+      00004E 5B 08            [ 2]  115 	addw	sp, #8
+      000050 1F 05            [ 2]  116 	ldw	(0x05, sp), x
+      000052 17 03            [ 2]  117 	ldw	(0x03, sp), y
+      000054 1E 01            [ 2]  118 	ldw	x, (0x01, sp)
+      000056 5C               [ 1]  119 	incw	x
+      000057 16 07            [ 2]  120 	ldw	y, (0x07, sp)
+      000059 90 FF            [ 2]  121 	ldw	(y), x
+      00005B 1E 01            [ 2]  122 	ldw	x, (0x01, sp)
+      00005D F6               [ 1]  123 	ld	a, (x)
+      00005E 90 5F            [ 1]  124 	clrw	y
+      000060 5F               [ 1]  125 	clrw	x
+      000061 90 5D            [ 2]  126 	tnzw	y
+      000063 2A 01            [ 1]  127 	jrpl	00124$
+      000065 5A               [ 2]  128 	decw	x
+      000066                        129 00124$:
+      000066 90 97            [ 1]  130 	ld	yl, a
+      000068 72 F9 05         [ 2]  131 	addw	y, (0x05, sp)
+      00006B 9F               [ 1]  132 	ld	a, xl
+      00006C 19 04            [ 1]  133 	adc	a, (0x04, sp)
+      00006E 02               [ 1]  134 	rlwa	x
+      00006F 19 03            [ 1]  135 	adc	a, (0x03, sp)
+      000071 95               [ 1]  136 	ld	xh, a
+      000072 72 A2 00 30      [ 2]  137 	subw	y, #0x0030
+      000076 17 05            [ 2]  138 	ldw	(0x05, sp), y
+      000078 24 B6            [ 1]  139 	jrnc	00102$
+      00007A 5A               [ 2]  140 	decw	x
+      00007B 20 B3            [ 2]  141 	jra	00102$
+      00007D                        142 00104$:
+                                    143 ;	./../../mib/stm8s_mib_vsprintf.c: 85: return i;
+      00007D 51               [ 1]  144 	exgw	x, y
+      00007E 1E 05            [ 2]  145 	ldw	x, (0x05, sp)
+                                    146 ;	./../../mib/stm8s_mib_vsprintf.c: 86: }
+      000080 5B 08            [ 2]  147 	addw	sp, #8
+      000082 81               [ 4]  148 	ret
+                                    149 ;	./../../mib/stm8s_mib_vsprintf.c: 91: static char *number(char *str, MMLONG num, MMINT base, MMINT size, MMINT precision, MMINT type)
+                                    150 ;	-----------------------------------------
+                                    151 ;	 function number
+                                    152 ;	-----------------------------------------
+      000083                        153 _number:
+      000083 52 62            [ 2]  154 	sub	sp, #98
+      000085 1F 5D            [ 2]  155 	ldw	(0x5d, sp), x
+                                    156 ;	./../../mib/stm8s_mib_vsprintf.c: 94: char *dig = digits;
+      000087 CEu00u00         [ 2]  157 	ldw	x, _digits+0
+      00008A 1F 43            [ 2]  158 	ldw	(0x43, sp), x
+                                    159 ;	./../../mib/stm8s_mib_vsprintf.c: 97: if (type & LARGE)  dig = upper_digits;
+      00008C 7B 78            [ 1]  160 	ld	a, (0x78, sp)
+      00008E A5 40            [ 1]  161 	bcp	a, #0x40
+      000090 27 05            [ 1]  162 	jreq	00102$
+      000092 CEu00u02         [ 2]  163 	ldw	x, _upper_digits+0
+      000095 1F 43            [ 2]  164 	ldw	(0x43, sp), x
+      000097                        165 00102$:
+                                    166 ;	./../../mib/stm8s_mib_vsprintf.c: 98: if (type & LEFT) type &= ~ZEROPAD;
+      000097 7B 78            [ 1]  167 	ld	a, (0x78, sp)
+      000099 A5 10            [ 1]  168 	bcp	a, #0x10
+      00009B 27 0A            [ 1]  169 	jreq	00104$
+      00009D 1E 77            [ 2]  170 	ldw	x, (0x77, sp)
+      00009F 54               [ 2]  171 	srlw	x
+      0000A0 58               [ 2]  172 	sllw	x
+      0000A1 16 75            [ 2]  173 	ldw	y, (0x75, sp)
+      0000A3 1F 77            [ 2]  174 	ldw	(0x77, sp), x
+      0000A5 17 75            [ 2]  175 	ldw	(0x75, sp), y
+      0000A7                        176 00104$:
+                                    177 ;	./../../mib/stm8s_mib_vsprintf.c: 99: if (base < 2 || base > 36) return 0;
+      0000A7 1E 6B            [ 2]  178 	ldw	x, (0x6b, sp)
+      0000A9 A3 00 02         [ 2]  179 	cpw	x, #0x0002
+      0000AC 7B 6A            [ 1]  180 	ld	a, (0x6a, sp)
+      0000AE A2 00            [ 1]  181 	sbc	a, #0x00
+      0000B0 7B 69            [ 1]  182 	ld	a, (0x69, sp)
+      0000B2 A2 00            [ 1]  183 	sbc	a, #0x00
+      0000B4 2F 0D            [ 1]  184 	jrslt	00105$
+      0000B6 AE 00 24         [ 2]  185 	ldw	x, #0x0024
+      0000B9 13 6B            [ 2]  186 	cpw	x, (0x6b, sp)
+      0000BB 4F               [ 1]  187 	clr	a
+      0000BC 12 6A            [ 1]  188 	sbc	a, (0x6a, sp)
+      0000BE 4F               [ 1]  189 	clr	a
+      0000BF 12 69            [ 1]  190 	sbc	a, (0x69, sp)
+      0000C1 2E 04            [ 1]  191 	jrsge	00106$
+      0000C3                        192 00105$:
+      0000C3 5F               [ 1]  193 	clrw	x
+      0000C4 CCr03r7F         [ 2]  194 	jp	00161$
+      0000C7                        195 00106$:
+                                    196 ;	./../../mib/stm8s_mib_vsprintf.c: 101: c = (type & ZEROPAD) ? '0' : ' ';
+      0000C7 7B 78            [ 1]  197 	ld	a, (0x78, sp)
+      0000C9 44               [ 1]  198 	srl	a
+      0000CA 24 03            [ 1]  199 	jrnc	00163$
+      0000CC A6 30            [ 1]  200 	ld	a, #0x30
+      0000CE C5                     201 	.byte 0xc5
+      0000CF                        202 00163$:
+      0000CF A6 20            [ 1]  203 	ld	a, #0x20
+      0000D1                        204 00164$:
+      0000D1 6B 45            [ 1]  205 	ld	(0x45, sp), a
+                                    206 ;	./../../mib/stm8s_mib_vsprintf.c: 102: sign = 0;
+      0000D3 0F 46            [ 1]  207 	clr	(0x46, sp)
+                                    208 ;	./../../mib/stm8s_mib_vsprintf.c: 103: if (type & SIGN)
+      0000D5 7B 78            [ 1]  209 	ld	a, (0x78, sp)
+      0000D7 A5 02            [ 1]  210 	bcp	a, #0x02
+      0000D9 27 52            [ 1]  211 	jreq	00117$
+                                    212 ;	./../../mib/stm8s_mib_vsprintf.c: 109: size--;
+      0000DB 16 6F            [ 2]  213 	ldw	y, (0x6f, sp)
+      0000DD 72 A2 00 01      [ 2]  214 	subw	y, #0x0001
+      0000E1 1E 6D            [ 2]  215 	ldw	x, (0x6d, sp)
+      0000E3 24 01            [ 1]  216 	jrnc	00330$
+      0000E5 5A               [ 2]  217 	decw	x
+      0000E6                        218 00330$:
+      0000E6 1F 57            [ 2]  219 	ldw	(0x57, sp), x
+                                    220 ;	./../../mib/stm8s_mib_vsprintf.c: 105: if (num < 0)
+      0000E8 0D 65            [ 1]  221 	tnz	(0x65, sp)
+      0000EA 2A 1F            [ 1]  222 	jrpl	00114$
+                                    223 ;	./../../mib/stm8s_mib_vsprintf.c: 107: sign = '-';
+      0000EC A6 2D            [ 1]  224 	ld	a, #0x2d
+      0000EE 6B 46            [ 1]  225 	ld	(0x46, sp), a
+                                    226 ;	./../../mib/stm8s_mib_vsprintf.c: 108: num = -num;
+      0000F0 1E 67            [ 2]  227 	ldw	x, (0x67, sp)
+      0000F2 50               [ 2]  228 	negw	x
+      0000F3 4F               [ 1]  229 	clr	a
+      0000F4 12 66            [ 1]  230 	sbc	a, (0x66, sp)
+      0000F6 6B 60            [ 1]  231 	ld	(0x60, sp), a
+      0000F8 4F               [ 1]  232 	clr	a
+      0000F9 12 65            [ 1]  233 	sbc	a, (0x65, sp)
+      0000FB 1F 67            [ 2]  234 	ldw	(0x67, sp), x
+      0000FD 6B 65            [ 1]  235 	ld	(0x65, sp), a
+      0000FF 7B 60            [ 1]  236 	ld	a, (0x60, sp)
+      000101 6B 66            [ 1]  237 	ld	(0x66, sp), a
+                                    238 ;	./../../mib/stm8s_mib_vsprintf.c: 109: size--;
+      000103 17 6F            [ 2]  239 	ldw	(0x6f, sp), y
+      000105 16 57            [ 2]  240 	ldw	y, (0x57, sp)
+      000107 17 6D            [ 2]  241 	ldw	(0x6d, sp), y
+      000109 20 22            [ 2]  242 	jra	00117$
+      00010B                        243 00114$:
+                                    244 ;	./../../mib/stm8s_mib_vsprintf.c: 111: else if (type & PLUS)
+      00010B 7B 78            [ 1]  245 	ld	a, (0x78, sp)
+      00010D A5 04            [ 1]  246 	bcp	a, #0x04
+      00010F 27 0C            [ 1]  247 	jreq	00111$
+                                    248 ;	./../../mib/stm8s_mib_vsprintf.c: 113: sign = '+';
+      000111 A6 2B            [ 1]  249 	ld	a, #0x2b
+      000113 6B 46            [ 1]  250 	ld	(0x46, sp), a
+                                    251 ;	./../../mib/stm8s_mib_vsprintf.c: 114: size--;
+      000115 17 6F            [ 2]  252 	ldw	(0x6f, sp), y
+      000117 16 57            [ 2]  253 	ldw	y, (0x57, sp)
+      000119 17 6D            [ 2]  254 	ldw	(0x6d, sp), y
+      00011B 20 10            [ 2]  255 	jra	00117$
+      00011D                        256 00111$:
+                                    257 ;	./../../mib/stm8s_mib_vsprintf.c: 116: else if (type & SPACE)
+      00011D 7B 78            [ 1]  258 	ld	a, (0x78, sp)
+      00011F A5 08            [ 1]  259 	bcp	a, #0x08
+      000121 27 0A            [ 1]  260 	jreq	00117$
+                                    261 ;	./../../mib/stm8s_mib_vsprintf.c: 118: sign = ' ';
+      000123 A6 20            [ 1]  262 	ld	a, #0x20
+      000125 6B 46            [ 1]  263 	ld	(0x46, sp), a
+                                    264 ;	./../../mib/stm8s_mib_vsprintf.c: 119: size--;
+      000127 17 6F            [ 2]  265 	ldw	(0x6f, sp), y
+      000129 16 57            [ 2]  266 	ldw	y, (0x57, sp)
+      00012B 17 6D            [ 2]  267 	ldw	(0x6d, sp), y
+      00012D                        268 00117$:
+                                    269 ;	./../../mib/stm8s_mib_vsprintf.c: 123: if (type & SPECIAL)
+      00012D 7B 78            [ 1]  270 	ld	a, (0x78, sp)
+      00012F A4 20            [ 1]  271 	and	a, #0x20
+      000131 6B 4A            [ 1]  272 	ld	(0x4a, sp), a
+      000133 5F               [ 1]  273 	clrw	x
+      000134 1F 48            [ 2]  274 	ldw	(0x48, sp), x
+      000136 0F 47            [ 1]  275 	clr	(0x47, sp)
+                                    276 ;	./../../mib/stm8s_mib_vsprintf.c: 125: if (base == 16)
+      000138 1E 6B            [ 2]  277 	ldw	x, (0x6b, sp)
+      00013A A3 00 10         [ 2]  278 	cpw	x, #0x0010
+      00013D 26 09            [ 1]  279 	jrne	00335$
+      00013F 1E 69            [ 2]  280 	ldw	x, (0x69, sp)
+      000141 26 05            [ 1]  281 	jrne	00335$
+      000143 A6 01            [ 1]  282 	ld	a, #0x01
+      000145 6B 4B            [ 1]  283 	ld	(0x4b, sp), a
+      000147 C5                     284 	.byte 0xc5
+      000148                        285 00335$:
+      000148 0F 4B            [ 1]  286 	clr	(0x4b, sp)
+      00014A                        287 00336$:
+                                    288 ;	./../../mib/stm8s_mib_vsprintf.c: 127: else if (base == 8)
+      00014A 1E 6B            [ 2]  289 	ldw	x, (0x6b, sp)
+      00014C A3 00 08         [ 2]  290 	cpw	x, #0x0008
+      00014F 26 09            [ 1]  291 	jrne	00338$
+      000151 1E 69            [ 2]  292 	ldw	x, (0x69, sp)
+      000153 26 05            [ 1]  293 	jrne	00338$
+      000155 A6 01            [ 1]  294 	ld	a, #0x01
+      000157 6B 4C            [ 1]  295 	ld	(0x4c, sp), a
+      000159 C5                     296 	.byte 0xc5
+      00015A                        297 00338$:
+      00015A 0F 4C            [ 1]  298 	clr	(0x4c, sp)
+      00015C                        299 00339$:
+                                    300 ;	./../../mib/stm8s_mib_vsprintf.c: 123: if (type & SPECIAL)
+      00015C 1E 49            [ 2]  301 	ldw	x, (0x49, sp)
+      00015E 26 04            [ 1]  302 	jrne	00340$
+      000160 1E 47            [ 2]  303 	ldw	x, (0x47, sp)
+      000162 27 28            [ 1]  304 	jreq	00124$
+      000164                        305 00340$:
+                                    306 ;	./../../mib/stm8s_mib_vsprintf.c: 125: if (base == 16)
+      000164 0D 4B            [ 1]  307 	tnz	(0x4b, sp)
+      000166 27 11            [ 1]  308 	jreq	00121$
+                                    309 ;	./../../mib/stm8s_mib_vsprintf.c: 126: size -= 2;
+      000168 1E 6F            [ 2]  310 	ldw	x, (0x6f, sp)
+      00016A 1D 00 02         [ 2]  311 	subw	x, #0x0002
+      00016D 16 6D            [ 2]  312 	ldw	y, (0x6d, sp)
+      00016F 24 02            [ 1]  313 	jrnc	00342$
+      000171 90 5A            [ 2]  314 	decw	y
+      000173                        315 00342$:
+      000173 1F 6F            [ 2]  316 	ldw	(0x6f, sp), x
+      000175 17 6D            [ 2]  317 	ldw	(0x6d, sp), y
+      000177 20 13            [ 2]  318 	jra	00124$
+      000179                        319 00121$:
+                                    320 ;	./../../mib/stm8s_mib_vsprintf.c: 127: else if (base == 8)
+      000179 0D 4C            [ 1]  321 	tnz	(0x4c, sp)
+      00017B 27 0F            [ 1]  322 	jreq	00124$
+                                    323 ;	./../../mib/stm8s_mib_vsprintf.c: 128: size--;
+      00017D 1E 6F            [ 2]  324 	ldw	x, (0x6f, sp)
+      00017F 1D 00 01         [ 2]  325 	subw	x, #0x0001
+      000182 16 6D            [ 2]  326 	ldw	y, (0x6d, sp)
+      000184 24 02            [ 1]  327 	jrnc	00344$
+      000186 90 5A            [ 2]  328 	decw	y
+      000188                        329 00344$:
+      000188 1F 6F            [ 2]  330 	ldw	(0x6f, sp), x
+      00018A 17 6D            [ 2]  331 	ldw	(0x6d, sp), y
+      00018C                        332 00124$:
+                                    333 ;	./../../mib/stm8s_mib_vsprintf.c: 133: if (num == 0)
+      00018C 1E 67            [ 2]  334 	ldw	x, (0x67, sp)
+      00018E 26 10            [ 1]  335 	jrne	00178$
+                                    336 ;	./../../mib/stm8s_mib_vsprintf.c: 134: tmp[i++] = '0';
+      000190 1E 65            [ 2]  337 	ldw	x, (0x65, sp)
+      000192 26 0C            [ 1]  338 	jrne	00178$
+      000194 5C               [ 1]  339 	incw	x
+      000195 1F 59            [ 2]  340 	ldw	(0x59, sp), x
+      000197 5F               [ 1]  341 	clrw	x
+      000198 1F 57            [ 2]  342 	ldw	(0x57, sp), x
+      00019A A6 30            [ 1]  343 	ld	a, #0x30
+      00019C 6B 01            [ 1]  344 	ld	(0x01, sp), a
+      00019E 20 70            [ 2]  345 	jra	00130$
+                                    346 ;	./../../mib/stm8s_mib_vsprintf.c: 137: while (num != 0)
+      0001A0                        347 00178$:
+      0001A0 5F               [ 1]  348 	clrw	x
+      0001A1 1F 61            [ 2]  349 	ldw	(0x61, sp), x
+      0001A3 1F 5F            [ 2]  350 	ldw	(0x5f, sp), x
+      0001A5                        351 00125$:
+      0001A5 1E 67            [ 2]  352 	ldw	x, (0x67, sp)
+      0001A7 26 04            [ 1]  353 	jrne	00347$
+      0001A9 1E 65            [ 2]  354 	ldw	x, (0x65, sp)
+      0001AB 27 5B            [ 1]  355 	jreq	00194$
+      0001AD                        356 00347$:
+                                    357 ;	./../../mib/stm8s_mib_vsprintf.c: 139: tmp[i++] = dig[((MMULONG) num) % (MMUSIGN) base];
+      0001AD 16 61            [ 2]  358 	ldw	y, (0x61, sp)
+      0001AF 17 59            [ 2]  359 	ldw	(0x59, sp), y
+      0001B1 16 5F            [ 2]  360 	ldw	y, (0x5f, sp)
+      0001B3 17 57            [ 2]  361 	ldw	(0x57, sp), y
+      0001B5 1E 61            [ 2]  362 	ldw	x, (0x61, sp)
+      0001B7 5C               [ 1]  363 	incw	x
+      0001B8 1F 61            [ 2]  364 	ldw	(0x61, sp), x
+      0001BA 26 05            [ 1]  365 	jrne	00348$
+      0001BC 1E 5F            [ 2]  366 	ldw	x, (0x5f, sp)
+      0001BE 5C               [ 1]  367 	incw	x
+      0001BF 1F 5F            [ 2]  368 	ldw	(0x5f, sp), x
+      0001C1                        369 00348$:
+      0001C1 96               [ 1]  370 	ldw	x, sp
+      0001C2 5C               [ 1]  371 	incw	x
+      0001C3 72 FB 59         [ 2]  372 	addw	x, (0x59, sp)
+      0001C6 1F 4D            [ 2]  373 	ldw	(0x4d, sp), x
+      0001C8 16 65            [ 2]  374 	ldw	y, (0x65, sp)
+      0001CA 17 4F            [ 2]  375 	ldw	(0x4f, sp), y
+      0001CC 16 67            [ 2]  376 	ldw	y, (0x67, sp)
+      0001CE 1E 6B            [ 2]  377 	ldw	x, (0x6b, sp)
+      0001D0 1F 55            [ 2]  378 	ldw	(0x55, sp), x
+      0001D2 5F               [ 1]  379 	clrw	x
+      0001D3 1F 53            [ 2]  380 	ldw	(0x53, sp), x
+      0001D5 90 89            [ 2]  381 	pushw	y
+      0001D7 1E 57            [ 2]  382 	ldw	x, (0x57, sp)
+      0001D9 89               [ 2]  383 	pushw	x
+      0001DA 1E 57            [ 2]  384 	ldw	x, (0x57, sp)
+      0001DC 89               [ 2]  385 	pushw	x
+      0001DD 90 89            [ 2]  386 	pushw	y
+      0001DF 1E 57            [ 2]  387 	ldw	x, (0x57, sp)
+      0001E1 89               [ 2]  388 	pushw	x
+      0001E2 CDr00r00         [ 4]  389 	call	__modulong
+      0001E5 5B 08            [ 2]  390 	addw	sp, #8
+      0001E7 17 59            [ 2]  391 	ldw	(0x59, sp), y
+      0001E9 90 85            [ 2]  392 	popw	y
+      0001EB 72 FB 43         [ 2]  393 	addw	x, (0x43, sp)
+      0001EE F6               [ 1]  394 	ld	a, (x)
+      0001EF 1E 4D            [ 2]  395 	ldw	x, (0x4d, sp)
+      0001F1 F7               [ 1]  396 	ld	(x), a
+                                    397 ;	./../../mib/stm8s_mib_vsprintf.c: 140: num = ((MMULONG) num) / (MMUSIGN) base;
+      0001F2 1E 55            [ 2]  398 	ldw	x, (0x55, sp)
+      0001F4 89               [ 2]  399 	pushw	x
+      0001F5 1E 55            [ 2]  400 	ldw	x, (0x55, sp)
+      0001F7 89               [ 2]  401 	pushw	x
+      0001F8 90 89            [ 2]  402 	pushw	y
+      0001FA 1E 55            [ 2]  403 	ldw	x, (0x55, sp)
+      0001FC 89               [ 2]  404 	pushw	x
+      0001FD CDr00r00         [ 4]  405 	call	__divulong
+      000200 5B 08            [ 2]  406 	addw	sp, #8
+      000202 1F 67            [ 2]  407 	ldw	(0x67, sp), x
+      000204 17 65            [ 2]  408 	ldw	(0x65, sp), y
+      000206 20 9D            [ 2]  409 	jra	00125$
+      000208                        410 00194$:
+      000208 16 61            [ 2]  411 	ldw	y, (0x61, sp)
+      00020A 17 59            [ 2]  412 	ldw	(0x59, sp), y
+      00020C 16 5F            [ 2]  413 	ldw	y, (0x5f, sp)
+      00020E 17 57            [ 2]  414 	ldw	(0x57, sp), y
+      000210                        415 00130$:
+                                    416 ;	./../../mib/stm8s_mib_vsprintf.c: 144: if (i > precision) precision = i;
+      000210 1E 73            [ 2]  417 	ldw	x, (0x73, sp)
+      000212 13 59            [ 2]  418 	cpw	x, (0x59, sp)
+      000214 7B 72            [ 1]  419 	ld	a, (0x72, sp)
+      000216 12 58            [ 1]  420 	sbc	a, (0x58, sp)
+      000218 7B 71            [ 1]  421 	ld	a, (0x71, sp)
+      00021A 12 57            [ 1]  422 	sbc	a, (0x57, sp)
+      00021C 2E 08            [ 1]  423 	jrsge	00132$
+      00021E 16 59            [ 2]  424 	ldw	y, (0x59, sp)
+      000220 17 73            [ 2]  425 	ldw	(0x73, sp), y
+      000222 16 57            [ 2]  426 	ldw	y, (0x57, sp)
+      000224 17 71            [ 2]  427 	ldw	(0x71, sp), y
+      000226                        428 00132$:
+                                    429 ;	./../../mib/stm8s_mib_vsprintf.c: 145: size -= precision;
+      000226 16 6F            [ 2]  430 	ldw	y, (0x6f, sp)
+      000228 72 F2 73         [ 2]  431 	subw	y, (0x73, sp)
+      00022B 7B 6E            [ 1]  432 	ld	a, (0x6e, sp)
+      00022D 12 72            [ 1]  433 	sbc	a, (0x72, sp)
+      00022F 97               [ 1]  434 	ld	xl, a
+      000230 7B 6D            [ 1]  435 	ld	a, (0x6d, sp)
+      000232 12 71            [ 1]  436 	sbc	a, (0x71, sp)
+      000234 95               [ 1]  437 	ld	xh, a
+      000235 17 6F            [ 2]  438 	ldw	(0x6f, sp), y
+      000237 1F 6D            [ 2]  439 	ldw	(0x6d, sp), x
+                                    440 ;	./../../mib/stm8s_mib_vsprintf.c: 146: if (!(type & (ZEROPAD | LEFT))) while (size-- > 0) *str++ = ' ';
+      000239 7B 78            [ 1]  441 	ld	a, (0x78, sp)
+      00023B A5 11            [ 1]  442 	bcp	a, #0x11
+      00023D 26 34            [ 1]  443 	jrne	00137$
+      00023F 16 6F            [ 2]  444 	ldw	y, (0x6f, sp)
+      000241 17 61            [ 2]  445 	ldw	(0x61, sp), y
+      000243 16 6D            [ 2]  446 	ldw	y, (0x6d, sp)
+      000245                        447 00133$:
+      000245 17 53            [ 2]  448 	ldw	(0x53, sp), y
+      000247 1E 61            [ 2]  449 	ldw	x, (0x61, sp)
+      000249 1F 55            [ 2]  450 	ldw	(0x55, sp), x
+      00024B 1E 61            [ 2]  451 	ldw	x, (0x61, sp)
+      00024D 1D 00 01         [ 2]  452 	subw	x, #0x0001
+      000250 1F 61            [ 2]  453 	ldw	(0x61, sp), x
+      000252 24 02            [ 1]  454 	jrnc	00351$
+      000254 90 5A            [ 2]  455 	decw	y
+      000256                        456 00351$:
+      000256 5F               [ 1]  457 	clrw	x
+      000257 13 55            [ 2]  458 	cpw	x, (0x55, sp)
+      000259 4F               [ 1]  459 	clr	a
+      00025A 12 54            [ 1]  460 	sbc	a, (0x54, sp)
+      00025C 4F               [ 1]  461 	clr	a
+      00025D 12 53            [ 1]  462 	sbc	a, (0x53, sp)
+      00025F 2E 0C            [ 1]  463 	jrsge	00195$
+      000261 1E 5D            [ 2]  464 	ldw	x, (0x5d, sp)
+      000263 A6 20            [ 1]  465 	ld	a, #0x20
+      000265 F7               [ 1]  466 	ld	(x), a
+      000266 1E 5D            [ 2]  467 	ldw	x, (0x5d, sp)
+      000268 5C               [ 1]  468 	incw	x
+      000269 1F 5D            [ 2]  469 	ldw	(0x5d, sp), x
+      00026B 20 D8            [ 2]  470 	jra	00133$
+      00026D                        471 00195$:
+      00026D 17 6D            [ 2]  472 	ldw	(0x6d, sp), y
+      00026F 16 61            [ 2]  473 	ldw	y, (0x61, sp)
+      000271 17 6F            [ 2]  474 	ldw	(0x6f, sp), y
+      000273                        475 00137$:
+                                    476 ;	./../../mib/stm8s_mib_vsprintf.c: 147: if (sign) *str++ = sign;
+      000273 0D 46            [ 1]  477 	tnz	(0x46, sp)
+      000275 27 0A            [ 1]  478 	jreq	00139$
+      000277 1E 5D            [ 2]  479 	ldw	x, (0x5d, sp)
+      000279 7B 46            [ 1]  480 	ld	a, (0x46, sp)
+      00027B F7               [ 1]  481 	ld	(x), a
+      00027C 1E 5D            [ 2]  482 	ldw	x, (0x5d, sp)
+      00027E 5C               [ 1]  483 	incw	x
+      00027F 1F 5D            [ 2]  484 	ldw	(0x5d, sp), x
+      000281                        485 00139$:
+                                    486 ;	./../../mib/stm8s_mib_vsprintf.c: 149: if (type & SPECIAL)
+      000281 1E 49            [ 2]  487 	ldw	x, (0x49, sp)
+      000283 26 04            [ 1]  488 	jrne	00356$
+      000285 1E 47            [ 2]  489 	ldw	x, (0x47, sp)
+      000287 27 26            [ 1]  490 	jreq	00146$
+      000289                        491 00356$:
+                                    492 ;	./../../mib/stm8s_mib_vsprintf.c: 147: if (sign) *str++ = sign;
+      000289 1E 5D            [ 2]  493 	ldw	x, (0x5d, sp)
+      00028B 5C               [ 1]  494 	incw	x
+                                    495 ;	./../../mib/stm8s_mib_vsprintf.c: 151: if (base == 8)
+      00028C 0D 4C            [ 1]  496 	tnz	(0x4c, sp)
+      00028E 27 0A            [ 1]  497 	jreq	00143$
+                                    498 ;	./../../mib/stm8s_mib_vsprintf.c: 152: *str++ = '0';
+      000290 16 5D            [ 2]  499 	ldw	y, (0x5d, sp)
+      000292 A6 30            [ 1]  500 	ld	a, #0x30
+      000294 90 F7            [ 1]  501 	ld	(y), a
+      000296 1F 5D            [ 2]  502 	ldw	(0x5d, sp), x
+      000298 20 15            [ 2]  503 	jra	00146$
+      00029A                        504 00143$:
+                                    505 ;	./../../mib/stm8s_mib_vsprintf.c: 153: else if (base == 16)
+      00029A 0D 4B            [ 1]  506 	tnz	(0x4b, sp)
+      00029C 27 11            [ 1]  507 	jreq	00146$
+                                    508 ;	./../../mib/stm8s_mib_vsprintf.c: 155: *str++ = '0';
+      00029E 16 5D            [ 2]  509 	ldw	y, (0x5d, sp)
+      0002A0 A6 30            [ 1]  510 	ld	a, #0x30
+      0002A2 90 F7            [ 1]  511 	ld	(y), a
+                                    512 ;	./../../mib/stm8s_mib_vsprintf.c: 156: *str++ = digits[33];
+      0002A4 90 CEu00u00      [ 2]  513 	ldw	y, _digits+0
+      0002A8 90 E6 21         [ 1]  514 	ld	a, (0x21, y)
+      0002AB F7               [ 1]  515 	ld	(x), a
+      0002AC 5C               [ 1]  516 	incw	x
+      0002AD 1F 5D            [ 2]  517 	ldw	(0x5d, sp), x
+      0002AF                        518 00146$:
+                                    519 ;	./../../mib/stm8s_mib_vsprintf.c: 160: if (!(type & LEFT)) while (size-- > 0) *str++ = c;
+      0002AF 7B 78            [ 1]  520 	ld	a, (0x78, sp)
+      0002B1 A5 10            [ 1]  521 	bcp	a, #0x10
+      0002B3 26 3D            [ 1]  522 	jrne	00189$
+      0002B5 16 6F            [ 2]  523 	ldw	y, (0x6f, sp)
+      0002B7 17 61            [ 2]  524 	ldw	(0x61, sp), y
+      0002B9 16 6D            [ 2]  525 	ldw	y, (0x6d, sp)
+      0002BB 17 5F            [ 2]  526 	ldw	(0x5f, sp), y
+      0002BD                        527 00147$:
+      0002BD 16 61            [ 2]  528 	ldw	y, (0x61, sp)
+      0002BF 17 55            [ 2]  529 	ldw	(0x55, sp), y
+      0002C1 16 5F            [ 2]  530 	ldw	y, (0x5f, sp)
+      0002C3 17 53            [ 2]  531 	ldw	(0x53, sp), y
+      0002C5 1E 61            [ 2]  532 	ldw	x, (0x61, sp)
+      0002C7 1D 00 01         [ 2]  533 	subw	x, #0x0001
+      0002CA 1F 61            [ 2]  534 	ldw	(0x61, sp), x
+      0002CC 1E 5F            [ 2]  535 	ldw	x, (0x5f, sp)
+      0002CE 24 01            [ 1]  536 	jrnc	00360$
+      0002D0 5A               [ 2]  537 	decw	x
+      0002D1                        538 00360$:
+      0002D1 1F 5F            [ 2]  539 	ldw	(0x5f, sp), x
+      0002D3 5F               [ 1]  540 	clrw	x
+      0002D4 13 55            [ 2]  541 	cpw	x, (0x55, sp)
+      0002D6 4F               [ 1]  542 	clr	a
+      0002D7 12 54            [ 1]  543 	sbc	a, (0x54, sp)
+      0002D9 4F               [ 1]  544 	clr	a
+      0002DA 12 53            [ 1]  545 	sbc	a, (0x53, sp)
+      0002DC 2E 0C            [ 1]  546 	jrsge	00196$
+      0002DE 1E 5D            [ 2]  547 	ldw	x, (0x5d, sp)
+      0002E0 7B 45            [ 1]  548 	ld	a, (0x45, sp)
+      0002E2 F7               [ 1]  549 	ld	(x), a
+      0002E3 1E 5D            [ 2]  550 	ldw	x, (0x5d, sp)
+      0002E5 5C               [ 1]  551 	incw	x
+      0002E6 1F 5D            [ 2]  552 	ldw	(0x5d, sp), x
+      0002E8 20 D3            [ 2]  553 	jra	00147$
+                                    554 ;	./../../mib/stm8s_mib_vsprintf.c: 161: while (i < precision--) *str++ = '0';
+      0002EA                        555 00196$:
+      0002EA 16 61            [ 2]  556 	ldw	y, (0x61, sp)
+      0002EC 17 6F            [ 2]  557 	ldw	(0x6f, sp), y
+      0002EE 16 5F            [ 2]  558 	ldw	y, (0x5f, sp)
+      0002F0 17 6D            [ 2]  559 	ldw	(0x6d, sp), y
+      0002F2                        560 00189$:
+      0002F2 16 5D            [ 2]  561 	ldw	y, (0x5d, sp)
+      0002F4 1E 73            [ 2]  562 	ldw	x, (0x73, sp)
+      0002F6 1F 61            [ 2]  563 	ldw	(0x61, sp), x
+      0002F8 1E 71            [ 2]  564 	ldw	x, (0x71, sp)
+      0002FA 1F 5F            [ 2]  565 	ldw	(0x5f, sp), x
+      0002FC                        566 00152$:
+      0002FC 1E 59            [ 2]  567 	ldw	x, (0x59, sp)
+      0002FE 13 61            [ 2]  568 	cpw	x, (0x61, sp)
+      000300 7B 58            [ 1]  569 	ld	a, (0x58, sp)
+      000302 12 60            [ 1]  570 	sbc	a, (0x60, sp)
+      000304 7B 57            [ 1]  571 	ld	a, (0x57, sp)
+      000306 12 5F            [ 1]  572 	sbc	a, (0x5f, sp)
+      000308 2E 16            [ 1]  573 	jrsge	00191$
+      00030A 1E 61            [ 2]  574 	ldw	x, (0x61, sp)
+      00030C 1D 00 01         [ 2]  575 	subw	x, #0x0001
+      00030F 1F 61            [ 2]  576 	ldw	(0x61, sp), x
+      000311 1E 5F            [ 2]  577 	ldw	x, (0x5f, sp)
+      000313 24 01            [ 1]  578 	jrnc	00364$
+      000315 5A               [ 2]  579 	decw	x
+      000316                        580 00364$:
+      000316 1F 5F            [ 2]  581 	ldw	(0x5f, sp), x
+      000318 A6 30            [ 1]  582 	ld	a, #0x30
+      00031A 90 F7            [ 1]  583 	ld	(y), a
+      00031C 90 5C            [ 1]  584 	incw	y
+      00031E 20 DC            [ 2]  585 	jra	00152$
+                                    586 ;	./../../mib/stm8s_mib_vsprintf.c: 162: while (i-- > 0) *str++ = tmp[i];
+      000320                        587 00191$:
+      000320 17 5B            [ 2]  588 	ldw	(0x5b, sp), y
+      000322 16 59            [ 2]  589 	ldw	y, (0x59, sp)
+      000324 17 61            [ 2]  590 	ldw	(0x61, sp), y
+      000326 16 57            [ 2]  591 	ldw	y, (0x57, sp)
+      000328 17 5F            [ 2]  592 	ldw	(0x5f, sp), y
+      00032A                        593 00155$:
+      00032A 5F               [ 1]  594 	clrw	x
+      00032B 13 61            [ 2]  595 	cpw	x, (0x61, sp)
+      00032D 4F               [ 1]  596 	clr	a
+      00032E 12 60            [ 1]  597 	sbc	a, (0x60, sp)
+      000330 4F               [ 1]  598 	clr	a
+      000331 12 5F            [ 1]  599 	sbc	a, (0x5f, sp)
+      000333 2E 1E            [ 1]  600 	jrsge	00193$
+      000335 1E 61            [ 2]  601 	ldw	x, (0x61, sp)
+      000337 1D 00 01         [ 2]  602 	subw	x, #0x0001
+      00033A 1F 61            [ 2]  603 	ldw	(0x61, sp), x
+      00033C 1E 5F            [ 2]  604 	ldw	x, (0x5f, sp)
+      00033E 24 01            [ 1]  605 	jrnc	00366$
+      000340 5A               [ 2]  606 	decw	x
+      000341                        607 00366$:
+      000341 1F 5F            [ 2]  608 	ldw	(0x5f, sp), x
+      000343 96               [ 1]  609 	ldw	x, sp
+      000344 5C               [ 1]  610 	incw	x
+      000345 72 FB 61         [ 2]  611 	addw	x, (0x61, sp)
+      000348 F6               [ 1]  612 	ld	a, (x)
+      000349 1E 5B            [ 2]  613 	ldw	x, (0x5b, sp)
+      00034B F7               [ 1]  614 	ld	(x), a
+      00034C 1E 5B            [ 2]  615 	ldw	x, (0x5b, sp)
+      00034E 5C               [ 1]  616 	incw	x
+      00034F 1F 5B            [ 2]  617 	ldw	(0x5b, sp), x
+      000351 20 D7            [ 2]  618 	jra	00155$
+                                    619 ;	./../../mib/stm8s_mib_vsprintf.c: 163: while (size-- > 0) *str++ = ' ';
+      000353                        620 00193$:
+      000353 16 5B            [ 2]  621 	ldw	y, (0x5b, sp)
+      000355 1E 6F            [ 2]  622 	ldw	x, (0x6f, sp)
+      000357 1F 61            [ 2]  623 	ldw	(0x61, sp), x
+      000359 1E 6D            [ 2]  624 	ldw	x, (0x6d, sp)
+      00035B 1F 5F            [ 2]  625 	ldw	(0x5f, sp), x
+      00035D                        626 00158$:
+      00035D 5F               [ 1]  627 	clrw	x
+      00035E 13 61            [ 2]  628 	cpw	x, (0x61, sp)
+      000360 4F               [ 1]  629 	clr	a
+      000361 12 60            [ 1]  630 	sbc	a, (0x60, sp)
+      000363 4F               [ 1]  631 	clr	a
+      000364 12 5F            [ 1]  632 	sbc	a, (0x5f, sp)
+      000366 2E 16            [ 1]  633 	jrsge	00160$
+      000368 1E 61            [ 2]  634 	ldw	x, (0x61, sp)
+      00036A 1D 00 01         [ 2]  635 	subw	x, #0x0001
+      00036D 1F 61            [ 2]  636 	ldw	(0x61, sp), x
+      00036F 1E 5F            [ 2]  637 	ldw	x, (0x5f, sp)
+      000371 24 01            [ 1]  638 	jrnc	00369$
+      000373 5A               [ 2]  639 	decw	x
+      000374                        640 00369$:
+      000374 1F 5F            [ 2]  641 	ldw	(0x5f, sp), x
+      000376 A6 20            [ 1]  642 	ld	a, #0x20
+      000378 90 F7            [ 1]  643 	ld	(y), a
+      00037A 90 5C            [ 1]  644 	incw	y
+      00037C 20 DF            [ 2]  645 	jra	00158$
+      00037E                        646 00160$:
+                                    647 ;	./../../mib/stm8s_mib_vsprintf.c: 165: return str;
+      00037E 93               [ 1]  648 	ldw	x, y
+      00037F                        649 00161$:
+                                    650 ;	./../../mib/stm8s_mib_vsprintf.c: 166: }
+      00037F 16 63            [ 2]  651 	ldw	y, (99, sp)
+      000381 5B 78            [ 2]  652 	addw	sp, #120
+      000383 90 FC            [ 2]  653 	jp	(y)
+                                    654 ;	./../../mib/stm8s_mib_vsprintf.c: 172: MMRINT mm_vsprintf(char *buf, const char *fmt, va_list args)
+                                    655 ;	-----------------------------------------
+                                    656 ;	 function mm_vsprintf
+                                    657 ;	-----------------------------------------
+      000385                        658 _mm_vsprintf:
+      000385 52 21            [ 2]  659 	sub	sp, #33
+      000387 1F 1A            [ 2]  660 	ldw	(0x1a, sp), x
+                                    661 ;	./../../mib/stm8s_mib_vsprintf.c: 186: char vStr[] = "<NULL>";
+      000389 A6 3C            [ 1]  662 	ld	a, #0x3c
+      00038B 6B 0D            [ 1]  663 	ld	(0x0d, sp), a
+      00038D A6 4E            [ 1]  664 	ld	a, #0x4e
+      00038F 6B 0E            [ 1]  665 	ld	(0x0e, sp), a
+      000391 A6 55            [ 1]  666 	ld	a, #0x55
+      000393 6B 0F            [ 1]  667 	ld	(0x0f, sp), a
+      000395 A6 4C            [ 1]  668 	ld	a, #0x4c
+      000397 6B 10            [ 1]  669 	ld	(0x10, sp), a
+      000399 6B 11            [ 1]  670 	ld	(0x11, sp), a
+      00039B A6 3E            [ 1]  671 	ld	a, #0x3e
+      00039D 6B 12            [ 1]  672 	ld	(0x12, sp), a
+      00039F 0F 13            [ 1]  673 	clr	(0x13, sp)
+                                    674 ;	./../../mib/stm8s_mib_vsprintf.c: 188: for (str = buf; *fmt; fmt++)
+      0003A1 16 1A            [ 2]  675 	ldw	y, (0x1a, sp)
+      0003A3 17 1C            [ 2]  676 	ldw	(0x1c, sp), y
+      0003A5                        677 00185$:
+      0003A5 16 24            [ 2]  678 	ldw	y, (0x24, sp)
+      0003A7 17 20            [ 2]  679 	ldw	(0x20, sp), y
+      0003A9 93               [ 1]  680 	ldw	x, y
+      0003AA F6               [ 1]  681 	ld	a, (x)
+      0003AB 6B 1F            [ 1]  682 	ld	(0x1f, sp), a
+      0003AD 26 03            [ 1]  683 	jrne	00437$
+      0003AF CCr07rAA         [ 2]  684 	jp	00180$
+      0003B2                        685 00437$:
+                                    686 ;	./../../mib/stm8s_mib_vsprintf.c: 190: if (*fmt != '%')
+      0003B2 7B 1F            [ 1]  687 	ld	a, (0x1f, sp)
+      0003B4 A1 25            [ 1]  688 	cp	a, #0x25
+      0003B6 27 0D            [ 1]  689 	jreq	00102$
+                                    690 ;	./../../mib/stm8s_mib_vsprintf.c: 192: *str++ = *fmt;
+      0003B8 1E 1C            [ 2]  691 	ldw	x, (0x1c, sp)
+      0003BA 7B 1F            [ 1]  692 	ld	a, (0x1f, sp)
+      0003BC F7               [ 1]  693 	ld	(x), a
+      0003BD 1E 1C            [ 2]  694 	ldw	x, (0x1c, sp)
+      0003BF 5C               [ 1]  695 	incw	x
+      0003C0 1F 1C            [ 2]  696 	ldw	(0x1c, sp), x
+                                    697 ;	./../../mib/stm8s_mib_vsprintf.c: 193: continue;
+      0003C2 CCr07rA2         [ 2]  698 	jp	00179$
+      0003C5                        699 00102$:
+                                    700 ;	./../../mib/stm8s_mib_vsprintf.c: 197: flags = 0;
+      0003C5 5F               [ 1]  701 	clrw	x
+      0003C6 1F 0B            [ 2]  702 	ldw	(0x0b, sp), x
+      0003C8 1F 09            [ 2]  703 	ldw	(0x09, sp), x
+                                    704 ;	./../../mib/stm8s_mib_vsprintf.c: 198: repeat:
+      0003CA 1E 20            [ 2]  705 	ldw	x, (0x20, sp)
+      0003CC                        706 00103$:
+                                    707 ;	./../../mib/stm8s_mib_vsprintf.c: 199: fmt++; // This also skips first '%'
+      0003CC 5C               [ 1]  708 	incw	x
+      0003CD 1F 24            [ 2]  709 	ldw	(0x24, sp), x
+                                    710 ;	./../../mib/stm8s_mib_vsprintf.c: 200: switch (*fmt)
+      0003CF F6               [ 1]  711 	ld	a, (x)
+      0003D0 6B 19            [ 1]  712 	ld	(0x19, sp), a
+      0003D2 A1 20            [ 1]  713 	cp	a, #0x20
+      0003D4 27 2C            [ 1]  714 	jreq	00106$
+      0003D6 7B 19            [ 1]  715 	ld	a, (0x19, sp)
+      0003D8 A1 23            [ 1]  716 	cp	a, #0x23
+      0003DA 27 2E            [ 1]  717 	jreq	00107$
+      0003DC 7B 19            [ 1]  718 	ld	a, (0x19, sp)
+      0003DE A1 2B            [ 1]  719 	cp	a, #0x2b
+      0003E0 27 18            [ 1]  720 	jreq	00105$
+      0003E2 7B 19            [ 1]  721 	ld	a, (0x19, sp)
+      0003E4 A1 2D            [ 1]  722 	cp	a, #0x2d
+      0003E6 27 0A            [ 1]  723 	jreq	00104$
+      0003E8 7B 19            [ 1]  724 	ld	a, (0x19, sp)
+      0003EA A1 30            [ 1]  725 	cp	a, #0x30
+      0003EC 27 24            [ 1]  726 	jreq	00108$
+      0003EE 1F 24            [ 2]  727 	ldw	(0x24, sp), x
+      0003F0 20 27            [ 2]  728 	jra	00109$
+                                    729 ;	./../../mib/stm8s_mib_vsprintf.c: 202: case '-': flags |= LEFT; goto repeat;
+      0003F2                        730 00104$:
+      0003F2 7B 0C            [ 1]  731 	ld	a, (0x0c, sp)
+      0003F4 AA 10            [ 1]  732 	or	a, #0x10
+      0003F6 6B 0C            [ 1]  733 	ld	(0x0c, sp), a
+      0003F8 20 D2            [ 2]  734 	jra	00103$
+                                    735 ;	./../../mib/stm8s_mib_vsprintf.c: 203: case '+': flags |= PLUS; goto repeat;
+      0003FA                        736 00105$:
+      0003FA 7B 0C            [ 1]  737 	ld	a, (0x0c, sp)
+      0003FC AA 04            [ 1]  738 	or	a, #0x04
+      0003FE 6B 0C            [ 1]  739 	ld	(0x0c, sp), a
+      000400 20 CA            [ 2]  740 	jra	00103$
+                                    741 ;	./../../mib/stm8s_mib_vsprintf.c: 204: case ' ': flags |= SPACE; goto repeat;
+      000402                        742 00106$:
+      000402 7B 0C            [ 1]  743 	ld	a, (0x0c, sp)
+      000404 AA 08            [ 1]  744 	or	a, #0x08
+      000406 6B 0C            [ 1]  745 	ld	(0x0c, sp), a
+      000408 20 C2            [ 2]  746 	jra	00103$
+                                    747 ;	./../../mib/stm8s_mib_vsprintf.c: 205: case '#': flags |= SPECIAL; goto repeat;
+      00040A                        748 00107$:
+      00040A 7B 0C            [ 1]  749 	ld	a, (0x0c, sp)
+      00040C AA 20            [ 1]  750 	or	a, #0x20
+      00040E 6B 0C            [ 1]  751 	ld	(0x0c, sp), a
+      000410 20 BA            [ 2]  752 	jra	00103$
+                                    753 ;	./../../mib/stm8s_mib_vsprintf.c: 206: case '0': flags |= ZEROPAD; goto repeat;
+      000412                        754 00108$:
+      000412 04 0C            [ 1]  755 	srl	(0x0c, sp)
+      000414 99               [ 1]  756 	scf
+      000415 09 0C            [ 1]  757 	rlc	(0x0c, sp)
+      000417 20 B3            [ 2]  758 	jra	00103$
+                                    759 ;	./../../mib/stm8s_mib_vsprintf.c: 207: }
+      000419                        760 00109$:
+                                    761 ;	./../../mib/stm8s_mib_vsprintf.c: 210: field_width = -1;
+      000419 5F               [ 1]  762 	clrw	x
+      00041A 5A               [ 2]  763 	decw	x
+      00041B 1F 20            [ 2]  764 	ldw	(0x20, sp), x
+      00041D 1F 1E            [ 2]  765 	ldw	(0x1e, sp), x
+                                    766 ;	./../../mib/stm8s_mib_vsprintf.c: 211: if (is_digit(*fmt))
+      00041F 7B 19            [ 1]  767 	ld	a, (0x19, sp)
+      000421 A1 30            [ 1]  768 	cp	a, #0x30
+      000423 25 11            [ 1]  769 	jrc	00115$
+      000425 A1 39            [ 1]  770 	cp	a, #0x39
+      000427 22 0D            [ 1]  771 	jrugt	00115$
+                                    772 ;	./../../mib/stm8s_mib_vsprintf.c: 212: field_width = skip_atoi(&fmt);
+      000429 96               [ 1]  773 	ldw	x, sp
+      00042A 1C 00 24         [ 2]  774 	addw	x, #36
+      00042D CDr00r29         [ 4]  775 	call	_skip_atoi
+      000430 1F 20            [ 2]  776 	ldw	(0x20, sp), x
+      000432 17 1E            [ 2]  777 	ldw	(0x1e, sp), y
+      000434 20 39            [ 2]  778 	jra	00116$
+      000436                        779 00115$:
+                                    780 ;	./../../mib/stm8s_mib_vsprintf.c: 213: else if (*fmt == '*')
+      000436 1E 24            [ 2]  781 	ldw	x, (0x24, sp)
+      000438 F6               [ 1]  782 	ld	a, (x)
+      000439 A1 2A            [ 1]  783 	cp	a, #0x2a
+      00043B 26 32            [ 1]  784 	jrne	00116$
+                                    785 ;	./../../mib/stm8s_mib_vsprintf.c: 215: fmt++;
+      00043D 5C               [ 1]  786 	incw	x
+      00043E 1F 24            [ 2]  787 	ldw	(0x24, sp), x
+                                    788 ;	./../../mib/stm8s_mib_vsprintf.c: 216: field_width = va_arg(args, MMINT);
+      000440 1E 26            [ 2]  789 	ldw	x, (0x26, sp)
+      000442 1C 00 04         [ 2]  790 	addw	x, #0x0004
+      000445 1F 26            [ 2]  791 	ldw	(0x26, sp), x
+      000447 1D 00 04         [ 2]  792 	subw	x, #0x0004
+      00044A 90 93            [ 1]  793 	ldw	y, x
+      00044C 90 EE 02         [ 2]  794 	ldw	y, (0x2, y)
+      00044F FE               [ 2]  795 	ldw	x, (x)
+      000450 17 20            [ 2]  796 	ldw	(0x20, sp), y
+      000452 1F 1E            [ 2]  797 	ldw	(0x1e, sp), x
+                                    798 ;	./../../mib/stm8s_mib_vsprintf.c: 217: if (field_width < 0)
+      000454 0D 1E            [ 1]  799 	tnz	(0x1e, sp)
+      000456 2A 17            [ 1]  800 	jrpl	00116$
+                                    801 ;	./../../mib/stm8s_mib_vsprintf.c: 219: field_width = -field_width;
+      000458 00 21            [ 1]  802 	neg	(0x21, sp)
+      00045A 4F               [ 1]  803 	clr	a
+      00045B 12 20            [ 1]  804 	sbc	a, (0x20, sp)
+      00045D 6B 20            [ 1]  805 	ld	(0x20, sp), a
+      00045F 4F               [ 1]  806 	clr	a
+      000460 12 1F            [ 1]  807 	sbc	a, (0x1f, sp)
+      000462 6B 1F            [ 1]  808 	ld	(0x1f, sp), a
+      000464 4F               [ 1]  809 	clr	a
+      000465 12 1E            [ 1]  810 	sbc	a, (0x1e, sp)
+      000467 6B 1E            [ 1]  811 	ld	(0x1e, sp), a
+                                    812 ;	./../../mib/stm8s_mib_vsprintf.c: 220: flags |= LEFT;
+      000469 7B 0C            [ 1]  813 	ld	a, (0x0c, sp)
+      00046B AA 10            [ 1]  814 	or	a, #0x10
+      00046D 6B 0C            [ 1]  815 	ld	(0x0c, sp), a
+      00046F                        816 00116$:
+                                    817 ;	./../../mib/stm8s_mib_vsprintf.c: 225: precision = -1;
+      00046F 5F               [ 1]  818 	clrw	x
+      000470 5A               [ 2]  819 	decw	x
+      000471 1F 18            [ 2]  820 	ldw	(0x18, sp), x
+      000473 1F 16            [ 2]  821 	ldw	(0x16, sp), x
+                                    822 ;	./../../mib/stm8s_mib_vsprintf.c: 226: if (*fmt == '.')
+      000475 16 24            [ 2]  823 	ldw	y, (0x24, sp)
+      000477 17 14            [ 2]  824 	ldw	(0x14, sp), y
+      000479 93               [ 1]  825 	ldw	x, y
+      00047A F6               [ 1]  826 	ld	a, (x)
+      00047B A1 2E            [ 1]  827 	cp	a, #0x2e
+      00047D 26 42            [ 1]  828 	jrne	00127$
+                                    829 ;	./../../mib/stm8s_mib_vsprintf.c: 228: ++fmt;    
+      00047F 1E 14            [ 2]  830 	ldw	x, (0x14, sp)
+      000481 5C               [ 1]  831 	incw	x
+                                    832 ;	./../../mib/stm8s_mib_vsprintf.c: 229: if (is_digit(*fmt))
+      000482 1F 24            [ 2]  833 	ldw	(0x24, sp), x
+      000484 F6               [ 1]  834 	ld	a, (x)
+      000485 A1 30            [ 1]  835 	cp	a, #0x30
+      000487 25 11            [ 1]  836 	jrc	00121$
+      000489 A1 39            [ 1]  837 	cp	a, #0x39
+      00048B 22 0D            [ 1]  838 	jrugt	00121$
+                                    839 ;	./../../mib/stm8s_mib_vsprintf.c: 230: precision = skip_atoi(&fmt);
+      00048D 96               [ 1]  840 	ldw	x, sp
+      00048E 1C 00 24         [ 2]  841 	addw	x, #36
+      000491 CDr00r29         [ 4]  842 	call	_skip_atoi
+      000494 1F 18            [ 2]  843 	ldw	(0x18, sp), x
+      000496 17 16            [ 2]  844 	ldw	(0x16, sp), y
+      000498 20 1E            [ 2]  845 	jra	00122$
+      00049A                        846 00121$:
+                                    847 ;	./../../mib/stm8s_mib_vsprintf.c: 231: else if (*fmt == '*')
+      00049A 1E 24            [ 2]  848 	ldw	x, (0x24, sp)
+      00049C F6               [ 1]  849 	ld	a, (x)
+      00049D A1 2A            [ 1]  850 	cp	a, #0x2a
+      00049F 26 17            [ 1]  851 	jrne	00122$
+                                    852 ;	./../../mib/stm8s_mib_vsprintf.c: 233: ++fmt;
+      0004A1 5C               [ 1]  853 	incw	x
+      0004A2 1F 24            [ 2]  854 	ldw	(0x24, sp), x
+                                    855 ;	./../../mib/stm8s_mib_vsprintf.c: 234: precision = va_arg(args, MMINT);
+      0004A4 1E 26            [ 2]  856 	ldw	x, (0x26, sp)
+      0004A6 1C 00 04         [ 2]  857 	addw	x, #0x0004
+      0004A9 1F 26            [ 2]  858 	ldw	(0x26, sp), x
+      0004AB 1D 00 04         [ 2]  859 	subw	x, #0x0004
+      0004AE 90 93            [ 1]  860 	ldw	y, x
+      0004B0 90 EE 02         [ 2]  861 	ldw	y, (0x2, y)
+      0004B3 FE               [ 2]  862 	ldw	x, (x)
+      0004B4 17 18            [ 2]  863 	ldw	(0x18, sp), y
+      0004B6 1F 16            [ 2]  864 	ldw	(0x16, sp), x
+      0004B8                        865 00122$:
+                                    866 ;	./../../mib/stm8s_mib_vsprintf.c: 236: if (precision < 0) precision = 0;
+      0004B8 0D 16            [ 1]  867 	tnz	(0x16, sp)
+      0004BA 2A 05            [ 1]  868 	jrpl	00127$
+      0004BC 5F               [ 1]  869 	clrw	x
+      0004BD 1F 18            [ 2]  870 	ldw	(0x18, sp), x
+      0004BF 1F 16            [ 2]  871 	ldw	(0x16, sp), x
+      0004C1                        872 00127$:
+                                    873 ;	./../../mib/stm8s_mib_vsprintf.c: 240: qualifier = -1;
+      0004C1 5F               [ 1]  874 	clrw	x
+      0004C2 5A               [ 2]  875 	decw	x
+      0004C3 1F 03            [ 2]  876 	ldw	(0x03, sp), x
+      0004C5 1F 01            [ 2]  877 	ldw	(0x01, sp), x
+                                    878 ;	./../../mib/stm8s_mib_vsprintf.c: 241: if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L')
+      0004C7 1E 24            [ 2]  879 	ldw	x, (0x24, sp)
+      0004C9 F6               [ 1]  880 	ld	a, (x)
+      0004CA 6B 15            [ 1]  881 	ld	(0x15, sp), a
+      0004CC A1 68            [ 1]  882 	cp	a, #0x68
+      0004CE 27 0C            [ 1]  883 	jreq	00128$
+      0004D0 7B 15            [ 1]  884 	ld	a, (0x15, sp)
+      0004D2 A1 6C            [ 1]  885 	cp	a, #0x6c
+      0004D4 27 06            [ 1]  886 	jreq	00128$
+      0004D6 7B 15            [ 1]  887 	ld	a, (0x15, sp)
+      0004D8 A1 4C            [ 1]  888 	cp	a, #0x4c
+      0004DA 26 0E            [ 1]  889 	jrne	00129$
+      0004DC                        890 00128$:
+                                    891 ;	./../../mib/stm8s_mib_vsprintf.c: 243: qualifier = *fmt;
+      0004DC 1E 24            [ 2]  892 	ldw	x, (0x24, sp)
+      0004DE F6               [ 1]  893 	ld	a, (x)
+      0004DF 6B 04            [ 1]  894 	ld	(0x04, sp), a
+      0004E1 0F 03            [ 1]  895 	clr	(0x03, sp)
+      0004E3 0F 02            [ 1]  896 	clr	(0x02, sp)
+      0004E5 0F 01            [ 1]  897 	clr	(0x01, sp)
+                                    898 ;	./../../mib/stm8s_mib_vsprintf.c: 244: fmt++;
+      0004E7 5C               [ 1]  899 	incw	x
+      0004E8 1F 24            [ 2]  900 	ldw	(0x24, sp), x
+      0004EA                        901 00129$:
+                                    902 ;	./../../mib/stm8s_mib_vsprintf.c: 248: base = 10;
+      0004EA AE 00 0A         [ 2]  903 	ldw	x, #0x000a
+      0004ED 1F 07            [ 2]  904 	ldw	(0x07, sp), x
+      0004EF 5F               [ 1]  905 	clrw	x
+      0004F0 1F 05            [ 2]  906 	ldw	(0x05, sp), x
+                                    907 ;	./../../mib/stm8s_mib_vsprintf.c: 250: switch (*fmt)
+      0004F2 16 24            [ 2]  908 	ldw	y, (0x24, sp)
+      0004F4 17 14            [ 2]  909 	ldw	(0x14, sp), y
+      0004F6 93               [ 1]  910 	ldw	x, y
+      0004F7 F6               [ 1]  911 	ld	a, (x)
+      0004F8 A1 58            [ 1]  912 	cp	a, #0x58
+      0004FA 26 03            [ 1]  913 	jrne	00482$
+      0004FC CCr06rF2         [ 2]  914 	jp	00161$
+      0004FF                        915 00482$:
+      0004FF A1 63            [ 1]  916 	cp	a, #0x63
+      000501 27 38            [ 1]  917 	jreq	00132$
+      000503 A1 64            [ 1]  918 	cp	a, #0x64
+      000505 26 03            [ 1]  919 	jrne	00488$
+      000507 CCr07r02         [ 2]  920 	jp	00164$
+      00050A                        921 00488$:
+      00050A A1 69            [ 1]  922 	cp	a, #0x69
+      00050C 26 03            [ 1]  923 	jrne	00491$
+      00050E CCr07r02         [ 2]  924 	jp	00164$
+      000511                        925 00491$:
+      000511 A1 6E            [ 1]  926 	cp	a, #0x6e
+      000513 26 03            [ 1]  927 	jrne	00494$
+      000515 CCr06r9D         [ 2]  928 	jp	00156$
+      000518                        929 00494$:
+      000518 A1 6F            [ 1]  930 	cp	a, #0x6f
+      00051A 26 03            [ 1]  931 	jrne	00497$
+      00051C CCr06rE8         [ 2]  932 	jp	00160$
+      00051F                        933 00497$:
+      00051F A1 70            [ 1]  934 	cp	a, #0x70
+      000521 26 03            [ 1]  935 	jrne	00500$
+      000523 CCr06r52         [ 2]  936 	jp	00153$
+      000526                        937 00500$:
+      000526 A1 73            [ 1]  938 	cp	a, #0x73
+      000528 27 76            [ 1]  939 	jreq	00141$
+      00052A A1 75            [ 1]  940 	cp	a, #0x75
+      00052C 26 03            [ 1]  941 	jrne	00506$
+      00052E CCr07r2C         [ 2]  942 	jp	00172$
+      000531                        943 00506$:
+      000531 A1 78            [ 1]  944 	cp	a, #0x78
+      000533 26 03            [ 1]  945 	jrne	00509$
+      000535 CCr06rF8         [ 2]  946 	jp	00162$
+      000538                        947 00509$:
+      000538 CCr07r0A         [ 2]  948 	jp	00166$
+                                    949 ;	./../../mib/stm8s_mib_vsprintf.c: 252: case 'c':
+      00053B                        950 00132$:
+                                    951 ;	./../../mib/stm8s_mib_vsprintf.c: 253: if (!(flags & LEFT)) while (--field_width > 0) *str++ = ' ';
+      00053B 7B 0C            [ 1]  952 	ld	a, (0x0c, sp)
+      00053D A5 10            [ 1]  953 	bcp	a, #0x10
+      00053F 26 25            [ 1]  954 	jrne	00137$
+      000541 16 1C            [ 2]  955 	ldw	y, (0x1c, sp)
+      000543                        956 00133$:
+      000543 1E 20            [ 2]  957 	ldw	x, (0x20, sp)
+      000545 1D 00 01         [ 2]  958 	subw	x, #0x0001
+      000548 1F 20            [ 2]  959 	ldw	(0x20, sp), x
+      00054A 1E 1E            [ 2]  960 	ldw	x, (0x1e, sp)
+      00054C 24 01            [ 1]  961 	jrnc	00512$
+      00054E 5A               [ 2]  962 	decw	x
+      00054F                        963 00512$:
+      00054F 1F 1E            [ 2]  964 	ldw	(0x1e, sp), x
+      000551 5F               [ 1]  965 	clrw	x
+      000552 13 20            [ 2]  966 	cpw	x, (0x20, sp)
+      000554 4F               [ 1]  967 	clr	a
+      000555 12 1F            [ 1]  968 	sbc	a, (0x1f, sp)
+      000557 4F               [ 1]  969 	clr	a
+      000558 12 1E            [ 1]  970 	sbc	a, (0x1e, sp)
+      00055A 2E 08            [ 1]  971 	jrsge	00236$
+      00055C A6 20            [ 1]  972 	ld	a, #0x20
+      00055E 90 F7            [ 1]  973 	ld	(y), a
+      000560 90 5C            [ 1]  974 	incw	y
+      000562 20 DF            [ 2]  975 	jra	00133$
+      000564                        976 00236$:
+      000564 17 1C            [ 2]  977 	ldw	(0x1c, sp), y
+      000566                        978 00137$:
+                                    979 ;	./../../mib/stm8s_mib_vsprintf.c: 254: *str++ = (MMUCHAR) va_arg(args, MMAINT); // test ok...
+      000566 1E 26            [ 2]  980 	ldw	x, (0x26, sp)
+      000568 5C               [ 1]  981 	incw	x
+      000569 5C               [ 1]  982 	incw	x
+      00056A 1F 26            [ 2]  983 	ldw	(0x26, sp), x
+      00056C 5A               [ 2]  984 	decw	x
+      00056D 5A               [ 2]  985 	decw	x
+      00056E E6 01            [ 1]  986 	ld	a, (0x1, x)
+      000570 1E 1C            [ 2]  987 	ldw	x, (0x1c, sp)
+      000572 F7               [ 1]  988 	ld	(x), a
+      000573 1E 1C            [ 2]  989 	ldw	x, (0x1c, sp)
+      000575 5C               [ 1]  990 	incw	x
+      000576 1F 18            [ 2]  991 	ldw	(0x18, sp), x
+                                    992 ;	./../../mib/stm8s_mib_vsprintf.c: 255: while (--field_width > 0) *str++ = ' ';
+      000578                        993 00138$:
+      000578 1E 20            [ 2]  994 	ldw	x, (0x20, sp)
+      00057A 1D 00 01         [ 2]  995 	subw	x, #0x0001
+      00057D 1F 20            [ 2]  996 	ldw	(0x20, sp), x
+      00057F 1E 1E            [ 2]  997 	ldw	x, (0x1e, sp)
+      000581 24 01            [ 1]  998 	jrnc	00514$
+      000583 5A               [ 2]  999 	decw	x
+      000584                       1000 00514$:
+      000584 1F 1E            [ 2] 1001 	ldw	(0x1e, sp), x
+      000586 5F               [ 1] 1002 	clrw	x
+      000587 13 20            [ 2] 1003 	cpw	x, (0x20, sp)
+      000589 4F               [ 1] 1004 	clr	a
+      00058A 12 1F            [ 1] 1005 	sbc	a, (0x1f, sp)
+      00058C 4F               [ 1] 1006 	clr	a
+      00058D 12 1E            [ 1] 1007 	sbc	a, (0x1e, sp)
+      00058F 2F 03            [ 1] 1008 	jrslt	00515$
+      000591 CCr07r9E         [ 2] 1009 	jp	00237$
+      000594                       1010 00515$:
+      000594 1E 18            [ 2] 1011 	ldw	x, (0x18, sp)
+      000596 A6 20            [ 1] 1012 	ld	a, #0x20
+      000598 F7               [ 1] 1013 	ld	(x), a
+      000599 1E 18            [ 2] 1014 	ldw	x, (0x18, sp)
+      00059B 5C               [ 1] 1015 	incw	x
+      00059C 1F 18            [ 2] 1016 	ldw	(0x18, sp), x
+      00059E 20 D8            [ 2] 1017 	jra	00138$
+                                   1018 ;	./../../mib/stm8s_mib_vsprintf.c: 258: case 's':
+      0005A0                       1019 00141$:
+                                   1020 ;	./../../mib/stm8s_mib_vsprintf.c: 259: s = va_arg(args, char *);
+      0005A0 1E 26            [ 2] 1021 	ldw	x, (0x26, sp)
+      0005A2 5C               [ 1] 1022 	incw	x
+      0005A3 5C               [ 1] 1023 	incw	x
+      0005A4 1F 26            [ 2] 1024 	ldw	(0x26, sp), x
+      0005A6 5A               [ 2] 1025 	decw	x
+      0005A7 5A               [ 2] 1026 	decw	x
+      0005A8 FE               [ 2] 1027 	ldw	x, (x)
+                                   1028 ;	./../../mib/stm8s_mib_vsprintf.c: 260: if (!s) s = vStr; // "<NULL>";
+      0005A9 1F 14            [ 2] 1029 	ldw	(0x14, sp), x
+      0005AB 26 06            [ 1] 1030 	jrne	00143$
+      0005AD 96               [ 1] 1031 	ldw	x, sp
+      0005AE 1C 00 0D         [ 2] 1032 	addw	x, #13
+      0005B1 1F 14            [ 2] 1033 	ldw	(0x14, sp), x
+      0005B3                       1034 00143$:
+                                   1035 ;	./../../mib/stm8s_mib_vsprintf.c: 261: len = strnlen(s, precision);
+      0005B3 1E 18            [ 2] 1036 	ldw	x, (0x18, sp)
+      0005B5 89               [ 2] 1037 	pushw	x
+      0005B6 1E 16            [ 2] 1038 	ldw	x, (0x16, sp)
+      0005B8 CDr00r00         [ 4] 1039 	call	_strnlen
+      0005BB 1F 18            [ 2] 1040 	ldw	(0x18, sp), x
+      0005BD 5F               [ 1] 1041 	clrw	x
+      0005BE 1F 16            [ 2] 1042 	ldw	(0x16, sp), x
+                                   1043 ;	./../../mib/stm8s_mib_vsprintf.c: 262: if (!(flags & LEFT)) while (len < field_width--) *str++ = ' ';
+      0005C0 7B 0C            [ 1] 1044 	ld	a, (0x0c, sp)
+      0005C2 A5 10            [ 1] 1045 	bcp	a, #0x10
+      0005C4 26 30            [ 1] 1046 	jrne	00225$
+      0005C6                       1047 00144$:
+      0005C6 16 20            [ 2] 1048 	ldw	y, (0x20, sp)
+      0005C8 17 0B            [ 2] 1049 	ldw	(0x0b, sp), y
+      0005CA 16 1E            [ 2] 1050 	ldw	y, (0x1e, sp)
+      0005CC 17 09            [ 2] 1051 	ldw	(0x09, sp), y
+      0005CE 1E 20            [ 2] 1052 	ldw	x, (0x20, sp)
+      0005D0 1D 00 01         [ 2] 1053 	subw	x, #0x0001
+      0005D3 1F 20            [ 2] 1054 	ldw	(0x20, sp), x
+      0005D5 1E 1E            [ 2] 1055 	ldw	x, (0x1e, sp)
+      0005D7 24 01            [ 1] 1056 	jrnc	00519$
+      0005D9 5A               [ 2] 1057 	decw	x
+      0005DA                       1058 00519$:
+      0005DA 1F 1E            [ 2] 1059 	ldw	(0x1e, sp), x
+      0005DC 1E 18            [ 2] 1060 	ldw	x, (0x18, sp)
+      0005DE 13 0B            [ 2] 1061 	cpw	x, (0x0b, sp)
+      0005E0 7B 17            [ 1] 1062 	ld	a, (0x17, sp)
+      0005E2 12 0A            [ 1] 1063 	sbc	a, (0x0a, sp)
+      0005E4 7B 16            [ 1] 1064 	ld	a, (0x16, sp)
+      0005E6 12 09            [ 1] 1065 	sbc	a, (0x09, sp)
+      0005E8 2E 0C            [ 1] 1066 	jrsge	00238$
+      0005EA 1E 1C            [ 2] 1067 	ldw	x, (0x1c, sp)
+      0005EC A6 20            [ 1] 1068 	ld	a, #0x20
+      0005EE F7               [ 1] 1069 	ld	(x), a
+      0005EF 1E 1C            [ 2] 1070 	ldw	x, (0x1c, sp)
+      0005F1 5C               [ 1] 1071 	incw	x
+      0005F2 1F 1C            [ 2] 1072 	ldw	(0x1c, sp), x
+      0005F4 20 D0            [ 2] 1073 	jra	00144$
+      0005F6                       1074 00238$:
+                                   1075 ;	./../../mib/stm8s_mib_vsprintf.c: 263: for (i = 0; i < len; ++i) *str++ = *s++;
+      0005F6                       1076 00225$:
+      0005F6 5F               [ 1] 1077 	clrw	x
+      0005F7 1F 0B            [ 2] 1078 	ldw	(0x0b, sp), x
+      0005F9 1F 09            [ 2] 1079 	ldw	(0x09, sp), x
+      0005FB                       1080 00182$:
+      0005FB 1E 0B            [ 2] 1081 	ldw	x, (0x0b, sp)
+      0005FD 13 18            [ 2] 1082 	cpw	x, (0x18, sp)
+      0005FF 7B 0A            [ 1] 1083 	ld	a, (0x0a, sp)
+      000601 12 17            [ 1] 1084 	sbc	a, (0x17, sp)
+      000603 7B 09            [ 1] 1085 	ld	a, (0x09, sp)
+      000605 12 16            [ 1] 1086 	sbc	a, (0x16, sp)
+      000607 2E 1E            [ 1] 1087 	jrsge	00227$
+      000609 1E 14            [ 2] 1088 	ldw	x, (0x14, sp)
+      00060B F6               [ 1] 1089 	ld	a, (x)
+      00060C 1E 14            [ 2] 1090 	ldw	x, (0x14, sp)
+      00060E 5C               [ 1] 1091 	incw	x
+      00060F 1F 14            [ 2] 1092 	ldw	(0x14, sp), x
+      000611 1E 1C            [ 2] 1093 	ldw	x, (0x1c, sp)
+      000613 F7               [ 1] 1094 	ld	(x), a
+      000614 1E 1C            [ 2] 1095 	ldw	x, (0x1c, sp)
+      000616 5C               [ 1] 1096 	incw	x
+      000617 1F 1C            [ 2] 1097 	ldw	(0x1c, sp), x
+      000619 1E 0B            [ 2] 1098 	ldw	x, (0x0b, sp)
+      00061B 5C               [ 1] 1099 	incw	x
+      00061C 1F 0B            [ 2] 1100 	ldw	(0x0b, sp), x
+      00061E 26 DB            [ 1] 1101 	jrne	00182$
+      000620 1E 09            [ 2] 1102 	ldw	x, (0x09, sp)
+      000622 5C               [ 1] 1103 	incw	x
+      000623 1F 09            [ 2] 1104 	ldw	(0x09, sp), x
+      000625 20 D4            [ 2] 1105 	jra	00182$
+                                   1106 ;	./../../mib/stm8s_mib_vsprintf.c: 264: while (len < field_width--) *str++ = ' ';
+      000627                       1107 00227$:
+      000627                       1108 00150$:
+      000627 1E 18            [ 2] 1109 	ldw	x, (0x18, sp)
+      000629 13 20            [ 2] 1110 	cpw	x, (0x20, sp)
+      00062B 7B 17            [ 1] 1111 	ld	a, (0x17, sp)
+      00062D 12 1F            [ 1] 1112 	sbc	a, (0x1f, sp)
+      00062F 7B 16            [ 1] 1113 	ld	a, (0x16, sp)
+      000631 12 1E            [ 1] 1114 	sbc	a, (0x1e, sp)
+      000633 2F 03            [ 1] 1115 	jrslt	00526$
+      000635 CCr07rA2         [ 2] 1116 	jp	00240$
+      000638                       1117 00526$:
+      000638 1E 20            [ 2] 1118 	ldw	x, (0x20, sp)
+      00063A 1D 00 01         [ 2] 1119 	subw	x, #0x0001
+      00063D 1F 20            [ 2] 1120 	ldw	(0x20, sp), x
+      00063F 1E 1E            [ 2] 1121 	ldw	x, (0x1e, sp)
+      000641 24 01            [ 1] 1122 	jrnc	00527$
+      000643 5A               [ 2] 1123 	decw	x
+      000644                       1124 00527$:
+      000644 1F 1E            [ 2] 1125 	ldw	(0x1e, sp), x
+      000646 1E 1C            [ 2] 1126 	ldw	x, (0x1c, sp)
+      000648 A6 20            [ 1] 1127 	ld	a, #0x20
+      00064A F7               [ 1] 1128 	ld	(x), a
+      00064B 1E 1C            [ 2] 1129 	ldw	x, (0x1c, sp)
+      00064D 5C               [ 1] 1130 	incw	x
+      00064E 1F 1C            [ 2] 1131 	ldw	(0x1c, sp), x
+      000650 20 D5            [ 2] 1132 	jra	00150$
+                                   1133 ;	./../../mib/stm8s_mib_vsprintf.c: 267: case 'p':
+      000652                       1134 00153$:
+                                   1135 ;	./../../mib/stm8s_mib_vsprintf.c: 268: if (field_width == -1)
+      000652 1E 20            [ 2] 1136 	ldw	x, (0x20, sp)
+      000654 5C               [ 1] 1137 	incw	x
+      000655 26 12            [ 1] 1138 	jrne	00155$
+      000657 1E 1E            [ 2] 1139 	ldw	x, (0x1e, sp)
+      000659 5C               [ 1] 1140 	incw	x
+      00065A 26 0D            [ 1] 1141 	jrne	00155$
+                                   1142 ;	./../../mib/stm8s_mib_vsprintf.c: 270: field_width = 2 * sizeof(void *);
+      00065C AE 00 04         [ 2] 1143 	ldw	x, #0x0004
+      00065F 1F 20            [ 2] 1144 	ldw	(0x20, sp), x
+      000661 5F               [ 1] 1145 	clrw	x
+      000662 1F 1E            [ 2] 1146 	ldw	(0x1e, sp), x
+                                   1147 ;	./../../mib/stm8s_mib_vsprintf.c: 271: flags |= ZEROPAD;
+      000664 04 0C            [ 1] 1148 	srl	(0x0c, sp)
+      000666 99               [ 1] 1149 	scf
+      000667 09 0C            [ 1] 1150 	rlc	(0x0c, sp)
+      000669                       1151 00155$:
+                                   1152 ;	./../../mib/stm8s_mib_vsprintf.c: 273: str = number(str, (MMULONG) va_arg(args, void *), 16, field_width, precision, flags);
+      000669 1E 26            [ 2] 1153 	ldw	x, (0x26, sp)
+      00066B 5C               [ 1] 1154 	incw	x
+      00066C 5C               [ 1] 1155 	incw	x
+      00066D 1F 26            [ 2] 1156 	ldw	(0x26, sp), x
+      00066F 5A               [ 2] 1157 	decw	x
+      000670 5A               [ 2] 1158 	decw	x
+      000671 FE               [ 2] 1159 	ldw	x, (x)
+      000672 1F 07            [ 2] 1160 	ldw	(0x07, sp), x
+      000674 90 5F            [ 1] 1161 	clrw	y
+      000676 1E 0B            [ 2] 1162 	ldw	x, (0x0b, sp)
+      000678 89               [ 2] 1163 	pushw	x
+      000679 1E 0B            [ 2] 1164 	ldw	x, (0x0b, sp)
+      00067B 89               [ 2] 1165 	pushw	x
+      00067C 1E 1C            [ 2] 1166 	ldw	x, (0x1c, sp)
+      00067E 89               [ 2] 1167 	pushw	x
+      00067F 1E 1C            [ 2] 1168 	ldw	x, (0x1c, sp)
+      000681 89               [ 2] 1169 	pushw	x
+      000682 1E 28            [ 2] 1170 	ldw	x, (0x28, sp)
+      000684 89               [ 2] 1171 	pushw	x
+      000685 1E 28            [ 2] 1172 	ldw	x, (0x28, sp)
+      000687 89               [ 2] 1173 	pushw	x
+      000688 4B 10            [ 1] 1174 	push	#0x10
+      00068A 5F               [ 1] 1175 	clrw	x
+      00068B 89               [ 2] 1176 	pushw	x
+      00068C 4B 00            [ 1] 1177 	push	#0x00
+      00068E 1E 17            [ 2] 1178 	ldw	x, (0x17, sp)
+      000690 89               [ 2] 1179 	pushw	x
+      000691 90 89            [ 2] 1180 	pushw	y
+      000693 1E 30            [ 2] 1181 	ldw	x, (0x30, sp)
+      000695 CDr00r83         [ 4] 1182 	call	_number
+      000698 1F 1C            [ 2] 1183 	ldw	(0x1c, sp), x
+                                   1184 ;	./../../mib/stm8s_mib_vsprintf.c: 274: continue;
+      00069A CCr07rA2         [ 2] 1185 	jp	00179$
+                                   1186 ;	./../../mib/stm8s_mib_vsprintf.c: 276: case 'n':
+      00069D                       1187 00156$:
+                                   1188 ;	./../../mib/stm8s_mib_vsprintf.c: 277: if (qualifier == 'l')
+      00069D 1E 03            [ 2] 1189 	ldw	x, (0x03, sp)
+      00069F A3 00 6C         [ 2] 1190 	cpw	x, #0x006c
+      0006A2 26 24            [ 1] 1191 	jrne	00158$
+      0006A4 1E 01            [ 2] 1192 	ldw	x, (0x01, sp)
+      0006A6 26 20            [ 1] 1193 	jrne	00158$
+                                   1194 ;	./../../mib/stm8s_mib_vsprintf.c: 279: MMLONG *ip = va_arg(args, MMLONG *);
+      0006A8 1E 26            [ 2] 1195 	ldw	x, (0x26, sp)
+      0006AA 5C               [ 1] 1196 	incw	x
+      0006AB 5C               [ 1] 1197 	incw	x
+      0006AC 1F 26            [ 2] 1198 	ldw	(0x26, sp), x
+      0006AE 5A               [ 2] 1199 	decw	x
+      0006AF 5A               [ 2] 1200 	decw	x
+      0006B0 FE               [ 2] 1201 	ldw	x, (x)
+                                   1202 ;	./../../mib/stm8s_mib_vsprintf.c: 280: *ip = (str - buf);
+      0006B1 16 1C            [ 2] 1203 	ldw	y, (0x1c, sp)
+      0006B3 72 F2 1A         [ 2] 1204 	subw	y, (0x1a, sp)
+      0006B6 90 9E            [ 1] 1205 	ld	a, yh
+      0006B8 49               [ 1] 1206 	rlc	a
+      0006B9 4F               [ 1] 1207 	clr	a
+      0006BA A2 00            [ 1] 1208 	sbc	a, #0x00
+      0006BC 6B 1F            [ 1] 1209 	ld	(0x1f, sp), a
+      0006BE 6B 1E            [ 1] 1210 	ld	(0x1e, sp), a
+      0006C0 EF 02            [ 2] 1211 	ldw	(0x2, x), y
+      0006C2 16 1E            [ 2] 1212 	ldw	y, (0x1e, sp)
+      0006C4 FF               [ 2] 1213 	ldw	(x), y
+      0006C5 CCr07rA2         [ 2] 1214 	jp	00179$
+      0006C8                       1215 00158$:
+                                   1216 ;	./../../mib/stm8s_mib_vsprintf.c: 284: MMINT *ip = va_arg(args, MMINT *);
+      0006C8 1E 26            [ 2] 1217 	ldw	x, (0x26, sp)
+      0006CA 5C               [ 1] 1218 	incw	x
+      0006CB 5C               [ 1] 1219 	incw	x
+      0006CC 1F 26            [ 2] 1220 	ldw	(0x26, sp), x
+      0006CE 5A               [ 2] 1221 	decw	x
+      0006CF 5A               [ 2] 1222 	decw	x
+      0006D0 FE               [ 2] 1223 	ldw	x, (x)
+                                   1224 ;	./../../mib/stm8s_mib_vsprintf.c: 285: *ip = (str - buf);
+      0006D1 16 1C            [ 2] 1225 	ldw	y, (0x1c, sp)
+      0006D3 72 F2 1A         [ 2] 1226 	subw	y, (0x1a, sp)
+      0006D6 90 9E            [ 1] 1227 	ld	a, yh
+      0006D8 49               [ 1] 1228 	rlc	a
+      0006D9 4F               [ 1] 1229 	clr	a
+      0006DA A2 00            [ 1] 1230 	sbc	a, #0x00
+      0006DC 6B 1F            [ 1] 1231 	ld	(0x1f, sp), a
+      0006DE 6B 1E            [ 1] 1232 	ld	(0x1e, sp), a
+      0006E0 EF 02            [ 2] 1233 	ldw	(0x2, x), y
+      0006E2 16 1E            [ 2] 1234 	ldw	y, (0x1e, sp)
+      0006E4 FF               [ 2] 1235 	ldw	(x), y
+                                   1236 ;	./../../mib/stm8s_mib_vsprintf.c: 287: continue;
+      0006E5 CCr07rA2         [ 2] 1237 	jp	00179$
+                                   1238 ;	./../../mib/stm8s_mib_vsprintf.c: 290: case 'o':
+      0006E8                       1239 00160$:
+                                   1240 ;	./../../mib/stm8s_mib_vsprintf.c: 291: base = 8;
+      0006E8 AE 00 08         [ 2] 1241 	ldw	x, #0x0008
+      0006EB 1F 07            [ 2] 1242 	ldw	(0x07, sp), x
+      0006ED 5F               [ 1] 1243 	clrw	x
+      0006EE 1F 05            [ 2] 1244 	ldw	(0x05, sp), x
+                                   1245 ;	./../../mib/stm8s_mib_vsprintf.c: 292: break;
+      0006F0 20 3A            [ 2] 1246 	jra	00172$
+                                   1247 ;	./../../mib/stm8s_mib_vsprintf.c: 294: case 'X':
+      0006F2                       1248 00161$:
+                                   1249 ;	./../../mib/stm8s_mib_vsprintf.c: 295: flags |= LARGE;
+      0006F2 7B 0C            [ 1] 1250 	ld	a, (0x0c, sp)
+      0006F4 AA 40            [ 1] 1251 	or	a, #0x40
+      0006F6 6B 0C            [ 1] 1252 	ld	(0x0c, sp), a
+                                   1253 ;	./../../mib/stm8s_mib_vsprintf.c: 297: case 'x':
+      0006F8                       1254 00162$:
+                                   1255 ;	./../../mib/stm8s_mib_vsprintf.c: 298: base = 16;
+      0006F8 AE 00 10         [ 2] 1256 	ldw	x, #0x0010
+      0006FB 1F 07            [ 2] 1257 	ldw	(0x07, sp), x
+      0006FD 5F               [ 1] 1258 	clrw	x
+      0006FE 1F 05            [ 2] 1259 	ldw	(0x05, sp), x
+                                   1260 ;	./../../mib/stm8s_mib_vsprintf.c: 299: break;
+      000700 20 2A            [ 2] 1261 	jra	00172$
+                                   1262 ;	./../../mib/stm8s_mib_vsprintf.c: 302: case 'i':
+      000702                       1263 00164$:
+                                   1264 ;	./../../mib/stm8s_mib_vsprintf.c: 303: flags |= SIGN;
+      000702 7B 0C            [ 1] 1265 	ld	a, (0x0c, sp)
+      000704 AA 02            [ 1] 1266 	or	a, #0x02
+      000706 6B 0C            [ 1] 1267 	ld	(0x0c, sp), a
+                                   1268 ;	./../../mib/stm8s_mib_vsprintf.c: 306: break;
+      000708 20 22            [ 2] 1269 	jra	00172$
+                                   1270 ;	./../../mib/stm8s_mib_vsprintf.c: 308: default:
+      00070A                       1271 00166$:
+                                   1272 ;	./../../mib/stm8s_mib_vsprintf.c: 309: if (*fmt != '%') *str++ = '%';
+      00070A A1 25            [ 1] 1273 	cp	a, #0x25
+      00070C 27 0A            [ 1] 1274 	jreq	00168$
+      00070E 1E 1C            [ 2] 1275 	ldw	x, (0x1c, sp)
+      000710 A6 25            [ 1] 1276 	ld	a, #0x25
+      000712 F7               [ 1] 1277 	ld	(x), a
+      000713 1E 1C            [ 2] 1278 	ldw	x, (0x1c, sp)
+      000715 5C               [ 1] 1279 	incw	x
+      000716 1F 1C            [ 2] 1280 	ldw	(0x1c, sp), x
+      000718                       1281 00168$:
+                                   1282 ;	./../../mib/stm8s_mib_vsprintf.c: 310: if (*fmt)
+      000718 1E 24            [ 2] 1283 	ldw	x, (0x24, sp)
+      00071A F6               [ 1] 1284 	ld	a, (x)
+      00071B 27 0A            [ 1] 1285 	jreq	00170$
+                                   1286 ;	./../../mib/stm8s_mib_vsprintf.c: 311: *str++ = *fmt;
+      00071D 1E 1C            [ 2] 1287 	ldw	x, (0x1c, sp)
+      00071F F7               [ 1] 1288 	ld	(x), a
+      000720 1E 1C            [ 2] 1289 	ldw	x, (0x1c, sp)
+      000722 5C               [ 1] 1290 	incw	x
+      000723 1F 1C            [ 2] 1291 	ldw	(0x1c, sp), x
+      000725 20 7B            [ 2] 1292 	jra	00179$
+      000727                       1293 00170$:
+                                   1294 ;	./../../mib/stm8s_mib_vsprintf.c: 313: --fmt;
+      000727 5A               [ 2] 1295 	decw	x
+      000728 1F 24            [ 2] 1296 	ldw	(0x24, sp), x
+                                   1297 ;	./../../mib/stm8s_mib_vsprintf.c: 314: continue;
+      00072A 20 76            [ 2] 1298 	jra	00179$
+                                   1299 ;	./../../mib/stm8s_mib_vsprintf.c: 315: }
+      00072C                       1300 00172$:
+                                   1301 ;	./../../mib/stm8s_mib_vsprintf.c: 317: if (qualifier == 'l')
+      00072C 1E 03            [ 2] 1302 	ldw	x, (0x03, sp)
+      00072E A3 00 6C         [ 2] 1303 	cpw	x, #0x006c
+      000731 26 1A            [ 1] 1304 	jrne	00177$
+      000733 1E 01            [ 2] 1305 	ldw	x, (0x01, sp)
+      000735 26 16            [ 1] 1306 	jrne	00177$
+                                   1307 ;	./../../mib/stm8s_mib_vsprintf.c: 318: num = va_arg(args, MMUINT); // MMULONG); // test ok..
+      000737 1E 26            [ 2] 1308 	ldw	x, (0x26, sp)
+      000739 1C 00 04         [ 2] 1309 	addw	x, #0x0004
+      00073C 1F 26            [ 2] 1310 	ldw	(0x26, sp), x
+      00073E 1D 00 04         [ 2] 1311 	subw	x, #0x0004
+      000741 90 93            [ 1] 1312 	ldw	y, x
+      000743 90 EE 02         [ 2] 1313 	ldw	y, (0x2, y)
+      000746 FE               [ 2] 1314 	ldw	x, (x)
+      000747 17 03            [ 2] 1315 	ldw	(0x03, sp), y
+      000749 1F 01            [ 2] 1316 	ldw	(0x01, sp), x
+      00074B 20 2A            [ 2] 1317 	jra	00178$
+      00074D                       1318 00177$:
+                                   1319 ;	./../../mib/stm8s_mib_vsprintf.c: 328: else if (flags & SIGN)
+      00074D 7B 0C            [ 1] 1320 	ld	a, (0x0c, sp)
+      00074F A5 02            [ 1] 1321 	bcp	a, #0x02
+      000751 27 16            [ 1] 1322 	jreq	00174$
+                                   1323 ;	./../../mib/stm8s_mib_vsprintf.c: 329: num = va_arg(args, MMINT); // test ok...
+      000753 1E 26            [ 2] 1324 	ldw	x, (0x26, sp)
+      000755 1C 00 04         [ 2] 1325 	addw	x, #0x0004
+      000758 1F 26            [ 2] 1326 	ldw	(0x26, sp), x
+      00075A 1D 00 04         [ 2] 1327 	subw	x, #0x0004
+      00075D 90 93            [ 1] 1328 	ldw	y, x
+      00075F 90 EE 02         [ 2] 1329 	ldw	y, (0x2, y)
+      000762 FE               [ 2] 1330 	ldw	x, (x)
+      000763 17 03            [ 2] 1331 	ldw	(0x03, sp), y
+      000765 1F 01            [ 2] 1332 	ldw	(0x01, sp), x
+      000767 20 0E            [ 2] 1333 	jra	00178$
+      000769                       1334 00174$:
+                                   1335 ;	./../../mib/stm8s_mib_vsprintf.c: 331: num = va_arg(args, MMAUINT);
+      000769 1E 26            [ 2] 1336 	ldw	x, (0x26, sp)
+      00076B 5C               [ 1] 1337 	incw	x
+      00076C 5C               [ 1] 1338 	incw	x
+      00076D 1F 26            [ 2] 1339 	ldw	(0x26, sp), x
+      00076F 5A               [ 2] 1340 	decw	x
+      000770 5A               [ 2] 1341 	decw	x
+      000771 FE               [ 2] 1342 	ldw	x, (x)
+      000772 1F 03            [ 2] 1343 	ldw	(0x03, sp), x
+      000774 5F               [ 1] 1344 	clrw	x
+      000775 1F 01            [ 2] 1345 	ldw	(0x01, sp), x
+      000777                       1346 00178$:
+                                   1347 ;	./../../mib/stm8s_mib_vsprintf.c: 333: str = number(str, num, base, field_width, precision, flags);
+      000777 1E 0B            [ 2] 1348 	ldw	x, (0x0b, sp)
+      000779 89               [ 2] 1349 	pushw	x
+      00077A 1E 0B            [ 2] 1350 	ldw	x, (0x0b, sp)
+      00077C 89               [ 2] 1351 	pushw	x
+      00077D 1E 1C            [ 2] 1352 	ldw	x, (0x1c, sp)
+      00077F 89               [ 2] 1353 	pushw	x
+      000780 1E 1C            [ 2] 1354 	ldw	x, (0x1c, sp)
+      000782 89               [ 2] 1355 	pushw	x
+      000783 1E 28            [ 2] 1356 	ldw	x, (0x28, sp)
+      000785 89               [ 2] 1357 	pushw	x
+      000786 1E 28            [ 2] 1358 	ldw	x, (0x28, sp)
+      000788 89               [ 2] 1359 	pushw	x
+      000789 1E 13            [ 2] 1360 	ldw	x, (0x13, sp)
+      00078B 89               [ 2] 1361 	pushw	x
+      00078C 1E 13            [ 2] 1362 	ldw	x, (0x13, sp)
+      00078E 89               [ 2] 1363 	pushw	x
+      00078F 1E 13            [ 2] 1364 	ldw	x, (0x13, sp)
+      000791 89               [ 2] 1365 	pushw	x
+      000792 1E 13            [ 2] 1366 	ldw	x, (0x13, sp)
+      000794 89               [ 2] 1367 	pushw	x
+      000795 1E 30            [ 2] 1368 	ldw	x, (0x30, sp)
+      000797 CDr00r83         [ 4] 1369 	call	_number
+      00079A 1F 1C            [ 2] 1370 	ldw	(0x1c, sp), x
+                                   1371 ;	./../../mib/stm8s_mib_vsprintf.c: 337: return str - buf;
+      00079C 20 04            [ 2] 1372 	jra	00179$
+                                   1373 ;	./../../mib/stm8s_mib_vsprintf.c: 333: str = number(str, num, base, field_width, precision, flags);
+      00079E                       1374 00237$:
+      00079E 16 18            [ 2] 1375 	ldw	y, (0x18, sp)
+      0007A0 17 1C            [ 2] 1376 	ldw	(0x1c, sp), y
+                                   1377 ;	./../../mib/stm8s_mib_vsprintf.c: 337: return str - buf;
+                                   1378 ;	./../../mib/stm8s_mib_vsprintf.c: 333: str = number(str, num, base, field_width, precision, flags);
+      0007A2                       1379 00240$:
+      0007A2                       1380 00179$:
+                                   1381 ;	./../../mib/stm8s_mib_vsprintf.c: 188: for (str = buf; *fmt; fmt++)
+      0007A2 1E 24            [ 2] 1382 	ldw	x, (0x24, sp)
+      0007A4 5C               [ 1] 1383 	incw	x
+      0007A5 1F 24            [ 2] 1384 	ldw	(0x24, sp), x
+      0007A7 CCr03rA5         [ 2] 1385 	jp	00185$
+      0007AA                       1386 00180$:
+                                   1387 ;	./../../mib/stm8s_mib_vsprintf.c: 336: *str = '\0';
+      0007AA 1E 1C            [ 2] 1388 	ldw	x, (0x1c, sp)
+      0007AC 7F               [ 1] 1389 	clr	(x)
+                                   1390 ;	./../../mib/stm8s_mib_vsprintf.c: 337: return str - buf;
+      0007AD 1E 1C            [ 2] 1391 	ldw	x, (0x1c, sp)
+      0007AF 72 F0 1A         [ 2] 1392 	subw	x, (0x1a, sp)
+                                   1393 ;	./../../mib/stm8s_mib_vsprintf.c: 338: }
+      0007B2 16 22            [ 2] 1394 	ldw	y, (34, sp)
+      0007B4 5B 27            [ 2] 1395 	addw	sp, #39
+      0007B6 90 FC            [ 2] 1396 	jp	(y)
+                                   1397 ;	./../../mib/stm8s_mib_vsprintf.c: 342: MMRINT mib_vsprintf(char *vpBuffer,char *format, ...)
+                                   1398 ;	-----------------------------------------
+                                   1399 ;	 function mib_vsprintf
+                                   1400 ;	-----------------------------------------
+      0007B8                       1401 _mib_vsprintf:
+                                   1402 ;	./../../mib/stm8s_mib_vsprintf.c: 347: va_start(ap, format);
+      0007B8 96               [ 1] 1403 	ldw	x, sp
+      0007B9 1C 00 07         [ 2] 1404 	addw	x, #7
+                                   1405 ;	./../../mib/stm8s_mib_vsprintf.c: 348: rc = mm_vsprintf(vpBuffer, format, ap);
+      0007BC 89               [ 2] 1406 	pushw	x
+      0007BD 1E 07            [ 2] 1407 	ldw	x, (0x07, sp)
+      0007BF 89               [ 2] 1408 	pushw	x
+      0007C0 1E 07            [ 2] 1409 	ldw	x, (0x07, sp)
+      0007C2 CDr03r85         [ 4] 1410 	call	_mm_vsprintf
+                                   1411 ;	./../../mib/stm8s_mib_vsprintf.c: 351: return (rc);
+                                   1412 ;	./../../mib/stm8s_mib_vsprintf.c: 352: }
+      0007C5 81               [ 4] 1413 	ret
+                                   1414 ;	./../../mib/stm8s_mib_vsprintf.c: 363: MMRINT mib_printf(char *format, ...)
+                                   1415 ;	-----------------------------------------
+                                   1416 ;	 function mib_printf
+                                   1417 ;	-----------------------------------------
+      0007C6                       1418 _mib_printf:
+      0007C6 52 82            [ 2] 1419 	sub	sp, #130
+                                   1420 ;	./../../mib/stm8s_mib_vsprintf.c: 370: va_start(ap, format);
+                                   1421 ;	./../../mib/stm8s_mib_vsprintf.c: 371: rc = mm_vsprintf(buffer, format, ap);
+      0007C8 96               [ 1] 1422 	ldw	x, sp
+      0007C9 1C 00 87         [ 2] 1423 	addw	x, #135
+      0007CC 89               [ 2] 1424 	pushw	x
+      0007CD 1E 87            [ 2] 1425 	ldw	x, (0x87, sp)
+      0007CF 89               [ 2] 1426 	pushw	x
+      0007D0 96               [ 1] 1427 	ldw	x, sp
+      0007D1 1C 00 05         [ 2] 1428 	addw	x, #5
+      0007D4 CDr03r85         [ 4] 1429 	call	_mm_vsprintf
+      0007D7 1F 81            [ 2] 1430 	ldw	(0x81, sp), x
+                                   1431 ;	./../../mib/stm8s_mib_vsprintf.c: 374: v_pString = (char *)buffer;
+      0007D9 96               [ 1] 1432 	ldw	x, sp
+      0007DA 5C               [ 1] 1433 	incw	x
+                                   1434 ;	./../../mib/stm8s_mib_vsprintf.c: 375: while (*v_pString != 0)	MibWriteDebugByte((uint8_t)*v_pString++);
+      0007DB                       1435 00101$:
+      0007DB F6               [ 1] 1436 	ld	a, (x)
+      0007DC 27 08            [ 1] 1437 	jreq	00103$
+      0007DE 5C               [ 1] 1438 	incw	x
+      0007DF 89               [ 2] 1439 	pushw	x
+      0007E0 CDr00r00         [ 4] 1440 	call	_MibWriteDebugByte
+      0007E3 85               [ 2] 1441 	popw	x
+      0007E4 20 F5            [ 2] 1442 	jra	00101$
+      0007E6                       1443 00103$:
+                                   1444 ;	./../../mib/stm8s_mib_vsprintf.c: 376: return (rc);
+      0007E6 1E 81            [ 2] 1445 	ldw	x, (0x81, sp)
+                                   1446 ;	./../../mib/stm8s_mib_vsprintf.c: 377: }
+      0007E8 5B 82            [ 2] 1447 	addw	sp, #130
+      0007EA 81               [ 4] 1448 	ret
+                                   1449 	.area CODE
+                                   1450 	.area CONST
+                                   1451 	.area CONST
+      000000                       1452 ___str_1:
+      000000 30 31 32 33 34 35 36  1453 	.ascii "0123456789abcdefghijklmnopqrstuvwxyz"
+             37 38 39 61 62 63 64
+             65 66 67 68 69 6A 6B
+             6C 6D 6E 6F 70 71 72
+             73 74 75 76 77 78 79
+             7A
+      000024 00                    1454 	.db 0x00
+                                   1455 	.area CODE
+                                   1456 	.area CONST
+      000025                       1457 ___str_2:
+      000025 30 31 32 33 34 35 36  1458 	.ascii "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+             37 38 39 41 42 43 44
+             45 46 47 48 49 4A 4B
+             4C 4D 4E 4F 50 51 52
+             53 54 55 56 57 58 59
+             5A
+      000049 00                    1459 	.db 0x00
+                                   1460 	.area CODE
+                                   1461 	.area INITIALIZER
+      000000                       1462 __xinit__digits:
+      000000r00r00                 1463 	.dw ___str_1
+      000002                       1464 __xinit__upper_digits:
+      000002r00r25                 1465 	.dw ___str_2
+                                   1466 	.area CABS (ABS)

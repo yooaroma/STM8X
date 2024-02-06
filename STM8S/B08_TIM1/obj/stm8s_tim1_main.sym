@@ -1,0 +1,115 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _DecToLong                                                     ****** GX
+  9 _DoTIM1                                                        000066 R
+    _FLASH_ProgramOptionByte                                       ****** GX
+    _FLASH_ReadByte                                                ****** GX
+    _FLASH_ReadOptionByte                                          ****** GX
+    _FLASH_Unlock                                                  ****** GX
+    _HexToInt                                                      ****** GX
+    _MibWriteDebugString                                           ****** GX
+    _TIM1_ARRPreloadConfig                                         ****** GX
+    _TIM1_CCxCmd                                                   ****** GX
+    _TIM1_CCxNCmd                                                  ****** GX
+    _TIM1_Cmd                                                      ****** GX
+    _TIM1_CtrlPWMOutputs                                           ****** GX
+    _TIM1_DeInit                                                   ****** GX
+    _TIM1_OC1NPolarityConfig                                       ****** GX
+    _TIM1_OC1PolarityConfig                                        ****** GX
+    _TIM1_OC1PreloadConfig                                         ****** GX
+    _TIM1_OC2NPolarityConfig                                       ****** GX
+    _TIM1_OC2PolarityConfig                                        ****** GX
+    _TIM1_OC2PreloadConfig                                         ****** GX
+    _TIM1_OC3NPolarityConfig                                       ****** GX
+    _TIM1_OC3PolarityConfig                                        ****** GX
+    _TIM1_OC3PreloadConfig                                         ****** GX
+    _TIM1_OC4PolarityConfig                                        ****** GX
+    _TIM1_OC4PreloadConfig                                         ****** GX
+    _TIM1_SelectOCxM                                               ****** GX
+    _TIM1_SelectOnePulseMode                                       ****** GX
+    _TIM1_SetCompare1                                              ****** GX
+    _TIM1_SetCompare2                                              ****** GX
+    _TIM1_SetCompare3                                              ****** GX
+    _TIM1_SetCompare4                                              ****** GX
+    _TIM1_TimeBaseInit                                             ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_12                                                      000113 R
+  7 ___str_13                                                      000119 R
+  7 ___str_14                                                      00011D R
+  7 ___str_18                                                      00016A R
+  7 ___str_2                                                       000028 R
+  7 ___str_20                                                      000188 R
+  7 ___str_27                                                      0002D0 R
+  7 ___str_28                                                      000A25 R
+  7 ___str_29                                                      000A2A R
+  7 ___str_5                                                       000068 R
+  7 ___str_7                                                       00008A R
+  7 ___str_8                                                       000093 R
+  7 ___str_9                                                       000097 R
+    __divulong                                                     ****** GX
+    __mullong                                                      ****** GX
+  7 __str_0                                                        000000 R
+  7 __str_1                                                        000014 R
+  7 __str_10                                                       00009B R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  7 __str_11                                                       0000CF R
+  7 __str_15                                                       000123 R
+  7 __str_16                                                       00013C R
+  7 __str_17                                                       000154 R
+  7 __str_19                                                       00016F R
+  7 __str_21                                                       00018D R
+  7 __str_22                                                       0001A9 R
+  7 __str_23                                                       0001E1 R
+  7 __str_24                                                       000218 R
+  7 __str_25                                                       00025A R
+  7 __str_26                                                       000283 R
+  7 __str_3                                                        00002E R
+  7 __str_4                                                        00004B R
+  7 __str_6                                                        00006D R
+  8 __xinit__cmdTbl_only                                           000002 R
+  8 __xinit__gpbHelp_TIM1_TypeDef                                  000000 R
+    _cmdTbl                                                        ****** GX
+  2 _cmdTbl_only                                                   000002 R
+  9 _cmd_test                                                      000062 GR
+  9 _cmd_test_init_before_irq_enable                               000065 GR
+  9 _cmd_tim1                                                      000000 GR
+  2 _gpbHelp_TIM1_TypeDef                                          000000 R
+  9 _irqTim1Cap_CALLBACK                                           000493 GR
+  9 _irqTim1UpdOvf_CALLBACK                                        000492 GR
+    _mib_printf                                                    ****** GX
+  9 _mmRemapCH1N_CH2N_CH3N_ETR                                     0006DE GR
+  9 _mmTim1CalPscrCntr                                             000641 GR
+  9 _mmTim1GpioInit                                                0006BF GR
+  9 _mmTim1Onepulse                                                000494 GR
+  9 _mmTim1PWM                                                     00051B GR
+    _strcmp                                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 3
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      E   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size    B67   flags    0
+   8 INITIALIZER                                size      E   flags    0
+   9 CODE                                       size    6F9   flags    0
+   A CABS                                       size      0   flags    8
+

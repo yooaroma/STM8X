@@ -1,0 +1,535 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_mib_debug_top
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _memset
+                                     13 	.globl _strcmp
+                                     14 	.globl _cmd_mem
+                                     15 	.globl _DoPrintHelp
+                                     16 	.globl _GetArgs
+                                     17 	.globl _GetCommand
+                                     18 	.globl _mib_printf
+                                     19 	.globl _timIrqInit
+                                     20 	.globl _MibWriteDebugString
+                                     21 	.globl _MibDebugInit
+                                     22 	.globl _debug_main
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area DATA
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area INITIALIZED
+                                     31 ;--------------------------------------------------------
+                                     32 ; Stack segment in internal ram
+                                     33 ;--------------------------------------------------------
+                                     34 	.area SSEG
+      000000                         35 __start__stack:
+      000000                         36 	.ds	1
+                                     37 
+                                     38 ;--------------------------------------------------------
+                                     39 ; absolute external ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area DABS (ABS)
+                                     42 
+                                     43 ; default segment ordering for linker
+                                     44 	.area HOME
+                                     45 	.area GSINIT
+                                     46 	.area GSFINAL
+                                     47 	.area CONST
+                                     48 	.area INITIALIZER
+                                     49 	.area CODE
+                                     50 
+                                     51 ;--------------------------------------------------------
+                                     52 ; interrupt vector
+                                     53 ;--------------------------------------------------------
+                                     54 	.area HOME
+      000000                         55 __interrupt_vect:
+      000000 82v00u00u00             56 	int s_GSINIT ; reset
+      000004 82v00u00u00             57 	int _TRAP_IRQHandler ; trap
+      000008 82v00u00u00             58 	int _TLI_IRQHandler ; int0
+      00000C 82v00u00u00             59 	int _AWU_IRQHandler ; int1
+      000010 82v00u00u00             60 	int _CLK_IRQHandler ; int2
+      000014 82v00u00u00             61 	int _EXTI_PORTA_IRQHandler ; int3
+      000018 82v00u00u00             62 	int _EXTI_PORTB_IRQHandler ; int4
+      00001C 82v00u00u00             63 	int _EXTI_PORTC_IRQHandler ; int5
+      000020 82v00u00u00             64 	int _EXTI_PORTD_IRQHandler ; int6
+      000024 82v00u00u00             65 	int _EXTI_PORTE_IRQHandler ; int7
+      000028 82 00 00 00             66 	int 0x000000 ; int8
+      00002C 82 00 00 00             67 	int 0x000000 ; int9
+      000030 82v00u00u00             68 	int _SPI_IRQHandler ; int10
+      000034 82v00u00u00             69 	int _TIM1_UPD_OVF_TRG_BRK_IRQHandler ; int11
+      000038 82v00u00u00             70 	int _TIM1_CAP_COM_IRQHandler ; int12
+      00003C 82v00u00u00             71 	int _TIM2_UPD_OVF_BRK_IRQHandler ; int13
+      000040 82v00u00u00             72 	int _TIM2_CAP_COM_IRQHandler ; int14
+      000044 82v00u00u00             73 	int _TIM3_UPD_OVF_BRK_IRQHandler ; int15
+      000048 82v00u00u00             74 	int _TIM3_CAP_COM_IRQHandler ; int16
+      00004C 82 00 00 00             75 	int 0x000000 ; int17
+      000050 82 00 00 00             76 	int 0x000000 ; int18
+      000054 82v00u00u00             77 	int _I2C_IRQHandler ; int19
+      000058 82v00u00u00             78 	int _UART2_TX_IRQHandler ; int20
+      00005C 82v00u00u00             79 	int _UART2_RX_IRQHandler ; int21
+      000060 82v00u00u00             80 	int _ADC1_IRQHandler ; int22
+      000064 82v00u00u00             81 	int _TIM4_UPD_OVF_IRQHandler ; int23
+      000068 82v00u00u00             82 	int _EEPROM_EEC_IRQHandler ; int24
+                                     83 ;--------------------------------------------------------
+                                     84 ; global & static initialisations
+                                     85 ;--------------------------------------------------------
+                                     86 	.area HOME
+                                     87 	.area GSINIT
+                                     88 	.area GSFINAL
+                                     89 	.area GSINIT
+      000000 CDr00r00         [ 4]   90 	call	___sdcc_external_startup
+      000003                         91 __sdcc_init_data:
+                                     92 ; stm8_genXINIT() start
+      000003 AEr00r00         [ 2]   93 	ldw x, #l_DATA
+      000006 27 07            [ 1]   94 	jreq	00002$
+      000008                         95 00001$:
+      000008 72 4FuFFuFF      [ 1]   96 	clr (s_DATA - 1, x)
+      00000C 5A               [ 2]   97 	decw x
+      00000D 26 F9            [ 1]   98 	jrne	00001$
+      00000F                         99 00002$:
+      00000F AEr00r00         [ 2]  100 	ldw	x, #l_INITIALIZER
+      000012 27 09            [ 1]  101 	jreq	00004$
+      000014                        102 00003$:
+      000014 D6uFFuFF         [ 1]  103 	ld	a, (s_INITIALIZER - 1, x)
+      000017 D7uFFuFF         [ 1]  104 	ld	(s_INITIALIZED - 1, x), a
+      00001A 5A               [ 2]  105 	decw	x
+      00001B 26 F7            [ 1]  106 	jrne	00003$
+      00001D                        107 00004$:
+                                    108 ; stm8_genXINIT() end
+                                    109 	.area GSFINAL
+      000000 CCr00r6C         [ 2]  110 	jp	__sdcc_program_startup
+                                    111 ;--------------------------------------------------------
+                                    112 ; Home
+                                    113 ;--------------------------------------------------------
+                                    114 	.area HOME
+                                    115 	.area HOME
+      00006C                        116 __sdcc_program_startup:
+      00006C CCr00r00         [ 2]  117 	jp	_main
+                                    118 ;	return from main will return to caller
+                                    119 ;--------------------------------------------------------
+                                    120 ; code
+                                    121 ;--------------------------------------------------------
+                                    122 	.area CODE
+                                    123 ;	./../../mib/stm8s_mib_debug_top.c: 45: void main(void)
+                                    124 ;	-----------------------------------------
+                                    125 ;	 function main
+                                    126 ;	-----------------------------------------
+      000000                        127 _main:
+      000000 52 10            [ 2]  128 	sub	sp, #16
+                                    129 ;	./../../mib/stm8s_mib_debug_top.c: 51: CLK->CKDIVR &= (uint8_t)(~CLK_CKDIVR_HSIDIV);  
+      000002 C6 50 C6         [ 1]  130 	ld	a, 0x50c6
+      000005 A4 E7            [ 1]  131 	and	a, #0xe7
+      000007 C7 50 C6         [ 1]  132 	ld	0x50c6, a
+                                    133 ;	./../../mib/stm8s_mib_debug_top.c: 53: CLK->CKDIVR |= (uint8_t)CLK_PRESCALER_HSIDIV1;
+      00000A C6 50 C6         [ 1]  134 	ld	a, 0x50c6
+      00000D C7 50 C6         [ 1]  135 	ld	0x50c6, a
+                                    136 ;	./../../mib/stm8s_mib_debug_top.c: 56: MibDebugInit(9600);
+      000010 4B 80            [ 1]  137 	push	#0x80
+      000012 4B 25            [ 1]  138 	push	#0x25
+      000014 5F               [ 1]  139 	clrw	x
+      000015 89               [ 2]  140 	pushw	x
+      000016 CDr00r00         [ 4]  141 	call	_MibDebugInit
+                                    142 ;	./../../mib/stm8s_mib_debug_top.c: 57: timIrqInit();
+      000019 CDr00r00         [ 4]  143 	call	_timIrqInit
+                                    144 ;	./../../mib/stm8s_mib_debug_top.c: 61: cmd_test_init_before_irq_enable();
+      00001C CDr00r00         [ 4]  145 	call	_cmd_test_init_before_irq_enable
+                                    146 ;	./../../mib/stm8s_mib_debug_top.c: 66: enableInterrupts();
+      00001F 9A               [ 1]  147 	rim
+                                    148 ;	./../../mib/stm8s_mib_debug_top.c: 73: for(vbIndexID=0;vbIndexID<12;vbIndexID++)
+      000020 90 AE 48 CD      [ 2]  149 	ldw	y, #0x48cd
+      000024 0F 10            [ 1]  150 	clr	(0x10, sp)
+      000026                        151 00105$:
+                                    152 ;	./../../mib/stm8s_mib_debug_top.c: 75: vbBufferID[vbIndexID] = *vpbUniqueID++;
+      000026 5F               [ 1]  153 	clrw	x
+      000027 7B 10            [ 1]  154 	ld	a, (0x10, sp)
+      000029 97               [ 1]  155 	ld	xl, a
+      00002A 89               [ 2]  156 	pushw	x
+      00002B 96               [ 1]  157 	ldw	x, sp
+      00002C 1C 00 05         [ 2]  158 	addw	x, #5
+      00002F 72 FB 01         [ 2]  159 	addw	x, (1, sp)
+      000032 5B 02            [ 2]  160 	addw	sp, #2
+      000034 90 F6            [ 1]  161 	ld	a, (y)
+      000036 90 5C            [ 1]  162 	incw	y
+      000038 F7               [ 1]  163 	ld	(x), a
+                                    164 ;	./../../mib/stm8s_mib_debug_top.c: 73: for(vbIndexID=0;vbIndexID<12;vbIndexID++)
+      000039 0C 10            [ 1]  165 	inc	(0x10, sp)
+      00003B 7B 10            [ 1]  166 	ld	a, (0x10, sp)
+      00003D A1 0C            [ 1]  167 	cp	a, #0x0c
+      00003F 25 E5            [ 1]  168 	jrc	00105$
+                                    169 ;	./../../mib/stm8s_mib_debug_top.c: 77: vbBufferID[12] = 0;
+      000041 0F 0F            [ 1]  170 	clr	(0x0f, sp)
+                                    171 ;	./../../mib/stm8s_mib_debug_top.c: 78: MibWriteDebugStringCheck(1, "\r\n ###################################\r\n");
+      000043 AEr00r00         [ 2]  172 	ldw	x, #(__str_0+0)
+      000046 CDr00r00         [ 4]  173 	call	_MibWriteDebugString
+                                    174 ;	./../../mib/stm8s_mib_debug_top.c: 79: MibWriteDebugStringCheck(1, " file name : " __FILE__ "\r\n");
+      000049 AEr00r29         [ 2]  175 	ldw	x, #(__str_1+0)
+      00004C CDr00r00         [ 4]  176 	call	_MibWriteDebugString
+                                    177 ;	./../../mib/stm8s_mib_debug_top.c: 80: MibWriteDebugStringCheck(1, " date :  "__DATE__"  :  "__TIME__"\r\n");
+      00004F AEr00r5A         [ 2]  178 	ldw	x, #(__str_2+0)
+      000052 CDr00r00         [ 4]  179 	call	_MibWriteDebugString
+                                    180 ;	./../../mib/stm8s_mib_debug_top.c: 81: MibWriteDebugStringCheck(1, " webgpio.com by MYMEDIA Co., Ltd.\r\n");
+      000055 AEr00r7E         [ 2]  181 	ldw	x, #(__str_3+0)
+      000058 CDr00r00         [ 4]  182 	call	_MibWriteDebugString
+                                    183 ;	./../../mib/stm8s_mib_debug_top.c: 82: MibWriteDebugStringCheck(1, " ###################################\r\n");    
+      00005B AEr00rA2         [ 2]  184 	ldw	x, #(__str_4+0)
+      00005E CDr00r00         [ 4]  185 	call	_MibWriteDebugString
+                                    186 ;	./../../mib/stm8s_mib_debug_top.c: 83: ccprintf(_DEBUG_TOP_A_, ("X co-ordinate on the wafer [%02X][%02X]\r\n",vbBufferID[0],vbBufferID[1]));
+      000061 7B 04            [ 1]  187 	ld	a, (0x04, sp)
+      000063 90 5F            [ 1]  188 	clrw	y
+      000065 90 97            [ 1]  189 	ld	yl, a
+      000067 7B 03            [ 1]  190 	ld	a, (0x03, sp)
+      000069 5F               [ 1]  191 	clrw	x
+      00006A 97               [ 1]  192 	ld	xl, a
+      00006B 90 89            [ 2]  193 	pushw	y
+      00006D 89               [ 2]  194 	pushw	x
+      00006E 4BrC9            [ 1]  195 	push	#<(__str_5+0)
+      000070 4Bs00            [ 1]  196 	push	#((__str_5+0) >> 8)
+      000072 CDr00r00         [ 4]  197 	call	_mib_printf
+      000075 5B 06            [ 2]  198 	addw	sp, #6
+                                    199 ;	./../../mib/stm8s_mib_debug_top.c: 84: ccprintf(_DEBUG_TOP_A_, ("Y co-ordinate on the wafer [%02X][%02X]\r\n",vbBufferID[2],vbBufferID[3]));
+      000077 7B 06            [ 1]  200 	ld	a, (0x06, sp)
+      000079 5F               [ 1]  201 	clrw	x
+      00007A 97               [ 1]  202 	ld	xl, a
+      00007B 7B 05            [ 1]  203 	ld	a, (0x05, sp)
+      00007D 0F 01            [ 1]  204 	clr	(0x01, sp)
+      00007F 89               [ 2]  205 	pushw	x
+      000080 88               [ 1]  206 	push	a
+      000081 7B 04            [ 1]  207 	ld	a, (0x04, sp)
+      000083 88               [ 1]  208 	push	a
+      000084 4BrF3            [ 1]  209 	push	#<(__str_6+0)
+      000086 4Bs00            [ 1]  210 	push	#((__str_6+0) >> 8)
+      000088 CDr00r00         [ 4]  211 	call	_mib_printf
+      00008B 5B 06            [ 2]  212 	addw	sp, #6
+                                    213 ;	./../../mib/stm8s_mib_debug_top.c: 85: ccprintf(_DEBUG_TOP_A_, ("Wafer number               [%02X]\r\n",vbBufferID[4]));
+      00008D 7B 07            [ 1]  214 	ld	a, (0x07, sp)
+      00008F 5F               [ 1]  215 	clrw	x
+      000090 97               [ 1]  216 	ld	xl, a
+      000091 89               [ 2]  217 	pushw	x
+      000092 4Br1D            [ 1]  218 	push	#<(__str_7+0)
+      000094 4Bs01            [ 1]  219 	push	#((__str_7+0) >> 8)
+      000096 CDr00r00         [ 4]  220 	call	_mib_printf
+      000099 5B 04            [ 2]  221 	addw	sp, #4
+                                    222 ;	./../../mib/stm8s_mib_debug_top.c: 86: ccprintf(_DEBUG_TOP_A_, ("Lot number [%s]\r\n",&(vbBufferID[5])));
+      00009B 96               [ 1]  223 	ldw	x, sp
+      00009C 1C 00 08         [ 2]  224 	addw	x, #8
+      00009F 89               [ 2]  225 	pushw	x
+      0000A0 4Br41            [ 1]  226 	push	#<(__str_8+0)
+      0000A2 4Bs01            [ 1]  227 	push	#((__str_8+0) >> 8)
+      0000A4 CDr00r00         [ 4]  228 	call	_mib_printf
+      0000A7 5B 04            [ 2]  229 	addw	sp, #4
+                                    230 ;	./../../mib/stm8s_mib_debug_top.c: 88: debug_main();
+      0000A9 CDr00rB1         [ 4]  231 	call	_debug_main
+                                    232 ;	./../../mib/stm8s_mib_debug_top.c: 90: while(1);
+      0000AC                        233 00103$:
+      0000AC 20 FE            [ 2]  234 	jra	00103$
+                                    235 ;	./../../mib/stm8s_mib_debug_top.c: 91: }
+      0000AE 5B 10            [ 2]  236 	addw	sp, #16
+      0000B0 81               [ 4]  237 	ret
+                                    238 ;	./../../mib/stm8s_mib_debug_top.c: 95: void debug_main(void)
+                                    239 ;	-----------------------------------------
+                                    240 ;	 function debug_main
+                                    241 ;	-----------------------------------------
+      0000B1                        242 _debug_main:
+      0000B1 52 50            [ 2]  243 	sub	sp, #80
+                                    244 ;	./../../mib/stm8s_mib_debug_top.c: 104: cmd[0] = 0;
+      0000B3 0F 01            [ 1]  245 	clr	(0x01, sp)
+                                    246 ;	./../../mib/stm8s_mib_debug_top.c: 105: cmd[1] = 0;
+      0000B5 0F 02            [ 1]  247 	clr	(0x02, sp)
+                                    248 ;	./../../mib/stm8s_mib_debug_top.c: 106: ccprintf(_DEBUG_TOP_A_, ("\r\n [help or ?] to get a list of commands\r\n\r"));
+      0000B7 4Br53            [ 1]  249 	push	#<(__str_9+0)
+      0000B9 4Bs01            [ 1]  250 	push	#((__str_9+0) >> 8)
+      0000BB CDr00r00         [ 4]  251 	call	_mib_printf
+      0000BE 5B 02            [ 2]  252 	addw	sp, #2
+                                    253 ;	./../../mib/stm8s_mib_debug_top.c: 107: cmd_list.cur = 0;
+      0000C0 35 00u00u00      [ 1]  254 	mov	_cmd_list+0, #0x00
+                                    255 ;	./../../mib/stm8s_mib_debug_top.c: 108: cmd_list.next = 0;
+      0000C4 AEr00r00         [ 2]  256 	ldw	x, #_cmd_list+0
+      0000C7 35 00u00u01      [ 1]  257 	mov	_cmd_list+1, #0x00
+                                    258 ;	./../../mib/stm8s_mib_debug_top.c: 109: memset((void *)(&cmd_list), 0, sizeof(cmd_list));
+      0000CB 4B 02            [ 1]  259 	push	#0x02
+      0000CD 4B 01            [ 1]  260 	push	#0x01
+      0000CF 4B 00            [ 1]  261 	push	#0x00
+      0000D1 4B 00            [ 1]  262 	push	#0x00
+      0000D3 CDr00r00         [ 4]  263 	call	_memset
+                                    264 ;	./../../mib/stm8s_mib_debug_top.c: 113: cmd_mem();
+      0000D6 CDr00r00         [ 4]  265 	call	_cmd_mem
+                                    266 ;	./../../mib/stm8s_mib_debug_top.c: 119: cmd_test();
+      0000D9 CDr00r00         [ 4]  267 	call	_cmd_test
+      0000DC                        268 00118$:
+                                    269 ;	./../../mib/stm8s_mib_debug_top.c: 125: ccprintf(1,("My>"));
+      0000DC 4Br7F            [ 1]  270 	push	#<(__str_10+0)
+      0000DE 4Bs01            [ 1]  271 	push	#((__str_10+0) >> 8)
+      0000E0 CDr00r00         [ 4]  272 	call	_mib_printf
+      0000E3 5B 02            [ 2]  273 	addw	sp, #2
+                                    274 ;	./../../mib/stm8s_mib_debug_top.c: 127: GetCommand(cmd, CMD_CHAR_MAX - 1, 60);
+      0000E5 4B 3C            [ 1]  275 	push	#0x3c
+      0000E7 4B 3F            [ 1]  276 	push	#0x3f
+      0000E9 4B 00            [ 1]  277 	push	#0x00
+      0000EB 96               [ 1]  278 	ldw	x, sp
+      0000EC 1C 00 04         [ 2]  279 	addw	x, #4
+      0000EF CDr00r00         [ 4]  280 	call	_GetCommand
+                                    281 ;	./../../mib/stm8s_mib_debug_top.c: 128: if (!cmd || !cmd[0]) continue;
+      0000F2 7B 01            [ 1]  282 	ld	a, (0x01, sp)
+      0000F4 27 E6            [ 1]  283 	jreq	00118$
+                                    284 ;	./../../mib/stm8s_mib_debug_top.c: 129: cmd_str = (char *)cmd;
+                                    285 ;	./../../mib/stm8s_mib_debug_top.c: 130: argc = GetArgs(cmd_str, argv);
+      0000F6 96               [ 1]  286 	ldw	x, sp
+      0000F7 1C 00 41         [ 2]  287 	addw	x, #65
+      0000FA 89               [ 2]  288 	pushw	x
+      0000FB 96               [ 1]  289 	ldw	x, sp
+      0000FC 1C 00 03         [ 2]  290 	addw	x, #3
+      0000FF CDr00r00         [ 4]  291 	call	_GetArgs
+      000102 1F 4B            [ 2]  292 	ldw	(0x4b, sp), x
+                                    293 ;	./../../mib/stm8s_mib_debug_top.c: 131: for (cptr = cmdTbl; cptr->cmd; cptr++)
+      000104 AEr00r00         [ 2]  294 	ldw	x, #(_cmdTbl+0)
+      000107 1F 4D            [ 2]  295 	ldw	(0x4d, sp), x
+      000109 1F 4F            [ 2]  296 	ldw	(0x4f, sp), x
+      00010B                        297 00116$:
+      00010B 1E 4F            [ 2]  298 	ldw	x, (0x4f, sp)
+      00010D FE               [ 2]  299 	ldw	x, (x)
+      00010E 27 28            [ 1]  300 	jreq	00106$
+                                    301 ;	./../../mib/stm8s_mib_debug_top.c: 133: if (!strcmp(argv[0], cptr->cmd))
+      000110 16 41            [ 2]  302 	ldw	y, (0x41, sp)
+      000112 89               [ 2]  303 	pushw	x
+      000113 93               [ 1]  304 	ldw	x, y
+      000114 CDr00r00         [ 4]  305 	call	_strcmp
+      000117 5D               [ 2]  306 	tnzw	x
+      000118 26 13            [ 1]  307 	jrne	00117$
+                                    308 ;	./../../mib/stm8s_mib_debug_top.c: 135: (cptr->run)(cptr, argc, argv);
+      00011A 16 4D            [ 2]  309 	ldw	y, (0x4d, sp)
+      00011C 90 EE 02         [ 2]  310 	ldw	y, (0x2, y)
+      00011F 96               [ 1]  311 	ldw	x, sp
+      000120 1C 00 41         [ 2]  312 	addw	x, #65
+      000123 89               [ 2]  313 	pushw	x
+      000124 1E 4D            [ 2]  314 	ldw	x, (0x4d, sp)
+      000126 89               [ 2]  315 	pushw	x
+      000127 1E 51            [ 2]  316 	ldw	x, (0x51, sp)
+      000129 90 FD            [ 4]  317 	call	(y)
+                                    318 ;	./../../mib/stm8s_mib_debug_top.c: 136: break;
+      00012B 20 0B            [ 2]  319 	jra	00106$
+      00012D                        320 00117$:
+                                    321 ;	./../../mib/stm8s_mib_debug_top.c: 131: for (cptr = cmdTbl; cptr->cmd; cptr++)
+      00012D 1E 4F            [ 2]  322 	ldw	x, (0x4f, sp)
+      00012F 1C 00 06         [ 2]  323 	addw	x, #0x0006
+      000132 1F 4F            [ 2]  324 	ldw	(0x4f, sp), x
+      000134 1F 4D            [ 2]  325 	ldw	(0x4d, sp), x
+      000136 20 D3            [ 2]  326 	jra	00116$
+      000138                        327 00106$:
+                                    328 ;	./../../mib/stm8s_mib_debug_top.c: 139: if (!strcmp(argv[0], "help") || !strcmp(argv[0], "?"))
+      000138 1E 41            [ 2]  329 	ldw	x, (0x41, sp)
+      00013A 4Br83            [ 1]  330 	push	#<(___str_11+0)
+      00013C 4Bs01            [ 1]  331 	push	#((___str_11+0) >> 8)
+      00013E CDr00r00         [ 4]  332 	call	_strcmp
+      000141 1F 4F            [ 2]  333 	ldw	(0x4f, sp), x
+      000143 27 0C            [ 1]  334 	jreq	00107$
+      000145 1E 41            [ 2]  335 	ldw	x, (0x41, sp)
+      000147 4Br88            [ 1]  336 	push	#<(___str_12+0)
+      000149 4Bs01            [ 1]  337 	push	#((___str_12+0) >> 8)
+      00014B CDr00r00         [ 4]  338 	call	_strcmp
+      00014E 5D               [ 2]  339 	tnzw	x
+      00014F 26 0A            [ 1]  340 	jrne	00108$
+      000151                        341 00107$:
+                                    342 ;	./../../mib/stm8s_mib_debug_top.c: 141: DoPrintHelp(argc, argv);
+      000151 96               [ 1]  343 	ldw	x, sp
+      000152 1C 00 41         [ 2]  344 	addw	x, #65
+      000155 89               [ 2]  345 	pushw	x
+      000156 1E 4D            [ 2]  346 	ldw	x, (0x4d, sp)
+      000158 CDr00r00         [ 4]  347 	call	_DoPrintHelp
+      00015B                        348 00108$:
+                                    349 ;	./../../mib/stm8s_mib_debug_top.c: 143: if (!strcmp(argv[0], "q") || !strcmp(argv[0], "Q"))
+      00015B 1E 41            [ 2]  350 	ldw	x, (0x41, sp)
+      00015D 4Br8A            [ 1]  351 	push	#<(___str_13+0)
+      00015F 4Bs01            [ 1]  352 	push	#((___str_13+0) >> 8)
+      000161 CDr00r00         [ 4]  353 	call	_strcmp
+      000164 5D               [ 2]  354 	tnzw	x
+      000165 27 14            [ 1]  355 	jreq	00110$
+      000167 16 41            [ 2]  356 	ldw	y, (0x41, sp)
+      000169 17 4F            [ 2]  357 	ldw	(0x4f, sp), y
+      00016B 4Br8C            [ 1]  358 	push	#<(___str_14+0)
+      00016D 4Bs01            [ 1]  359 	push	#((___str_14+0) >> 8)
+      00016F 1E 51            [ 2]  360 	ldw	x, (0x51, sp)
+      000171 CDr00r00         [ 4]  361 	call	_strcmp
+      000174 1F 4F            [ 2]  362 	ldw	(0x4f, sp), x
+      000176 27 03            [ 1]  363 	jreq	00168$
+      000178 CCr00rDC         [ 2]  364 	jp	00118$
+      00017B                        365 00168$:
+      00017B                        366 00110$:
+                                    367 ;	./../../mib/stm8s_mib_debug_top.c: 145: ccprintf(_DEBUG_TOP_A_,("\r\nmonitor program end!!!\r\n"));
+      00017B 4Br8E            [ 1]  368 	push	#<(__str_15+0)
+      00017D 4Bs01            [ 1]  369 	push	#((__str_15+0) >> 8)
+      00017F CDr00r00         [ 4]  370 	call	_mib_printf
+                                    371 ;	./../../mib/stm8s_mib_debug_top.c: 146: break;
+                                    372 ;	./../../mib/stm8s_mib_debug_top.c: 150: }
+      000182 5B 52            [ 2]  373 	addw	sp, #82
+      000184 81               [ 4]  374 	ret
+                                    375 	.area CODE
+                                    376 	.area CONST
+                                    377 	.area CONST
+      000000                        378 __str_0:
+      000000 0D                     379 	.db 0x0d
+      000001 0A                     380 	.db 0x0a
+      000002 20 23 23 23 23 23 23   381 	.ascii " ###################################"
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23
+      000026 0D                     382 	.db 0x0d
+      000027 0A                     383 	.db 0x0a
+      000028 00                     384 	.db 0x00
+                                    385 	.area CODE
+                                    386 	.area CONST
+      000029                        387 __str_1:
+      000029 20 66 69 6C 65 20 6E   388 	.ascii " file name : ./../../mib/stm8s_mib_debug_top.c"
+             61 6D 65 20 3A 20 2E
+             2F 2E 2E 2F 2E 2E 2F
+             6D 69 62 2F 73 74 6D
+             38 73 5F 6D 69 62 5F
+             64 65 62 75 67 5F 74
+             6F 70 2E 63
+      000057 0D                     389 	.db 0x0d
+      000058 0A                     390 	.db 0x0a
+      000059 00                     391 	.db 0x00
+                                    392 	.area CODE
+                                    393 	.area CONST
+      00005A                        394 __str_2:
+      00005A 20 64 61 74 65 20 3A   395 	.ascii " date :  Mar 13 2023  :  20:44:16"
+             20 20 4D 61 72 20 31
+             33 20 32 30 32 33 20
+             20 3A 20 20 32 30 3A
+             34 34 3A 31 36
+      00007B 0D                     396 	.db 0x0d
+      00007C 0A                     397 	.db 0x0a
+      00007D 00                     398 	.db 0x00
+                                    399 	.area CODE
+                                    400 	.area CONST
+      00007E                        401 __str_3:
+      00007E 20 77 65 62 67 70 69   402 	.ascii " webgpio.com by MYMEDIA Co., Ltd."
+             6F 2E 63 6F 6D 20 62
+             79 20 4D 59 4D 45 44
+             49 41 20 43 6F 2E 2C
+             20 4C 74 64 2E
+      00009F 0D                     403 	.db 0x0d
+      0000A0 0A                     404 	.db 0x0a
+      0000A1 00                     405 	.db 0x00
+                                    406 	.area CODE
+                                    407 	.area CONST
+      0000A2                        408 __str_4:
+      0000A2 20 23 23 23 23 23 23   409 	.ascii " ###################################"
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23 23 23 23 23 23 23
+             23
+      0000C6 0D                     410 	.db 0x0d
+      0000C7 0A                     411 	.db 0x0a
+      0000C8 00                     412 	.db 0x00
+                                    413 	.area CODE
+                                    414 	.area CONST
+      0000C9                        415 __str_5:
+      0000C9 58 20 63 6F 2D 6F 72   416 	.ascii "X co-ordinate on the wafer [%02X][%02X]"
+             64 69 6E 61 74 65 20
+             6F 6E 20 74 68 65 20
+             77 61 66 65 72 20 5B
+             25 30 32 58 5D 5B 25
+             30 32 58 5D
+      0000F0 0D                     417 	.db 0x0d
+      0000F1 0A                     418 	.db 0x0a
+      0000F2 00                     419 	.db 0x00
+                                    420 	.area CODE
+                                    421 	.area CONST
+      0000F3                        422 __str_6:
+      0000F3 59 20 63 6F 2D 6F 72   423 	.ascii "Y co-ordinate on the wafer [%02X][%02X]"
+             64 69 6E 61 74 65 20
+             6F 6E 20 74 68 65 20
+             77 61 66 65 72 20 5B
+             25 30 32 58 5D 5B 25
+             30 32 58 5D
+      00011A 0D                     424 	.db 0x0d
+      00011B 0A                     425 	.db 0x0a
+      00011C 00                     426 	.db 0x00
+                                    427 	.area CODE
+                                    428 	.area CONST
+      00011D                        429 __str_7:
+      00011D 57 61 66 65 72 20 6E   430 	.ascii "Wafer number               [%02X]"
+             75 6D 62 65 72 20 20
+             20 20 20 20 20 20 20
+             20 20 20 20 20 20 5B
+             25 30 32 58 5D
+      00013E 0D                     431 	.db 0x0d
+      00013F 0A                     432 	.db 0x0a
+      000140 00                     433 	.db 0x00
+                                    434 	.area CODE
+                                    435 	.area CONST
+      000141                        436 __str_8:
+      000141 4C 6F 74 20 6E 75 6D   437 	.ascii "Lot number [%s]"
+             62 65 72 20 5B 25 73
+             5D
+      000150 0D                     438 	.db 0x0d
+      000151 0A                     439 	.db 0x0a
+      000152 00                     440 	.db 0x00
+                                    441 	.area CODE
+                                    442 	.area CONST
+      000153                        443 __str_9:
+      000153 0D                     444 	.db 0x0d
+      000154 0A                     445 	.db 0x0a
+      000155 20 5B 68 65 6C 70 20   446 	.ascii " [help or ?] to get a list of commands"
+             6F 72 20 3F 5D 20 74
+             6F 20 67 65 74 20 61
+             20 6C 69 73 74 20 6F
+             66 20 63 6F 6D 6D 61
+             6E 64 73
+      00017B 0D                     447 	.db 0x0d
+      00017C 0A                     448 	.db 0x0a
+      00017D 0D                     449 	.db 0x0d
+      00017E 00                     450 	.db 0x00
+                                    451 	.area CODE
+                                    452 	.area CONST
+      00017F                        453 __str_10:
+      00017F 4D 79 3E               454 	.ascii "My>"
+      000182 00                     455 	.db 0x00
+                                    456 	.area CODE
+                                    457 	.area CONST
+      000183                        458 ___str_11:
+      000183 68 65 6C 70            459 	.ascii "help"
+      000187 00                     460 	.db 0x00
+                                    461 	.area CODE
+                                    462 	.area CONST
+      000188                        463 ___str_12:
+      000188 3F                     464 	.ascii "?"
+      000189 00                     465 	.db 0x00
+                                    466 	.area CODE
+                                    467 	.area CONST
+      00018A                        468 ___str_13:
+      00018A 71                     469 	.ascii "q"
+      00018B 00                     470 	.db 0x00
+                                    471 	.area CODE
+                                    472 	.area CONST
+      00018C                        473 ___str_14:
+      00018C 51                     474 	.ascii "Q"
+      00018D 00                     475 	.db 0x00
+                                    476 	.area CODE
+                                    477 	.area CONST
+      00018E                        478 __str_15:
+      00018E 0D                     479 	.db 0x0d
+      00018F 0A                     480 	.db 0x0a
+      000190 6D 6F 6E 69 74 6F 72   481 	.ascii "monitor program end!!!"
+             20 70 72 6F 67 72 61
+             6D 20 65 6E 64 21 21
+             21
+      0001A6 0D                     482 	.db 0x0d
+      0001A7 0A                     483 	.db 0x0a
+      0001A8 00                     484 	.db 0x00
+                                    485 	.area CODE
+                                    486 	.area INITIALIZER
+                                    487 	.area CABS (ABS)

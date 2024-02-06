@@ -1,0 +1,96 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  9 _DoEEPROM                                                      000066 R
+    _HexToInt                                                      ****** GX
+    _MibWriteDebugString                                           ****** GX
+    ___memcpy                                                      ****** GX
+  7 ___str_11                                                      00011B R
+  7 ___str_13                                                      000140 R
+  7 ___str_2                                                       00002C R
+  7 ___str_26                                                      000406 R
+  7 ___str_29                                                      000466 R
+  7 ___str_31                                                      000491 R
+  7 ___str_35                                                      000507 R
+  7 ___str_38                                                      000582 R
+  7 ___str_40                                                      0005B9 R
+  7 ___str_41                                                      0005C0 R
+  7 ___str_6                                                       00009E R
+  7 ___str_8                                                       0000C3 R
+  7 __str_0                                                        000000 R
+  7 __str_1                                                        000016 R
+  7 __str_10                                                       0000F3 R
+  7 __str_12                                                       000120 R
+  7 __str_14                                                       000145 R
+  7 __str_15                                                       000174 R
+  7 __str_16                                                       0001A3 R
+  7 __str_17                                                       0001CD R
+  7 __str_18                                                       0001FC R
+  7 __str_19                                                       00022B R
+  7 __str_20                                                       000255 R
+  7 __str_21                                                       00027F R
+  7 __str_22                                                       0002AE R
+  7 __str_23                                                       0002DD R
+  7 __str_24                                                       000330 R
+  7 __str_25                                                       000390 R
+  7 __str_27                                                       00040D R
+  7 __str_28                                                       00043B R
+  7 __str_3                                                        000032 R
+  7 __str_30                                                       00046C R
+  7 __str_32                                                       000498 R
+  7 __str_33                                                       0004BE R
+  7 __str_34                                                       0004E1 R
+  7 __str_36                                                       00050D R
+  7 __str_37                                                       000549 R
+  7 __str_39                                                       000588 R
+  7 __str_4                                                        00004F R
+  7 __str_5                                                        000078 R
+  7 __str_7                                                        0000A3 R
+  7 __str_9                                                        0000C8 R
+  8 __xinit__cmdTbl_only                                           000000 R
+    _cmdTbl                                                        ****** GX
+  2 _cmdTbl_only                                                   000000 R
+  9 _cmd_eeprom                                                    000000 GR
+  9 _cmd_test                                                      000062 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 2
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  9 _cmd_test_init_before_irq_enable                               000065 GR
+    _mib_printf                                                    ****** GX
+    _mmEepromLock                                                  ****** GX
+    _mmEepromRead                                                  ****** GX
+    _mmEepromUnlock                                                ****** GX
+    _mmEepromWrite                                                 ****** GX
+    _mmFlashOptionErase                                            ****** GX
+    _mmFlashOptionLock                                             ****** GX
+    _mmFlashOptionRead                                             ****** GX
+    _mmFlashOptionUnlock                                           ****** GX
+    _mmFlashOptionWrite                                            ****** GX
+    _strcmp                                                        ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8)  Page 3
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      C   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size    756   flags    0
+   8 INITIALIZER                                size      C   flags    0
+   9 CODE                                       size    433   flags    0
+   A CABS                                       size      0   flags    8
+

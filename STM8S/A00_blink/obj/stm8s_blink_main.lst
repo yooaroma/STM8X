@@ -1,0 +1,134 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.2.10 #13778 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module stm8s_blink_main
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 ;--------------------------------------------------------
+                                     13 ; ram data
+                                     14 ;--------------------------------------------------------
+                                     15 	.area DATA
+                                     16 ;--------------------------------------------------------
+                                     17 ; ram data
+                                     18 ;--------------------------------------------------------
+                                     19 	.area INITIALIZED
+                                     20 ;--------------------------------------------------------
+                                     21 ; Stack segment in internal ram
+                                     22 ;--------------------------------------------------------
+                                     23 	.area SSEG
+      000000                         24 __start__stack:
+      000000                         25 	.ds	1
+                                     26 
+                                     27 ;--------------------------------------------------------
+                                     28 ; absolute external ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area DABS (ABS)
+                                     31 
+                                     32 ; default segment ordering for linker
+                                     33 	.area HOME
+                                     34 	.area GSINIT
+                                     35 	.area GSFINAL
+                                     36 	.area CONST
+                                     37 	.area INITIALIZER
+                                     38 	.area CODE
+                                     39 
+                                     40 ;--------------------------------------------------------
+                                     41 ; interrupt vector
+                                     42 ;--------------------------------------------------------
+                                     43 	.area HOME
+      000000                         44 __interrupt_vect:
+      000000 82v00u00u00             45 	int s_GSINIT ; reset
+                                     46 ;--------------------------------------------------------
+                                     47 ; global & static initialisations
+                                     48 ;--------------------------------------------------------
+                                     49 	.area HOME
+                                     50 	.area GSINIT
+                                     51 	.area GSFINAL
+                                     52 	.area GSINIT
+      000000 CDr00r00         [ 4]   53 	call	___sdcc_external_startup
+      000003                         54 __sdcc_init_data:
+                                     55 ; stm8_genXINIT() start
+      000003 AEr00r00         [ 2]   56 	ldw x, #l_DATA
+      000006 27 07            [ 1]   57 	jreq	00002$
+      000008                         58 00001$:
+      000008 72 4FuFFuFF      [ 1]   59 	clr (s_DATA - 1, x)
+      00000C 5A               [ 2]   60 	decw x
+      00000D 26 F9            [ 1]   61 	jrne	00001$
+      00000F                         62 00002$:
+      00000F AEr00r00         [ 2]   63 	ldw	x, #l_INITIALIZER
+      000012 27 09            [ 1]   64 	jreq	00004$
+      000014                         65 00003$:
+      000014 D6uFFuFF         [ 1]   66 	ld	a, (s_INITIALIZER - 1, x)
+      000017 D7uFFuFF         [ 1]   67 	ld	(s_INITIALIZED - 1, x), a
+      00001A 5A               [ 2]   68 	decw	x
+      00001B 26 F7            [ 1]   69 	jrne	00003$
+      00001D                         70 00004$:
+                                     71 ; stm8_genXINIT() end
+                                     72 	.area GSFINAL
+      000000 CCr00r04         [ 2]   73 	jp	__sdcc_program_startup
+                                     74 ;--------------------------------------------------------
+                                     75 ; Home
+                                     76 ;--------------------------------------------------------
+                                     77 	.area HOME
+                                     78 	.area HOME
+      000004                         79 __sdcc_program_startup:
+      000004 CCr00r00         [ 2]   80 	jp	_main
+                                     81 ;	return from main will return to caller
+                                     82 ;--------------------------------------------------------
+                                     83 ; code
+                                     84 ;--------------------------------------------------------
+                                     85 	.area CODE
+                                     86 ;	stm8s_blink_main.c: 53: void main(void)
+                                     87 ;	-----------------------------------------
+                                     88 ;	 function main
+                                     89 ;	-----------------------------------------
+      000000                         90 _main:
+                                     91 ;	stm8s_blink_main.c: 59: CLK->CKDIVR &= (uint8_t)(~CLK_CKDIVR_HSIDIV);    
+      000000 C6 50 C6         [ 1]   92 	ld	a, 0x50c6
+      000003 A4 E7            [ 1]   93 	and	a, #0xe7
+      000005 C7 50 C6         [ 1]   94 	ld	0x50c6, a
+                                     95 ;	stm8s_blink_main.c: 61: CLK->CKDIVR |= (uint8_t)CLK_PRESCALER_HSIDIV1;
+      000008 55 50 C6 50 C6   [ 1]   96 	mov	0x50c6, 0x50c6
+                                     97 ;	stm8s_blink_main.c: 70: UCOM_LED1_GPIO->ODR &= (uint8_t)(~(UCOM_LED1_PIN)); /* Output mode  Low level */
+      00000D 72 11 50 0F      [ 1]   98 	bres	0x500f, #0
+                                     99 ;	stm8s_blink_main.c: 71: UCOM_LED1_GPIO->DDR |= (uint8_t)UCOM_LED1_PIN; /* Set Output mode */
+      000011 72 10 50 11      [ 1]  100 	bset	0x5011, #0
+                                    101 ;	stm8s_blink_main.c: 72: UCOM_LED1_GPIO->CR1 |= (uint8_t)UCOM_LED1_PIN; /* Push-Pull */
+      000015 72 10 50 12      [ 1]  102 	bset	0x5012, #0
+                                    103 ;	stm8s_blink_main.c: 74: UCOM_LED1_GPIO->CR2 |= (uint8_t)UCOM_LED1_PIN; /* 10MHz */
+      000019 72 10 50 13      [ 1]  104 	bset	0x5013, #0
+                                    105 ;	stm8s_blink_main.c: 79: uint32_t vdwDelay = 0;
+      00001D 5F               [ 1]  106 	clrw	x
+      00001E 90 5F            [ 1]  107 	clrw	y
+                                    108 ;	stm8s_blink_main.c: 80: do {
+      000020                        109 00104$:
+                                    110 ;	stm8s_blink_main.c: 81: if(vdwDelay)
+      000020 5D               [ 2]  111 	tnzw	x
+      000021 26 04            [ 1]  112 	jrne	00119$
+      000023 90 5D            [ 2]  113 	tnzw	y
+      000025 27 09            [ 1]  114 	jreq	00102$
+      000027                        115 00119$:
+                                    116 ;	stm8s_blink_main.c: 83: vdwDelay--;
+      000027 1D 00 01         [ 2]  117 	subw	x, #0x0001
+      00002A 24 F4            [ 1]  118 	jrnc	00104$
+      00002C 90 5A            [ 2]  119 	decw	y
+      00002E 20 F0            [ 2]  120 	jra	00104$
+      000030                        121 00102$:
+                                    122 ;	stm8s_blink_main.c: 87: vdwDelay = 0x20000*5;
+      000030 5F               [ 1]  123 	clrw	x
+      000031 90 AE 00 0A      [ 2]  124 	ldw	y, #0x000a
+                                    125 ;	stm8s_blink_main.c: 89: UCOM_LED1_GPIO->ODR ^= (uint8_t)UCOM_LED1_PIN;
+      000035 90 10 50 0F      [ 1]  126 	bcpl	0x500f, #0
+                                    127 ;	stm8s_blink_main.c: 91: } while(1);
+      000039 20 E5            [ 2]  128 	jra	00104$
+                                    129 ;	stm8s_blink_main.c: 93: }
+      00003B 81               [ 4]  130 	ret
+                                    131 	.area CODE
+                                    132 	.area CONST
+                                    133 	.area INITIALIZER
+                                    134 	.area CABS (ABS)
